@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Villsy — Digitalni vodič</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #0d1b2a;
+  --navy-mid: #162435;
+  --navy-light: #1e3048;
+  --gold: #c9a84c;
+  --gold-light: #e8d49a;
+  --cream: #faf8f4;
+  --stone: #f0ece4;
+  --stone-mid: #d8d0c0;
+  --stone-dark: #b8ad98;
+  --text: #1a1a1a;
+  --text-mid: #5a5a5a;
+  --text-light: #9a9a9a;
+  --white: #ffffff;
+  --success: #27ae60;
+  --danger: #c0392b;
+  --r: 14px;
+  --r-sm: 9px;
+  --shadow: 0 1px 12px rgba(13,27,42,0.07);
+  --shadow-md: 0 4px 24px rgba(13,27,42,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; }
+body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+/* ── SCREENS ── */
+.screen { display: none; min-height: 100vh; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* ── SHARED HEADER ── */
+.app-header {
+  background: var(--navy);
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.header-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px 10px;
+}
+.header-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 3px;
+  line-height: 1;
+}
+.header-prop {
+  text-align: right;
+  line-height: 1.3;
+}
+.header-prop-name {
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+  font-weight: 400;
+}
+.header-prop-loc {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+}
+.header-lang {
+  display: flex;
+  padding: 0 18px 12px;
+  gap: 0;
+}
+.lang-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  padding: 4px 12px;
+  border: 0.5px solid rgba(201,168,76,0.3);
+  background: none;
+  color: rgba(255,255,255,0.4);
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.15s;
+}
+.lang-btn:first-child { border-radius: 5px 0 0 5px; }
+.lang-btn:last-child { border-radius: 0 5px 5px 0; border-left: none; }
+.lang-btn.active { background: var(--gold); border-color: var(--gold); color: var(--navy); font-weight: 500; }
+
+/* breadcrumb */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: var(--navy-mid);
+  border-top: 0.5px solid rgba(255,255,255,0.07);
+  min-height: 38px;
+}
+.bc-back {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: rgba(255,255,255,0.45);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 2px 0;
+  transition: color 0.15s;
+}
+.bc-back:hover { color: var(--gold); }
+.bc-sep { color: rgba(255,255,255,0.2); font-size: 12px; }
+.bc-current { font-size: 12px; color: rgba(255,255,255,0.6); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── SCROLL AREA ── */
+.scroll-area { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+
+/* ── LEVEL 1: HOME GRID ── */
+.home-hero {
+  background: var(--navy);
+  padding: 22px 18px 24px;
+  text-align: center;
+}
+.home-welcome {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 6px;
+}
+.home-villa-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 500;
+  color: var(--white);
+  line-height: 1.1;
+}
+.home-villa-loc {
+  font-size: 13px;
+  color: var(--gold);
+  margin-top: 4px;
+}
+.home-divider {
+  width: 32px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.4;
+  margin: 14px auto 0;
+}
+
+.section-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 20px 16px 32px;
+}
+.section-card {
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 18px 14px 16px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  border: 0.5px solid rgba(13,27,42,0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  transition: all 0.15s;
+  position: relative;
+  overflow: hidden;
+  min-height: 100px;
+}
+.section-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gold);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.section-card:active, .section-card:hover { box-shadow: var(--shadow-md); }
+.section-card:active::after { opacity: 1; }
+.section-card.wide { grid-column: span 2; flex-direction: row; align-items: center; min-height: auto; padding: 14px 16px; }
+.section-card.wide .section-card-arrow { margin-left: auto; }
+.section-card-icon { font-size: 26px; line-height: 1; }
+.section-card.wide .section-card-icon { font-size: 22px; }
+.section-card-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--navy);
+  line-height: 1.3;
+}
+.section-card-count {
+  font-size: 11px;
+  color: var(--text-light);
+}
+.section-card-arrow {
+  font-size: 15px;
+  color: var(--stone-dark);
+  align-self: flex-end;
+}
+.section-card.wide .section-card-text { flex: 1; }
+
+/* ── LEVEL 2: SUBSECTION LIST ── */
+.sub-list { padding: 16px; }
+.sub-list-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--navy);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sub-item {
+  background: var(--white);
+  border-radius: var(--r-sm);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  border: 0.5px solid rgba(13,27,42,0.05);
+  transition: all 0.15s;
+}
+.sub-item:active { background: var(--stone); }
+.sub-item-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+.sub-item-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--stone);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+.sub-item-text { min-width: 0; }
+.sub-item-title { font-size: 15px; font-weight: 500; color: var(--navy); }
+.sub-item-preview { font-size: 12px; color: var(--text-light); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
+.sub-item-arrow { color: var(--stone-dark); font-size: 16px; flex-shrink: 0; }
+
+/* phone cards (special sub-items) */
+.phone-item {
+  background: var(--white);
+  border-radius: var(--r-sm);
+  padding: 13px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow);
+  border: 0.5px solid rgba(13,27,42,0.05);
+}
+.phone-item-info { flex: 1; }
+.phone-cat {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-bottom: 2px;
+}
+.phone-name { font-size: 15px; font-weight: 500; color: var(--navy); }
+.phone-call {
+  background: var(--navy);
+  color: var(--gold);
+  border: none;
+  border-radius: var(--r-sm);
+  padding: 9px 14px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* map section */
+.map-section { padding: 0; }
+.map-placeholder {
+  background: var(--stone);
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--text-light);
+  font-size: 14px;
+  border-bottom: 0.5px solid var(--stone-mid);
+}
+.map-placeholder .mi { font-size: 36px; }
+.map-info { padding: 16px; }
+.map-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-light); margin-bottom: 6px; }
+.map-address { font-size: 16px; font-weight: 500; color: var(--navy); margin-bottom: 14px; }
+.map-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--navy);
+  color: var(--gold);
+  text-decoration: none;
+  border-radius: var(--r-sm);
+  padding: 14px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.3px;
+}
+
+/* ── LEVEL 3: CONTENT ── */
+.content-area { padding: 20px 18px 40px; }
+.content-icon { font-size: 32px; margin-bottom: 10px; }
+.content-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--navy);
+  line-height: 1.2;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--stone-mid);
+}
+.content-body {
+  font-size: 15px;
+  color: var(--text-mid);
+  line-height: 1.8;
+}
+.content-body p { margin-bottom: 12px; }
+.content-body p:last-child { margin-bottom: 0; }
+
+/* rec card */
+.rec-card {
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 16px 18px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+  border: 0.5px solid rgba(13,27,42,0.05);
+}
+.rec-category {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+.rec-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--navy);
+}
+.rec-desc {
+  font-size: 13px;
+  color: var(--text-mid);
+  margin-top: 6px;
+  line-height: 1.7;
+}
+
+/* empty */
+.empty { text-align: center; padding: 48px 24px; color: var(--text-light); }
+.empty-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-text { font-size: 14px; }
+
+/* ── ADMIN LOGIN ── */
+#screen-login {
+  background: var(--navy);
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+.login-logo { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 600; color: var(--gold); letter-spacing: 3px; margin-bottom: 4px; }
+.login-sub { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 48px; }
+.login-box {
+  background: rgba(255,255,255,0.05);
+  border: 0.5px solid rgba(255,255,255,0.1);
+  border-radius: var(--r);
+  padding: 28px 22px;
+  width: 100%;
+  max-width: 360px;
+}
+.fl { display: block; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 7px; }
+.fi {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 0.5px solid rgba(255,255,255,0.12);
+  border-radius: var(--r-sm);
+  padding: 12px 15px;
+  color: var(--white);
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  margin-bottom: 18px;
+  transition: border-color 0.2s;
+}
+.fi:focus { border-color: var(--gold); }
+.login-btn {
+  width: 100%;
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  border-radius: var(--r-sm);
+  padding: 14px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+}
+.login-err { color: #e74c3c; font-size: 13px; text-align: center; margin-top: 10px; display: none; }
+.login-back { color: rgba(255,255,255,0.25); font-size: 12px; cursor: pointer; margin-top: 28px; text-decoration: underline; text-underline-offset: 3px; }
+.login-back:hover { color: rgba(255,255,255,0.5); }
+
+/* ── ADMIN PANEL ── */
+#screen-admin { background: var(--cream); }
+.admin-hdr {
+  background: var(--navy);
+  padding: 13px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  flex-shrink: 0;
+}
+.admin-logo { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--gold); letter-spacing: 2px; }
+.admin-hdr-right { display: flex; align-items: center; gap: 10px; }
+.admin-badge { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.07); padding: 3px 8px; border-radius: 4px; }
+.logout-btn { font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(255,255,255,0.35); border: 0.5px solid rgba(255,255,255,0.12); border-radius: 5px; padding: 5px 10px; background: none; cursor: pointer; }
+.logout-btn:hover { color: rgba(255,255,255,0.65); border-color: rgba(255,255,255,0.3); }
+
+.admin-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 18px 16px 60px; }
+
+.a-section-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-light); margin: 20px 0 10px; }
+.a-section-label:first-child { margin-top: 0; }
+
+/* admin accordion card */
+.a-card {
+  background: var(--white);
+  border-radius: var(--r);
+  margin-bottom: 10px;
+  box-shadow: var(--shadow);
+  border: 0.5px solid rgba(13,27,42,0.05);
+  overflow: hidden;
+}
+.a-card-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.a-card-hdr:active { background: var(--stone); }
+.a-card-title { display: flex; align-items: center; gap: 9px; font-size: 14px; font-weight: 500; color: var(--navy); }
+.a-card-icon { font-size: 15px; }
+.a-chevron { font-size: 13px; color: var(--stone-dark); transition: transform 0.25s; }
+.a-card.open .a-chevron { transform: rotate(180deg); }
+.a-card-body { display: none; padding: 14px 16px; border-top: 0.5px solid var(--stone); }
+.a-card.open .a-card-body { display: block; }
+
+/* property item */
+.prop-item {
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow);
+  border: 0.5px solid rgba(13,27,42,0.05);
+}
+.prop-item-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.prop-item-name { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 500; color: var(--navy); }
+.prop-item-loc { font-size: 12px; color: var(--text-light); margin-top: 1px; }
+.btn-del { width: 30px; height: 30px; border-radius: 7px; border: 0.5px solid var(--stone-mid); background: var(--white); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.btn-del:hover { background: #fdecea; border-color: #e74c3c; }
+.url-box { background: var(--stone); border-radius: var(--r-sm); padding: 10px 12px; margin-top: 10px; }
+.url-label { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-light); margin-bottom: 3px; }
+.url-val { font-size: 12px; color: var(--navy); font-family: monospace; word-break: break-all; }
+.url-copy { font-size: 12px; color: var(--gold); cursor: pointer; margin-top: 5px; display: inline-block; }
+
+/* form */
+.fg { margin-bottom: 14px; }
+.fl2 { display: block; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-light); margin-bottom: 5px; }
+.fi2, .ft2, .fs2 {
+  width: 100%;
+  background: var(--stone);
+  border: 0.5px solid var(--stone-mid);
+  border-radius: var(--r-sm);
+  padding: 10px 13px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.ft2 { resize: vertical; min-height: 80px; line-height: 1.6; }
+.fi2:focus, .ft2:focus, .fs2:focus { border-color: var(--gold); background: var(--white); }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.sub-item-admin {
+  background: var(--stone);
+  border-radius: var(--r-sm);
+  padding: 11px 13px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  justify-content: space-between;
+}
+.sia-content { flex: 1; min-width: 0; }
+.sia-title { font-size: 13px; font-weight: 500; color: var(--navy); }
+.sia-preview { font-size: 11px; color: var(--text-light); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sia-actions { display: flex; gap: 5px; flex-shrink: 0; }
+.btn-sm-icon { width: 28px; height: 28px; border-radius: 6px; border: 0.5px solid var(--stone-mid); background: var(--white); font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.btn-sm-icon.del:hover { background: #fdecea; border-color: #e74c3c; }
+
+/* add form */
+.add-form { background: var(--stone); border-radius: var(--r-sm); padding: 14px; margin-top: 10px; display: none; }
+.add-form.open { display: block; }
+.add-form-title { font-size: 13px; font-weight: 500; color: var(--navy); margin-bottom: 12px; }
+
+/* lang tabs in form */
+.ltabs { display: flex; border-radius: var(--r-sm); overflow: hidden; border: 0.5px solid var(--stone-mid); margin-bottom: 12px; }
+.ltab { flex: 1; padding: 7px; font-size: 12px; text-align: center; cursor: pointer; background: var(--stone); color: var(--text-light); border: none; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+.ltab.active { background: var(--navy); color: var(--gold); font-weight: 500; }
+.lfield { display: none; }
+.lfield.active { display: block; }
+
+/* buttons */
+.btn-primary { background: var(--navy); color: var(--gold); border: none; border-radius: var(--r-sm); padding: 12px 18px; font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; width: 100%; letter-spacing: 0.3px; transition: background 0.15s; }
+.btn-primary:hover { background: var(--navy-mid); }
+.btn-secondary { background: var(--stone); color: var(--text); border: 0.5px solid var(--stone-mid); border-radius: var(--r-sm); padding: 11px 16px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background 0.15s; }
+.btn-secondary:hover { background: var(--stone-mid); }
+.btn-gold { background: var(--gold); color: var(--navy); border: none; border-radius: var(--r-sm); padding: 11px 16px; font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: background 0.15s; }
+.btn-gold:hover { background: var(--gold-light); }
+.btn-row { display: flex; gap: 8px; margin-top: 12px; }
+.btn-row > * { flex: 1; }
+.btn-translate { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; background: #e8f4f8; color: #1a6b8a; border: 0.5px solid #b8d9e8; border-radius: var(--r-sm); padding: 9px 14px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; margin: 8px 0; transition: background 0.15s; }
+.btn-translate:hover { background: #d0eaf5; }
+.btn-translate.loading { opacity: 0.6; pointer-events: none; }
+
+/* select in admin */
+.admin-prop-select { width: 100%; background: var(--white); border: 0.5px solid var(--stone-mid); border-radius: var(--r); padding: 12px 15px; font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--navy); outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a9a9a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 15px center; padding-right: 38px; box-shadow: var(--shadow); cursor: pointer; }
+
+/* divider */
+.divider { height: 0.5px; background: var(--stone-mid); margin: 16px 0; }
+
+/* toast */
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--navy); color: var(--white); padding: 11px 20px; border-radius: var(--r); font-size: 14px; z-index: 999; transition: transform 0.3s ease; white-space: nowrap; box-shadow: var(--shadow-md); }
+.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.success { border-left: 3px solid var(--success); }
+.toast.error { border-left: 3px solid var(--danger); }
+
+/* admin link on guest home */
+.admin-tiny { position: fixed; bottom: 12px; right: 16px; font-size: 11px; color: rgba(0,0,0,0.18); cursor: pointer; z-index: 50; }
+.admin-tiny:hover { color: rgba(0,0,0,0.4); }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════
+     GUEST SCREENS
+════════════════════════════════════════════ -->
+
+<!-- SCREEN: GUEST HOME (Level 1) -->
+<div id="screen-home" class="screen">
+  <div class="app-header">
+    <div class="header-main">
+      <div class="header-logo">VILLSY</div>
+      <div class="header-prop">
+        <div class="header-prop-name" id="g-prop-name">Villa Sunset</div>
+        <div class="header-prop-loc" id="g-prop-loc">Rovinj, Istra</div>
+      </div>
+    </div>
+    <div class="header-lang">
+      <button class="lang-btn active" onclick="setLang('hr',this)">HR</button>
+      <button class="lang-btn" onclick="setLang('en',this)">EN</button>
+    </div>
+  </div>
+  <div class="scroll-area">
+    <div class="home-hero">
+      <div class="home-welcome" id="g-welcome">Dobrodošli</div>
+      <div class="home-villa-name" id="g-hero-name">Villa Sunset</div>
+      <div class="home-villa-loc" id="g-hero-loc">Rovinj · Istra</div>
+      <div class="home-divider"></div>
+    </div>
+    <div class="section-grid" id="g-section-grid"></div>
+  </div>
+  <div class="admin-tiny" onclick="goAdminLogin()">admin</div>
+</div>
+
+<!-- SCREEN: SUBSECTION LIST (Level 2) -->
+<div id="screen-subs" class="screen">
+  <div class="app-header">
+    <div class="header-main">
+      <div class="header-logo">VILLSY</div>
+      <div class="header-prop">
+        <div class="header-prop-name" id="g-prop-name2"></div>
+        <div class="header-prop-loc" id="g-prop-loc2"></div>
+      </div>
+    </div>
+    <div class="breadcrumb">
+      <span class="bc-back" onclick="goHome()">← <span id="bc-home-label">Početak</span></span>
+    </div>
+  </div>
+  <div class="scroll-area">
+    <div class="sub-list">
+      <div class="sub-list-title" id="g-sub-title"></div>
+      <div id="g-sub-items"></div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN: CONTENT (Level 3) -->
+<div id="screen-content" class="screen">
+  <div class="app-header">
+    <div class="header-main">
+      <div class="header-logo">VILLSY</div>
+      <div class="header-prop">
+        <div class="header-prop-name" id="g-prop-name3"></div>
+        <div class="header-prop-loc" id="g-prop-loc3"></div>
+      </div>
+    </div>
+    <div class="breadcrumb">
+      <span class="bc-back" onclick="goSubs()">← <span id="bc-section-label"></span></span>
+    </div>
+  </div>
+  <div class="scroll-area">
+    <div id="g-content-inner"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     ADMIN SCREENS
+════════════════════════════════════════════ -->
+
+<!-- SCREEN: ADMIN LOGIN -->
+<div id="screen-login" class="screen">
+  <div class="login-logo">VILLSY</div>
+  <div class="login-sub">Admin panel</div>
+  <div class="login-box">
+    <label class="fl">Korisničko ime</label>
+    <input type="text" class="fi" id="l-user" placeholder="admin" autocomplete="off">
+    <label class="fl">Lozinka</label>
+    <input type="password" class="fi" id="l-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Prijava</button>
+    <div class="login-err" id="l-err">Pogrešni podaci za prijavu.</div>
+  </div>
+  <div class="login-back" onclick="goHome()">← Povratak</div>
+</div>
+
+<!-- SCREEN: ADMIN PANEL -->
+<div id="screen-admin" class="screen">
+  <div class="admin-hdr">
+    <div class="admin-logo">VILLSY</div>
+    <div class="admin-hdr-right">
+      <div class="admin-badge">Admin</div>
+      <button class="logout-btn" onclick="doLogout()">Odjava</button>
+    </div>
+  </div>
+  <div class="admin-scroll">
+
+    <div class="a-section-label">Objekti</div>
+    <div id="a-prop-list"></div>
+    <button class="btn-primary" onclick="toggleAddPropForm()" style="margin-bottom:6px;">+ Dodaj objekt</button>
+
+    <div class="add-form" id="add-prop-form">
+      <div class="add-form-title">Novi objekt</div>
+      <div class="fg"><label class="fl2">Naziv (HR)</label><input type="text" class="fi2" id="np-name-hr" placeholder="npr. Villa Sunset"></div>
+      <div class="fg"><label class="fl2">Naziv (EN)</label><input type="text" class="fi2" id="np-name-en" placeholder="e.g. Villa Sunset"></div>
+      <div class="frow">
+        <div class="fg"><label class="fl2">Mjesto</label><input type="text" class="fi2" id="np-loc" placeholder="Rovinj"></div>
+        <div class="fg"><label class="fl2">Regija</label><input type="text" class="fi2" id="np-region" placeholder="Istra"></div>
+      </div>
+      <div class="fg"><label class="fl2">Adresa</label><input type="text" class="fi2" id="np-addr" placeholder="Ulica bb, Mjesto"></div>
+      <div class="fg"><label class="fl2">Google Maps link</label><input type="text" class="fi2" id="np-maps" placeholder="https://maps.google.com/..."></div>
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="toggleAddPropForm()">Odustani</button>
+        <button class="btn-gold" onclick="addProperty()">Spremi</button>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+    <div class="a-section-label">Uredi sadržaj</div>
+
+    <select class="admin-prop-select" id="a-prop-select" onchange="renderAdminSections()">
+      <option value="">— Odaberite objekt —</option>
+    </select>
+
+    <div id="a-sections" style="margin-top:14px;"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'villsy2025';
+
+const SECTIONS = [
+  { id:'info',      icon:'🏠', hr:'Informacije o objektu', en:'Property Info',      wide:false },
+  { id:'checkin',   icon:'🗝️', hr:'Check-in / Check-out',  en:'Check-in / Check-out', wide:false },
+  { id:'rules',     icon:'📋', hr:'Kućni red',              en:'House Rules',        wide:false },
+  { id:'recommend', icon:'🍽️', hr:'Preporuke',              en:'Recommendations',    wide:false },
+  { id:'services',  icon:'🛎️', hr:'Usluge u okolici',       en:'Local Services',     wide:true  },
+  { id:'phones',    icon:'📞', hr:'Važni brojevi',           en:'Important Numbers',  wide:false },
+  { id:'map',       icon:'📍', hr:'Lokacija',               en:'Location',           wide:false },
+];
+
+// ═══════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════
+function loadData() {
+  const def = {
+    properties: [{
+      id:'villa-sunset', slug:'villa-sunset',
+      nameHr:'Villa Sunset', nameEn:'Villa Sunset',
+      location:'Rovinj', region:'Istra',
+      address:'Put za Monkodonju 12, Rovinj',
+      mapsLink:'https://maps.google.com',
+      sections:{
+        info:[
+          {id:'i1',icon:'📶',titleHr:'WiFi',titleEn:'WiFi',bodyHr:'Mreža: Villsy_5G\nLozinka: sunset2025',bodyEn:'Network: Villsy_5G\nPassword: sunset2025'},
+          {id:'i2',icon:'⚡',titleHr:'Osigurači i struja',titleEn:'Fuse Box',bodyHr:'Električna tabla se nalazi u hodniku, prva vrata lijevo od ulaza. Glavni osigurač je crne boje, gornji lijevo.\n\nU slučaju nestanka struje, provjerite je li glavni osigurač uključen.',bodyEn:'The fuse box is in the hallway, first door left of the entrance. Main fuse is black, top left.\n\nIn case of power outage, check if the main fuse is switched on.'},
+          {id:'i3',icon:'🫧',titleHr:'Veš mašina',titleEn:'Washing Machine',bodyHr:'Koristite program br. 3 (40°C) za normalan veš.\nDeterdžent se nalazi ispod sudopera u kuhinji.',bodyEn:'Use program no. 3 (40°C) for regular laundry.\nDetergent is under the kitchen sink.'},
+        ],
+        checkin:[
+          {id:'c1',icon:'🔑',titleHr:'Upute za dolazak',titleEn:'Arrival Instructions',bodyHr:'Check-in od 15:00h\n\nKljučevi se nalaze u sef-kutiji na glavnom ulazu. Kod: 1234\n\nKontaktirajte nas po dolasku!',bodyEn:'Check-in from 3:00 PM\n\nKeys are in the key safe at the main entrance. Code: 1234\n\nPlease contact us upon arrival!'},
+          {id:'c2',icon:'🚪',titleHr:'Upute za odlazak',titleEn:'Departure Instructions',bodyHr:'Check-out do 10:00h\n\nOstavite ključeve na stolu u kuhinji.\nZatvorite prozore i isključite klimu.\n\nHvala na boravku!',bodyEn:'Check-out by 10:00 AM\n\nLeave keys on the kitchen table.\nClose windows and turn off AC.\n\nThank you for your stay!'},
+        ],
+        rules:[
+          {id:'r1',icon:'🚭',titleHr:'Pušenje',titleEn:'Smoking',bodyHr:'Pušenje nije dozvoljeno unutar objekta. Dopušteno je isključivo na vanjskoj terasi.',bodyEn:'Smoking is not allowed inside the property. It is only permitted on the outdoor terrace.'},
+          {id:'r2',icon:'🐾',titleHr:'Kućni ljubimci',titleEn:'Pets',bodyHr:'Kućni ljubimci su dobrodošli uz prethodnu najavu agenciji.',bodyEn:'Pets are welcome with prior notice to the agency.'},
+          {id:'r3',icon:'🔇',titleHr:'Noćna tišina',titleEn:'Quiet Hours',bodyHr:'Molimo poštivanje noćne tišine od 23:00 do 07:00h. Maksimalan broj gostiju: 8 osoba.',bodyEn:'Please respect quiet hours from 11:00 PM to 7:00 AM. Maximum number of guests: 8 persons.'},
+        ],
+        recommend:[
+          {id:'rec1',icon:'🍷',titleHr:'Restoran Maestral',titleEn:'Restaurant Maestral',bodyHr:'Jedan od najboljih restorana u Rovinju s pogledom na more. Preporučamo riblji tanjur i domaća vina.\n\n📍 1.2 km od objekta\n⏰ 12:00 – 23:00',bodyEn:'One of the best restaurants in Rovinj with a sea view. We recommend the fish platter and local wines.\n\n📍 1.2 km from the property\n⏰ 12:00 – 23:00'},
+          {id:'rec2',icon:'🏖️',titleHr:'Plaža Zlatni Rt',titleEn:'Zlatni Rt Beach',bodyHr:'Prekrasna plaža u borovoj šumi, idealna za obitelji. Ima kafić i sanitarni čvor.\n\n📍 2.5 km od objekta\n🌊 Sezona: lipanj – rujan',bodyEn:'Beautiful beach in a pine forest, ideal for families. Has a café and restrooms.\n\n📍 2.5 km from the property\n🌊 Season: June – September'},
+        ],
+        services:[
+          {id:'sv1',icon:'🛒',titleHr:'Dostava namirnica',titleEn:'Grocery Delivery',bodyHr:'Konzum dostava: konzum.hr\nNarudžba dan unaprijed.\nDostava svaki dan 9:00 – 20:00.',bodyEn:'Konzum delivery: konzum.hr\nOrder one day in advance.\nDelivery every day 9:00 – 20:00.'},
+          {id:'sv2',icon:'🚕',titleHr:'Taxi',titleEn:'Taxi',bodyHr:'Radio Taxi Rovinj: +385 52 811 100\nTaxi Viktor: +385 91 234 5678',bodyEn:'Radio Taxi Rovinj: +385 52 811 100\nTaxi Viktor: +385 91 234 5678'},
+        ],
+        phones:[
+          {id:'p1',icon:'🚨',nameHr:'Hitna pomoć',nameEn:'Emergency',number:'112',cat:'hitno'},
+          {id:'p2',icon:'🏢',nameHr:'Villsy agencija',nameEn:'Villsy Agency',number:'+385 91 5888 620',cat:'agencija'},
+          {id:'p3',icon:'👤',nameHr:'Domaćin',nameEn:'Host',number:'+385 91 123 4567',cat:'domacin'},
+        ],
+        map:[]
+      }
+    }]
+  };
+  try { return JSON.parse(localStorage.getItem('villsy_v2') || 'null') || def; } catch(e) { return def; }
+}
+function saveData() { localStorage.setItem('villsy_v2', JSON.stringify(D)); }
+
+let D = loadData();
+let currentPropId = null;
+let currentSectionId = null;
+let lang = 'hr';
+let isLoggedIn = false;
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function goHome() { renderHome(); show('screen-home'); }
+function goAdminLogin() { if(isLoggedIn) { renderAdmin(); show('screen-admin'); } else show('screen-login'); }
+function doLogout() { isLoggedIn = false; goHome(); }
+
+function goSubs() { renderSubs(currentSectionId); show('screen-subs'); }
+
+// ═══════════════════════════════════════════
+// GUEST: HOME (Level 1)
+// ═══════════════════════════════════════════
+function setLang(l, btn) {
+  lang = l;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHome();
+}
+
+function renderHome() {
+  const prop = D.properties.find(p => p.id === currentPropId);
+  if (!prop) return;
+  const n = lang==='hr' ? prop.nameHr : prop.nameEn;
+  const loc = prop.location + ', ' + prop.region;
+
+  document.getElementById('g-prop-name').textContent = n;
+  document.getElementById('g-prop-loc').textContent = loc;
+  document.getElementById('g-welcome').textContent = lang==='hr' ? 'Dobrodošli' : 'Welcome';
+  document.getElementById('g-hero-name').textContent = n;
+  document.getElementById('g-hero-loc').textContent = prop.location + ' · ' + prop.region;
+
+  const grid = document.getElementById('g-section-grid');
+  grid.innerHTML = '';
+
+  const activeSections = SECTIONS.filter(s => {
+    if (s.id === 'map') return !!(prop.address || prop.mapsLink);
+    const items = prop.sections[s.id] || [];
+    return items.length > 0;
+  });
+
+  activeSections.forEach(s => {
+    const label = lang==='hr' ? s.hr : s.en;
+    const count = s.id === 'map' ? '' : s.id === 'phones' ? '' : `${(prop.sections[s.id]||[]).length} ${lang==='hr'?'stavki':'items'}`;
+    const card = document.createElement('div');
+    card.className = 'section-card' + (s.wide ? ' wide' : '');
+    if (s.wide) {
+      card.innerHTML = `
+        <div style="font-size:22px">${s.icon}</div>
+        <div class="section-card-text">
+          <div class="section-card-label">${label}</div>
+          ${count ? `<div class="section-card-count">${count}</div>` : ''}
+        </div>
+        <div class="section-card-arrow">›</div>`;
+    } else {
+      card.innerHTML = `
+        <div class="section-card-icon">${s.icon}</div>
+        <div class="section-card-label">${label}</div>
+        ${count ? `<div class="section-card-count">${count}</div>` : ''}
+        <div class="section-card-arrow">›</div>`;
+    }
+    card.onclick = () => { currentSectionId = s.id; renderSubs(s.id); show('screen-subs'); };
+    grid.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════
+// GUEST: SUBS (Level 2)
+// ═══════════════════════════════════════════
+function renderSubs(sectionId) {
+  const prop = D.properties.find(p => p.id === currentPropId);
+  if (!prop) return;
+  const sec = SECTIONS.find(s => s.id === sectionId);
+  const n = lang==='hr' ? prop.nameHr : prop.nameEn;
+
+  document.getElementById('g-prop-name2').textContent = n;
+  document.getElementById('g-prop-loc2').textContent = prop.location + ', ' + prop.region;
+  document.getElementById('bc-home-label').textContent = lang==='hr' ? 'Početak' : 'Home';
+  document.getElementById('g-sub-title').textContent = sec.icon + ' ' + (lang==='hr' ? sec.hr : sec.en);
+
+  const container = document.getElementById('g-sub-items');
+  container.innerHTML = '';
+
+  // Special: phones
+  if (sectionId === 'phones') {
+    const phones = prop.sections.phones || [];
+    if (!phones.length) { container.innerHTML = emptyState(sec.icon); return; }
+    phones.forEach(ph => {
+      const name = lang==='hr' ? ph.nameHr : (ph.nameEn || ph.nameHr);
+      container.innerHTML += `
+        <div class="phone-item">
+          <div class="phone-item-info">
+            <div class="phone-cat">${catLabel(ph.cat, lang)}</div>
+            <div class="phone-name">${(ph.icon||'') + ' ' + name}</div>
+          </div>
+          <a class="phone-call" href="tel:${ph.number}">${ph.number}</a>
+        </div>`;
+    });
+    return;
+  }
+
+  // Special: map (go direct to content)
+  if (sectionId === 'map') {
+    renderMapContent();
+    show('screen-content');
+    return;
+  }
+
+  const items = prop.sections[sectionId] || [];
+  if (!items.length) { container.innerHTML = emptyState(sec.icon); return; }
+
+  items.forEach(item => {
+    const title = lang==='hr' ? item.titleHr : (item.titleEn || item.titleHr);
+    const body  = lang==='hr' ? item.bodyHr  : (item.bodyEn  || item.bodyHr);
+    const preview = (body||'').split('\n')[0].substring(0, 55);
+    const div = document.createElement('div');
+    div.className = 'sub-item';
+    div.innerHTML = `
+      <div class="sub-item-left">
+        <div class="sub-item-icon">${item.icon || sec.icon}</div>
+        <div class="sub-item-text">
+          <div class="sub-item-title">${title}</div>
+          <div class="sub-item-preview">${preview}…</div>
+        </div>
+      </div>
+      <div class="sub-item-arrow">›</div>`;
+    div.onclick = () => { renderItemContent(sectionId, item.id); show('screen-content'); };
+    container.appendChild(div);
+  });
+}
+
+// ═══════════════════════════════════════════
+// GUEST: CONTENT (Level 3)
+// ═══════════════════════════════════════════
+function renderItemContent(sectionId, itemId) {
+  const prop = D.properties.find(p => p.id === currentPropId);
+  const sec  = SECTIONS.find(s => s.id === sectionId);
+  const item = (prop.sections[sectionId]||[]).find(i => i.id === itemId);
+  if (!item) return;
+
+  const n = lang==='hr' ? prop.nameHr : prop.nameEn;
+  document.getElementById('g-prop-name3').textContent = n;
+  document.getElementById('g-prop-loc3').textContent = prop.location + ', ' + prop.region;
+  document.getElementById('bc-section-label').textContent = lang==='hr' ? sec.hr : sec.en;
+
+  const title = lang==='hr' ? item.titleHr : (item.titleEn || item.titleHr);
+  const body  = lang==='hr' ? item.bodyHr  : (item.bodyEn  || item.bodyHr);
+  const bodyHtml = (body||'').split('\n').map(l => l ? `<p>${l}</p>` : '').join('');
+
+  document.getElementById('g-content-inner').innerHTML = `
+    <div class="content-area">
+      <div class="content-icon">${item.icon || sec.icon}</div>
+      <div class="content-title">${title}</div>
+      <div class="content-body">${bodyHtml}</div>
+    </div>`;
+}
+
+function renderMapContent() {
+  const prop = D.properties.find(p => p.id === currentPropId);
+  const n = lang==='hr' ? prop.nameHr : prop.nameEn;
+  document.getElementById('g-prop-name3').textContent = n;
+  document.getElementById('g-prop-loc3').textContent = prop.location + ', ' + prop.region;
+  document.getElementById('bc-section-label').textContent = lang==='hr' ? 'Lokacija' : 'Location';
+
+  document.getElementById('g-content-inner').innerHTML = `
+    <div class="map-section">
+      <div class="map-placeholder">
+        <div class="mi">📍</div>
+        <div>${prop.location}, ${prop.region}</div>
+      </div>
+      <div class="map-info">
+        <div class="map-label">${lang==='hr'?'Adresa':'Address'}</div>
+        <div class="map-address">${prop.address || '—'}</div>
+        <a class="map-btn" href="${prop.mapsLink||'#'}" target="_blank">
+          ↗ ${lang==='hr'?'Otvori u Google Maps':'Open in Google Maps'}
+        </a>
+      </div>
+    </div>`;
+}
+
+function emptyState(icon) {
+  return `<div class="empty"><div class="empty-icon">${icon}</div><div class="empty-text">Nema sadržaja.</div></div>`;
+}
+
+function catLabel(cat, l) {
+  const m = { hitno:{hr:'Hitno',en:'Emergency'}, agencija:{hr:'Agencija',en:'Agency'}, domacin:{hr:'Domaćin',en:'Host'}, ostalo:{hr:'Ostalo',en:'Other'} };
+  return (m[cat]||m.ostalo)[l];
+}
+
+// ═══════════════════════════════════════════
+// ADMIN LOGIN
+// ═══════════════════════════════════════════
+function doLogin() {
+  const u = document.getElementById('l-user').value;
+  const p = document.getElementById('l-pass').value;
+  const err = document.getElementById('l-err');
+  if (u===ADMIN_USER && p===ADMIN_PASS) {
+    isLoggedIn = true; err.style.display='none';
+    renderAdmin(); show('screen-admin');
+  } else { err.style.display='block'; }
+}
+
+// ═══════════════════════════════════════════
+// ADMIN: PROPERTY LIST
+// ═══════════════════════════════════════════
+function renderAdmin() {
+  renderAdminPropList();
+  renderAdminPropSelect();
+}
+
+function renderAdminPropList() {
+  const c = document.getElementById('a-prop-list');
+  c.innerHTML = '';
+  D.properties.forEach(prop => {
+    const url = window.location.href.split('?')[0] + '?villa=' + prop.slug;
+    const div = document.createElement('div');
+    div.className = 'prop-item';
+    div.innerHTML = `
+      <div class="prop-item-top">
+        <div>
+          <div class="prop-item-name">${prop.nameHr}</div>
+          <div class="prop-item-loc">${prop.location}, ${prop.region}</div>
+        </div>
+        <button class="btn-del" onclick="deleteProp('${prop.id}')">🗑</button>
+      </div>
+      <div class="url-box">
+        <div class="url-label">URL za gosta</div>
+        <div class="url-val">${url}</div>
+        <span class="url-copy" onclick="copyUrl('${prop.slug}')">📋 Kopiraj link</span>
+      </div>`;
+    c.appendChild(div);
+  });
+}
+
+function copyUrl(slug) {
+  const url = window.location.href.split('?')[0] + '?villa=' + slug;
+  navigator.clipboard.writeText(url).then(() => toast('Link kopiran!','success'));
+}
+
+function toggleAddPropForm() {
+  const f = document.getElementById('add-prop-form');
+  f.classList.toggle('open');
+}
+
+function addProperty() {
+  const nameHr = v('np-name-hr'), nameEn = v('np-name-en');
+  const loc = v('np-loc'), region = v('np-region');
+  const addr = v('np-addr'), maps = v('np-maps');
+  if (!nameHr || !loc) { toast('Unesite naziv i mjesto!','error'); return; }
+  const slug = nameHr.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'') + '-' + Date.now();
+  D.properties.push({ id:slug, slug, nameHr, nameEn:nameEn||nameHr, location:loc, region, address:addr, mapsLink:maps,
+    sections:{ info:[], checkin:[], rules:[], recommend:[], services:[], phones:[], map:[] } });
+  saveData();
+  toggleAddPropForm();
+  renderAdmin();
+  ['np-name-hr','np-name-en','np-loc','np-region','np-addr','np-maps'].forEach(id => document.getElementById(id).value='');
+  toast('Objekt dodan!','success');
+}
+
+function deleteProp(id) {
+  if (!confirm('Obrisati objekt i sve podatke?')) return;
+  D.properties = D.properties.filter(p => p.id !== id);
+  saveData(); renderAdmin();
+  document.getElementById('a-sections').innerHTML = '';
+  toast('Objekt obrisan.','success');
+}
+
+// ═══════════════════════════════════════════
+// ADMIN: SECTIONS
+// ═══════════════════════════════════════════
+function renderAdminPropSelect() {
+  const sel = document.getElementById('a-prop-select');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">— Odaberite objekt —</option>';
+  D.properties.forEach(p => {
+    const o = document.createElement('option');
+    o.value = p.id; o.textContent = p.nameHr + ' — ' + p.location;
+    if (p.id === cur) o.selected = true;
+    sel.appendChild(o);
+  });
+}
+
+function renderAdminSections() {
+  const propId = document.getElementById('a-prop-select').value;
+  const c = document.getElementById('a-sections');
+  c.innerHTML = '';
+  if (!propId) return;
+  const prop = D.properties.find(p => p.id === propId);
+  if (!prop) return;
+
+  SECTIONS.forEach(sec => {
+    const card = document.createElement('div');
+    card.className = 'a-card';
+    card.id = 'acard-' + sec.id;
+    const items = prop.sections[sec.id] || [];
+    const cnt = sec.id !== 'map' ? ` (${items.length})` : '';
+    card.innerHTML = `
+      <div class="a-card-hdr" onclick="toggleACard('${sec.id}')">
+        <div class="a-card-title"><span class="a-card-icon">${sec.icon}</span>${sec.hr}${cnt}</div>
+        <div class="a-chevron">▾</div>
+      </div>
+      <div class="a-card-body" id="abody-${sec.id}">
+        ${renderAdminSecBody(sec, prop)}
+      </div>`;
+    c.appendChild(card);
+  });
+}
+
+function toggleACard(sid) {
+  const card = document.getElementById('acard-' + sid);
+  card.classList.toggle('open');
+}
+
+function renderAdminSecBody(sec, prop) {
+  if (sec.id === 'map') return renderAdminMap(prop);
+  if (sec.id === 'phones') return renderAdminPhones(prop);
+  return renderAdminItems(sec, prop);
+}
+
+function renderAdminItems(sec, prop) {
+  const items = prop.sections[sec.id] || [];
+  let h = '';
+  if (!items.length) h += `<div style="font-size:13px;color:var(--text-light);padding:4px 0 10px;">Nema stavki.</div>`;
+  else items.forEach(item => {
+    h += `
+      <div class="sub-item-admin">
+        <div class="sia-content">
+          <div class="sia-title">${item.icon||''} ${item.titleHr}</div>
+          <div class="sia-preview">${(item.bodyHr||'').substring(0,55)}…</div>
+        </div>
+        <div class="sia-actions">
+          <button class="btn-sm-icon" onclick="editItem('${prop.id}','${sec.id}','${item.id}')">✏️</button>
+          <button class="btn-sm-icon del" onclick="deleteItem('${prop.id}','${sec.id}','${item.id}')">🗑</button>
+        </div>
+      </div>`;
+  });
+  h += `
+    <div class="add-form" id="af-${sec.id}">
+      <div class="add-form-title" id="aft-${sec.id}">Nova stavka</div>
+      <input type="hidden" id="aeid-${sec.id}">
+      <div class="fg"><label class="fl2">Ikona (emoji)</label><input type="text" class="fi2" id="aicon-${sec.id}" placeholder="npr. 📶" style="width:80px;"></div>
+      <div class="ltabs">
+        <button class="ltab active" onclick="switchFL('${sec.id}','hr',this)">🇭🇷 HR</button>
+        <button class="ltab" onclick="switchFL('${sec.id}','en',this)">🇬🇧 EN</button>
+      </div>
+      <div class="lfield active" id="lf-hr-${sec.id}">
+        <div class="fg"><label class="fl2">Naslov (HR)</label><input type="text" class="fi2" id="athr-${sec.id}"></div>
+        <div class="fg"><label class="fl2">Sadržaj (HR)</label><textarea class="ft2" id="abhr-${sec.id}"></textarea></div>
+      </div>
+      <div class="lfield" id="lf-en-${sec.id}">
+        <div class="fg"><label class="fl2">Title (EN)</label><input type="text" class="fi2" id="aten-${sec.id}"></div>
+        <div class="fg"><label class="fl2">Content (EN)</label><textarea class="ft2" id="aben-${sec.id}"></textarea></div>
+      </div>
+      <button class="btn-translate" id="atr-${sec.id}" onclick="autoTranslate('${sec.id}')">🤖 Auto-prijevod HR → EN</button>
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="closeAddForm('${sec.id}')">Odustani</button>
+        <button class="btn-gold" onclick="saveItem('${prop.id}','${sec.id}')">Spremi</button>
+      </div>
+    </div>
+    <button class="btn-primary" style="margin-top:10px;" onclick="openAddForm('${sec.id}')">+ Dodaj stavku</button>`;
+  return h;
+}
+
+function renderAdminPhones(prop) {
+  const phones = prop.sections.phones || [];
+  let h = '';
+  if (!phones.length) h += `<div style="font-size:13px;color:var(--text-light);padding:4px 0 10px;">Nema kontakata.</div>`;
+  else phones.forEach(ph => {
+    h += `
+      <div class="sub-item-admin">
+        <div class="sia-content">
+          <div class="sia-title">${ph.icon||'📞'} ${ph.nameHr}</div>
+          <div class="sia-preview">${ph.number}</div>
+        </div>
+        <div class="sia-actions">
+          <button class="btn-sm-icon del" onclick="deletePhone('${prop.id}','${ph.id}')">🗑</button>
+        </div>
+      </div>`;
+  });
+  h += `
+    <div class="add-form" id="af-phones">
+      <div class="add-form-title">Novi kontakt</div>
+      <div class="fg"><label class="fl2">Ikona</label><input type="text" class="fi2" id="ph-icon" placeholder="📞" style="width:70px;"></div>
+      <div class="frow">
+        <div class="fg"><label class="fl2">Naziv (HR)</label><input type="text" class="fi2" id="ph-hr" placeholder="Hitna pomoć"></div>
+        <div class="fg"><label class="fl2">Naziv (EN)</label><input type="text" class="fi2" id="ph-en" placeholder="Emergency"></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl2">Broj</label><input type="text" class="fi2" id="ph-num" placeholder="+385 91..."></div>
+        <div class="fg"><label class="fl2">Kategorija</label>
+          <select class="fs2" id="ph-cat">
+            <option value="domacin">Domaćin</option>
+            <option value="agencija">Agencija</option>
+            <option value="hitno">Hitno</option>
+            <option value="ostalo">Ostalo</option>
+          </select>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="closeAddForm('phones')">Odustani</button>
+        <button class="btn-gold" onclick="savePhone('${prop.id}')">Spremi</button>
+      </div>
+    </div>
+    <button class="btn-primary" style="margin-top:10px;" onclick="openAddForm('phones')">+ Dodaj kontakt</button>`;
+  return h;
+}
+
+function renderAdminMap(prop) {
+  return `
+    <div class="fg"><label class="fl2">Adresa</label><input type="text" class="fi2" id="map-addr-${prop.id}" value="${prop.address||''}" placeholder="Ulica bb, Mjesto"></div>
+    <div class="fg"><label class="fl2">Google Maps link</label><input type="text" class="fi2" id="map-link-${prop.id}" value="${prop.mapsLink||''}" placeholder="https://maps.google.com/..."></div>
+    <button class="btn-primary" onclick="saveMap('${prop.id}')">Spremi lokaciju</button>`;
+}
+
+// ═══════════════════════════════════════════
+// ADMIN: ITEM CRUD
+// ═══════════════════════════════════════════
+function openAddForm(sid) {
+  const f = document.getElementById('af-' + sid);
+  if (f) { f.classList.add('open'); const eid = document.getElementById('aeid-'+sid); if(eid) eid.value=''; const t = document.getElementById('aft-'+sid); if(t) t.textContent='Nova stavka'; }
+}
+function closeAddForm(sid) {
+  const f = document.getElementById('af-' + sid);
+  if (f) {
+    f.classList.remove('open');
+    ['athr-','abhr-','aten-','aben-','aicon-'].forEach(pre => { const el = document.getElementById(pre+sid); if(el) el.value=''; });
+  }
+}
+function switchFL(sid, l, btn) {
+  const f = document.getElementById('af-'+sid);
+  f.querySelectorAll('.ltab').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+  f.querySelectorAll('.lfield').forEach(lf => lf.classList.remove('active'));
+  document.getElementById('lf-'+l+'-'+sid).classList.add('active');
+}
+
+function editItem(propId, sid, itemId) {
+  const prop = D.properties.find(p => p.id===propId);
+  const item = (prop.sections[sid]||[]).find(i => i.id===itemId);
+  if (!item) return;
+  openAddForm(sid);
+  document.getElementById('aeid-'+sid).value = itemId;
+  document.getElementById('aft-'+sid).textContent = 'Uredi stavku';
+  document.getElementById('aicon-'+sid).value = item.icon || '';
+  document.getElementById('athr-'+sid).value = item.titleHr || '';
+  document.getElementById('abhr-'+sid).value = item.bodyHr  || '';
+  document.getElementById('aten-'+sid).value = item.titleEn || '';
+  document.getElementById('aben-'+sid).value = item.bodyEn  || '';
+}
+
+function saveItem(propId, sid) {
+  const prop = D.properties.find(p => p.id===propId);
+  const titleHr = v('athr-'+sid), bodyHr = v('abhr-'+sid);
+  const titleEn = v('aten-'+sid), bodyEn = v('aben-'+sid);
+  const icon = v('aicon-'+sid);
+  if (!titleHr) { toast('Unesite naslov!','error'); return; }
+  const editId = v('aeid-'+sid);
+  if (!prop.sections[sid]) prop.sections[sid] = [];
+  if (editId) {
+    const item = prop.sections[sid].find(i => i.id===editId);
+    if (item) Object.assign(item, {titleHr,bodyHr,titleEn,bodyEn,icon});
+    toast('Ažurirano!','success');
+  } else {
+    prop.sections[sid].push({id:'i'+Date.now(),icon,titleHr,bodyHr,titleEn,bodyEn});
+    toast('Dodano!','success');
+  }
+  saveData(); closeAddForm(sid); reRenderSec(sid, prop);
+}
+
+function deleteItem(propId, sid, itemId) {
+  if (!confirm('Obrisati stavku?')) return;
+  const prop = D.properties.find(p => p.id===propId);
+  prop.sections[sid] = prop.sections[sid].filter(i => i.id!==itemId);
+  saveData(); reRenderSec(sid, prop);
+  toast('Obrisano.','success');
+}
+
+function savePhone(propId) {
+  const prop = D.properties.find(p => p.id===propId);
+  const nameHr = v('ph-hr'), nameEn = v('ph-en');
+  const number = v('ph-num'), cat = v('ph-cat'), icon = v('ph-icon');
+  if (!nameHr || !number) { toast('Unesite naziv i broj!','error'); return; }
+  if (!prop.sections.phones) prop.sections.phones = [];
+  prop.sections.phones.push({id:'ph'+Date.now(),icon:icon||'📞',nameHr,nameEn:nameEn||nameHr,number,cat});
+  saveData(); closeAddForm('phones'); reRenderSec('phones', prop);
+  toast('Kontakt dodan!','success');
+}
+
+function deletePhone(propId, phoneId) {
+  if (!confirm('Obrisati kontakt?')) return;
+  const prop = D.properties.find(p => p.id===propId);
+  prop.sections.phones = prop.sections.phones.filter(p => p.id!==phoneId);
+  saveData(); reRenderSec('phones', prop);
+  toast('Obrisano.','success');
+}
+
+function saveMap(propId) {
+  const prop = D.properties.find(p => p.id===propId);
+  prop.address  = v('map-addr-'+propId);
+  prop.mapsLink = v('map-link-'+propId);
+  saveData(); toast('Lokacija spremljena!','success');
+}
+
+function reRenderSec(sid, prop) {
+  const sec = SECTIONS.find(s => s.id===sid);
+  const body = document.getElementById('abody-'+sid);
+  if (body) body.innerHTML = renderAdminSecBody(sec, prop);
+  const card = document.getElementById('acard-'+sid);
+  if (card) {
+    const items = prop.sections[sid] || [];
+    const cnt = sid !== 'map' ? ` (${items.length})` : '';
+    const title = card.querySelector('.a-card-title');
+    if (title) title.innerHTML = `<span class="a-card-icon">${sec.icon}</span>${sec.hr}${cnt}`;
+    if (!card.classList.contains('open')) card.classList.add('open');
+  }
+}
+
+// ═══════════════════════════════════════════
+// AUTO TRANSLATE
+// ═══════════════════════════════════════════
+async function autoTranslate(sid) {
+  const titleHr = v('athr-'+sid);
+  const bodyHr  = v('abhr-'+sid);
+  if (!titleHr && !bodyHr) { toast('Unesite HR sadržaj!','error'); return; }
+  const btn = document.getElementById('atr-'+sid);
+  btn.classList.add('loading'); btn.textContent = '⏳ Prevodim...';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514', max_tokens:1000,
+        messages:[{ role:'user', content:`Prevedi s hrvatskog na engleski. Vrati SAMO JSON: {"titleEn":"...","bodyEn":"..."}\n\nNaslov: ${titleHr}\nSadržaj: ${bodyHr}` }]
+      })
+    });
+    const data = await res.json();
+    const parsed = JSON.parse(data.content[0].text.replace(/```json|```/g,'').trim());
+    document.getElementById('aten-'+sid).value = parsed.titleEn || '';
+    document.getElementById('aben-'+sid).value = parsed.bodyEn  || '';
+    const enBtn = document.querySelector(`#af-${sid} .ltab:last-child`);
+    if (enBtn) switchFL(sid, 'en', enBtn);
+    toast('Prijevod gotov!','success');
+  } catch(e) { toast('Greška pri prijevodu.','error'); }
+  finally { btn.classList.remove('loading'); btn.textContent = '🤖 Auto-prijevod HR → EN'; }
+}
+
+// ═══════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════
+function v(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function toast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast ' + (type||''); t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+// ═══════════════════════════════════════════
+// INIT + URL ROUTING
+// ═══════════════════════════════════════════
+function init() {
+  D = loadData();
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get('villa');
+  if (slug) {
+    const prop = D.properties.find(p => p.slug===slug || p.id===slug);
+    if (prop) { currentPropId = prop.id; goHome(); return; }
+  }
+  // Fallback: show first property or login
+  if (D.properties.length) { currentPropId = D.properties[0].id; goHome(); }
+  else goAdminLogin();
+}
+
+init();
+</script>
+</body>
+</html>
