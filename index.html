@@ -33,97 +33,81 @@
 html, body { height: 100%; }
 body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); font-size: 15px; line-height: 1.6; }
 
-/* ── SCREENS ── */
 .screen { display: none; min-height: 100vh; flex-direction: column; }
 .screen.active { display: flex; }
 
-/* ── LOADING ── */
-#screen-loading {
-  background: var(--navy);
-  align-items: center;
-  justify-content: center;
-}
+/* LOADING */
+#screen-loading { background: var(--navy); align-items: center; justify-content: center; }
 .loading-logo { font-family: 'Cormorant Garamond', serif; font-size: 38px; font-weight: 600; color: var(--gold); letter-spacing: 4px; margin-bottom: 20px; }
-.loading-spinner {
-  width: 28px; height: 28px;
-  border: 2px solid rgba(201,168,76,0.2);
-  border-top-color: var(--gold);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
+.loading-spinner { width: 28px; height: 28px; border: 2px solid rgba(201,168,76,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── SHARED HEADER ── */
+/* HEADER */
 .app-header { background: var(--navy); flex-shrink: 0; position: sticky; top: 0; z-index: 200; }
 .header-main { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px 10px; }
 .header-logo { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; color: var(--gold); letter-spacing: 3px; line-height: 1; }
 .header-prop { text-align: right; line-height: 1.3; }
 .header-prop-name { font-size: 13px; color: rgba(255,255,255,0.85); font-weight: 400; }
 .header-prop-loc { font-size: 11px; color: rgba(255,255,255,0.4); }
-.header-lang { display: flex; padding: 0 18px 12px; gap: 0; }
+.header-lang { display: flex; padding: 0 18px 12px; }
 .lang-btn { font-family: 'DM Sans', sans-serif; font-size: 11px; padding: 4px 12px; border: 0.5px solid rgba(201,168,76,0.3); background: none; color: rgba(255,255,255,0.4); cursor: pointer; letter-spacing: 1px; transition: all 0.15s; }
 .lang-btn:first-child { border-radius: 5px 0 0 5px; }
 .lang-btn:last-child { border-radius: 0 5px 5px 0; border-left: none; }
 .lang-btn.active { background: var(--gold); border-color: var(--gold); color: var(--navy); font-weight: 500; }
-
-/* breadcrumb */
-.breadcrumb { display: flex; align-items: center; gap: 6px; padding: 8px 18px; background: var(--navy-mid); border-top: 0.5px solid rgba(255,255,255,0.07); min-height: 38px; }
-.bc-back { display: flex; align-items: center; gap: 5px; color: rgba(255,255,255,0.45); font-size: 13px; cursor: pointer; padding: 2px 0; transition: color 0.15s; }
+.breadcrumb { display: flex; align-items: center; padding: 8px 18px; background: var(--navy-mid); border-top: 0.5px solid rgba(255,255,255,0.07); min-height: 38px; }
+.bc-back { display: flex; align-items: center; gap: 5px; color: rgba(255,255,255,0.45); font-size: 13px; cursor: pointer; transition: color 0.15s; }
 .bc-back:hover { color: var(--gold); }
 
-/* ── SCROLL AREA ── */
 .scroll-area { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
-/* ── LEVEL 1: HOME GRID ── */
+/* HOME */
 .home-hero { background: var(--navy); padding: 22px 18px 24px; text-align: center; }
 .home-welcome { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 6px; }
 .home-villa-name { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 500; color: var(--white); line-height: 1.1; }
 .home-villa-loc { font-size: 13px; color: var(--gold); margin-top: 4px; }
 .home-divider { width: 32px; height: 1px; background: var(--gold); opacity: 0.4; margin: 14px auto 0; }
-
 .section-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px 16px 32px; }
 .section-card { background: var(--white); border-radius: var(--r); padding: 18px 14px 16px; box-shadow: var(--shadow); cursor: pointer; border: 0.5px solid rgba(13,27,42,0.06); display: flex; flex-direction: column; align-items: flex-start; gap: 8px; transition: all 0.15s; position: relative; overflow: hidden; min-height: 100px; }
 .section-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--gold); opacity: 0; transition: opacity 0.15s; }
-.section-card:active, .section-card:hover { box-shadow: var(--shadow-md); }
+.section-card:active { box-shadow: var(--shadow-md); }
 .section-card:active::after { opacity: 1; }
 .section-card.wide { grid-column: span 2; flex-direction: row; align-items: center; min-height: auto; padding: 14px 16px; }
 .section-card.wide .section-card-arrow { margin-left: auto; }
 .section-card-icon { font-size: 26px; line-height: 1; }
-.section-card.wide .section-card-icon { font-size: 22px; }
 .section-card-label { font-size: 13px; font-weight: 500; color: var(--navy); line-height: 1.3; }
 .section-card-count { font-size: 11px; color: var(--text-light); }
 .section-card-arrow { font-size: 15px; color: var(--stone-dark); align-self: flex-end; }
 .section-card.wide .section-card-text { flex: 1; }
 
-/* ── LEVEL 2 ── */
+/* LEVEL 2 */
 .sub-list { padding: 16px; }
-.sub-list-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 500; color: var(--navy); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+.sub-list-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 500; color: var(--navy); margin-bottom: 16px; }
 .sub-item { background: var(--white); border-radius: var(--r-sm); padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 12px; box-shadow: var(--shadow); cursor: pointer; border: 0.5px solid rgba(13,27,42,0.05); transition: all 0.15s; }
 .sub-item:active { background: var(--stone); }
 .sub-item-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
 .sub-item-icon { width: 36px; height: 36px; background: var(--stone); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
 .sub-item-text { min-width: 0; }
 .sub-item-title { font-size: 15px; font-weight: 500; color: var(--navy); }
-.sub-item-preview { font-size: 12px; color: var(--text-light); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px; }
+.sub-item-preview { font-size: 12px; color: var(--text-light); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
 .sub-item-arrow { color: var(--stone-dark); font-size: 16px; flex-shrink: 0; }
 
-/* phone cards */
+/* PHONES */
 .phone-item { background: var(--white); border-radius: var(--r-sm); padding: 13px 16px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow); border: 0.5px solid rgba(13,27,42,0.05); }
 .phone-item-info { flex: 1; }
 .phone-cat { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-light); margin-bottom: 2px; }
 .phone-name { font-size: 15px; font-weight: 500; color: var(--navy); }
 .phone-call { background: var(--navy); color: var(--gold); border: none; border-radius: var(--r-sm); padding: 9px 14px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; text-decoration: none; display: inline-block; white-space: nowrap; }
 
-/* map */
+/* MAP */
 .map-section { padding: 0; }
-.map-placeholder { background: var(--stone); height: 180px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; color: var(--text-light); font-size: 14px; border-bottom: 0.5px solid var(--stone-mid); }
+.map-placeholder { background: var(--stone); height: 180px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; color: var(--text-light); font-size: 14px; }
 .map-placeholder .mi { font-size: 36px; }
 .map-info { padding: 16px; }
 .map-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-light); margin-bottom: 6px; }
 .map-address { font-size: 16px; font-weight: 500; color: var(--navy); margin-bottom: 14px; }
-.map-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--navy); color: var(--gold); text-decoration: none; border-radius: var(--r-sm); padding: 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; letter-spacing: 0.3px; }
+.map-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--navy); color: var(--gold); text-decoration: none; border-radius: var(--r-sm); padding: 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; }
 
-/* ── LEVEL 3: CONTENT ── */
+/* LEVEL 3 */
 .content-area { padding: 20px 18px 40px; }
 .content-icon { font-size: 32px; margin-bottom: 10px; }
 .content-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 500; color: var(--navy); line-height: 1.2; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--stone-mid); }
@@ -131,12 +115,14 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .content-body p { margin-bottom: 12px; }
 .content-body p:last-child { margin-bottom: 0; }
 
-/* empty */
+/* SHARED badge */
+.shared-badge { display: inline-block; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; background: var(--stone); color: var(--text-light); padding: 2px 7px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
+
 .empty { text-align: center; padding: 48px 24px; color: var(--text-light); }
 .empty-icon { font-size: 40px; margin-bottom: 12px; }
 .empty-text { font-size: 14px; }
 
-/* ── ADMIN LOGIN ── */
+/* LOGIN */
 #screen-login { background: var(--navy); align-items: center; justify-content: center; padding: 40px 24px; }
 .login-logo { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 600; color: var(--gold); letter-spacing: 3px; margin-bottom: 4px; }
 .login-sub { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 48px; }
@@ -144,13 +130,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .fl { display: block; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 7px; }
 .fi { width: 100%; background: rgba(255,255,255,0.06); border: 0.5px solid rgba(255,255,255,0.12); border-radius: var(--r-sm); padding: 12px 15px; color: var(--white); font-size: 15px; font-family: 'DM Sans', sans-serif; outline: none; margin-bottom: 18px; transition: border-color 0.2s; }
 .fi:focus { border-color: var(--gold); }
-.login-btn { width: 100%; background: var(--gold); color: var(--navy); border: none; border-radius: var(--r-sm); padding: 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; letter-spacing: 0.3px; }
+.login-btn { width: 100%; background: var(--gold); color: var(--navy); border: none; border-radius: var(--r-sm); padding: 14px; font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; }
 .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .login-err { color: #e74c3c; font-size: 13px; text-align: center; margin-top: 10px; display: none; }
-.login-back { color: rgba(255,255,255,0.25); font-size: 12px; cursor: pointer; margin-top: 28px; text-decoration: underline; text-underline-offset: 3px; }
-.login-back:hover { color: rgba(255,255,255,0.5); }
+.login-back { color: rgba(255,255,255,0.25); font-size: 12px; cursor: pointer; margin-top: 28px; text-decoration: underline; }
 
-/* ── ADMIN PANEL ── */
+/* ADMIN */
 #screen-admin { background: var(--cream); }
 .admin-hdr { background: var(--navy); padding: 13px 18px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 200; flex-shrink: 0; }
 .admin-logo { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--gold); letter-spacing: 2px; }
@@ -158,11 +143,17 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .admin-badge { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.07); padding: 3px 8px; border-radius: 4px; }
 .logout-btn { font-family: 'DM Sans', sans-serif; font-size: 12px; color: rgba(255,255,255,0.35); border: 0.5px solid rgba(255,255,255,0.12); border-radius: 5px; padding: 5px 10px; background: none; cursor: pointer; }
 .logout-btn:hover { color: rgba(255,255,255,0.65); }
+
+/* ADMIN TABS */
+.admin-tabs { display: flex; background: var(--navy-mid); border-bottom: 0.5px solid rgba(255,255,255,0.07); flex-shrink: 0; }
+.admin-tab { flex: 1; padding: 11px 8px; font-size: 12px; text-align: center; cursor: pointer; color: rgba(255,255,255,0.35); font-family: 'DM Sans', sans-serif; border: none; background: none; letter-spacing: 0.5px; transition: all 0.15s; border-bottom: 2px solid transparent; }
+.admin-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
 .admin-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 18px 16px 60px; }
 .a-section-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-light); margin: 20px 0 10px; }
 .a-section-label:first-child { margin-top: 0; }
 
-/* accordion */
+/* ACCORDION */
 .a-card { background: var(--white); border-radius: var(--r); margin-bottom: 10px; box-shadow: var(--shadow); border: 0.5px solid rgba(13,27,42,0.05); overflow: hidden; }
 .a-card-hdr { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; transition: background 0.15s; }
 .a-card-hdr:active { background: var(--stone); }
@@ -173,11 +164,12 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .a-card-body { display: none; padding: 14px 16px; border-top: 0.5px solid var(--stone); }
 .a-card.open .a-card-body { display: block; }
 
-/* property item */
+/* PROP ITEM */
 .prop-item { background: var(--white); border-radius: var(--r); padding: 14px 16px; margin-bottom: 10px; box-shadow: var(--shadow); border: 0.5px solid rgba(13,27,42,0.05); }
 .prop-item-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
 .prop-item-name { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 500; color: var(--navy); }
 .prop-item-loc { font-size: 12px; color: var(--text-light); margin-top: 1px; }
+.prop-item-region { font-size: 11px; color: var(--gold); margin-top: 2px; }
 .btn-del { width: 30px; height: 30px; border-radius: 7px; border: 0.5px solid var(--stone-mid); background: var(--white); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .btn-del:hover { background: #fdecea; border-color: #e74c3c; }
 .url-box { background: var(--stone); border-radius: var(--r-sm); padding: 10px 12px; margin-top: 10px; }
@@ -185,15 +177,8 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .url-val { font-size: 12px; color: var(--navy); font-family: monospace; word-break: break-all; }
 .url-copy { font-size: 12px; color: var(--gold); cursor: pointer; margin-top: 5px; display: inline-block; }
 
-/* forms */
-.fg { margin-bottom: 14px; }
-.fl2 { display: block; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-light); margin-bottom: 5px; }
-.fi2, .ft2, .fs2 { width: 100%; background: var(--stone); border: 0.5px solid var(--stone-mid); border-radius: var(--r-sm); padding: 10px 13px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--text); outline: none; transition: border-color 0.2s, background 0.2s; }
-.ft2 { resize: vertical; min-height: 80px; line-height: 1.6; }
-.fi2:focus, .ft2:focus, .fs2:focus { border-color: var(--gold); background: var(--white); }
-.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-.sub-item-admin { background: var(--stone); border-radius: var(--r-sm); padding: 11px 13px; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px; justify-content: space-between; }
+/* SHARED ITEM in admin */
+.shared-item-admin { background: var(--stone); border-radius: var(--r-sm); padding: 11px 13px; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 10px; justify-content: space-between; }
 .sia-content { flex: 1; min-width: 0; }
 .sia-title { font-size: 13px; font-weight: 500; color: var(--navy); }
 .sia-preview { font-size: 11px; color: var(--text-light); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -201,47 +186,53 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .btn-sm-icon { width: 28px; height: 28px; border-radius: 6px; border: 0.5px solid var(--stone-mid); background: var(--white); font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .btn-sm-icon.del:hover { background: #fdecea; border-color: #e74c3c; }
 
+/* CHECKBOX LIST (shared items za objekt) */
+.check-list { margin-bottom: 10px; }
+.check-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--stone); border-radius: var(--r-sm); margin-bottom: 6px; cursor: pointer; }
+.check-item input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--gold); flex-shrink: 0; cursor: pointer; }
+.check-item-label { font-size: 13px; color: var(--navy); flex: 1; }
+.check-item-sub { font-size: 11px; color: var(--text-light); }
+
+/* FORMS */
+.fg { margin-bottom: 14px; }
+.fl2 { display: block; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-light); margin-bottom: 5px; }
+.fi2, .ft2, .fs2 { width: 100%; background: var(--stone); border: 0.5px solid var(--stone-mid); border-radius: var(--r-sm); padding: 10px 13px; font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--text); outline: none; transition: border-color 0.2s, background 0.2s; }
+.ft2 { resize: vertical; min-height: 80px; line-height: 1.6; }
+.fi2:focus, .ft2:focus, .fs2:focus { border-color: var(--gold); background: var(--white); }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .add-form { background: var(--stone); border-radius: var(--r-sm); padding: 14px; margin-top: 10px; display: none; }
 .add-form.open { display: block; }
 .add-form-title { font-size: 13px; font-weight: 500; color: var(--navy); margin-bottom: 12px; }
-
-/* lang tabs */
 .ltabs { display: flex; border-radius: var(--r-sm); overflow: hidden; border: 0.5px solid var(--stone-mid); margin-bottom: 12px; }
 .ltab { flex: 1; padding: 7px; font-size: 12px; text-align: center; cursor: pointer; background: var(--stone); color: var(--text-light); border: none; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
 .ltab.active { background: var(--navy); color: var(--gold); font-weight: 500; }
 .lfield { display: none; }
 .lfield.active { display: block; }
 
-/* buttons */
+/* BUTTONS */
 .btn-primary { background: var(--navy); color: var(--gold); border: none; border-radius: var(--r-sm); padding: 12px 18px; font-size: 14px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; width: 100%; letter-spacing: 0.3px; transition: background 0.15s; }
-.btn-primary:hover { background: var(--navy-mid); }
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-.btn-secondary { background: var(--stone); color: var(--text); border: 0.5px solid var(--stone-mid); border-radius: var(--r-sm); padding: 11px 16px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: background 0.15s; }
-.btn-secondary:hover { background: var(--stone-mid); }
-.btn-gold { background: var(--gold); color: var(--navy); border: none; border-radius: var(--r-sm); padding: 11px 16px; font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; transition: background 0.15s; }
-.btn-gold:hover { background: var(--gold-light); }
+.btn-secondary { background: var(--stone); color: var(--text); border: 0.5px solid var(--stone-mid); border-radius: var(--r-sm); padding: 11px 16px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; }
+.btn-gold { background: var(--gold); color: var(--navy); border: none; border-radius: var(--r-sm); padding: 11px 16px; font-size: 13px; font-family: 'DM Sans', sans-serif; font-weight: 500; cursor: pointer; }
 .btn-gold:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn-row { display: flex; gap: 8px; margin-top: 12px; }
 .btn-row > * { flex: 1; }
-.btn-translate { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; background: #e8f4f8; color: #1a6b8a; border: 0.5px solid #b8d9e8; border-radius: var(--r-sm); padding: 9px 14px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; margin: 8px 0; transition: background 0.15s; }
-.btn-translate:hover { background: #d0eaf5; }
+.btn-translate { display: flex; align-items: center; justify-content: center; gap: 7px; width: 100%; background: #e8f4f8; color: #1a6b8a; border: 0.5px solid #b8d9e8; border-radius: var(--r-sm); padding: 9px 14px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; margin: 8px 0; }
 .btn-translate.loading { opacity: 0.6; pointer-events: none; }
 
-.admin-prop-select { width: 100%; background: var(--white); border: 0.5px solid var(--stone-mid); border-radius: var(--r); padding: 12px 15px; font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--navy); outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a9a9a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 15px center; padding-right: 38px; box-shadow: var(--shadow); cursor: pointer; }
+.admin-prop-select { width: 100%; background: var(--white); border: 0.5px solid var(--stone-mid); border-radius: var(--r); padding: 12px 15px; font-size: 15px; font-family: 'DM Sans', sans-serif; color: var(--navy); outline: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a9a9a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 15px center; padding-right: 38px; box-shadow: var(--shadow); cursor: pointer; margin-bottom: 14px; }
 
-/* API key field */
-.api-key-section { background: var(--white); border-radius: var(--r); padding: 16px; margin-bottom: 10px; box-shadow: var(--shadow); border: 0.5px solid rgba(13,27,42,0.05); }
+.api-key-section { background: var(--white); border-radius: var(--r); padding: 16px; margin-bottom: 10px; box-shadow: var(--shadow); }
 .api-key-note { font-size: 12px; color: var(--text-light); margin-top: 6px; }
 
 .divider { height: 0.5px; background: var(--stone-mid); margin: 16px 0; }
+.info-note { font-size: 12px; color: var(--text-light); padding: 8px 10px; background: var(--stone); border-radius: var(--r-sm); margin-bottom: 10px; }
 
-/* toast */
 .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--navy); color: var(--white); padding: 11px 20px; border-radius: var(--r); font-size: 14px; z-index: 999; transition: transform 0.3s ease; white-space: nowrap; box-shadow: var(--shadow-md); }
 .toast.show { transform: translateX(-50%) translateY(0); }
 .toast.success { border-left: 3px solid var(--success); }
 .toast.error { border-left: 3px solid var(--danger); }
 
-/* admin link */
 .admin-tiny { position: fixed; bottom: 12px; right: 16px; font-size: 11px; color: rgba(0,0,0,0.18); cursor: pointer; z-index: 50; }
 .admin-tiny:hover { color: rgba(0,0,0,0.4); }
 </style>
@@ -254,7 +245,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
   <div class="loading-spinner"></div>
 </div>
 
-<!-- GUEST HOME (Level 1) -->
+<!-- GUEST HOME -->
 <div id="screen-home" class="screen">
   <div class="app-header">
     <div class="header-main">
@@ -281,7 +272,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
   <div class="admin-tiny" onclick="goAdminLogin()">admin</div>
 </div>
 
-<!-- SUBSECTION LIST (Level 2) -->
+<!-- GUEST SUBS (Level 2) -->
 <div id="screen-subs" class="screen">
   <div class="app-header">
     <div class="header-main">
@@ -303,7 +294,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
   </div>
 </div>
 
-<!-- CONTENT (Level 3) -->
+<!-- GUEST CONTENT (Level 3) -->
 <div id="screen-content" class="screen">
   <div class="app-header">
     <div class="header-main">
@@ -346,32 +337,25 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
       <button class="logout-btn" onclick="doLogout()">Odjava</button>
     </div>
   </div>
-  <div class="admin-scroll">
+  <div class="admin-tabs">
+    <button class="admin-tab active" onclick="switchAdminTab('objekti', this)">Objekti</button>
+    <button class="admin-tab" onclick="switchAdminTab('sadrzaj', this)">Sadržaj regije</button>
+    <button class="admin-tab" onclick="switchAdminTab('postavke', this)">Postavke</button>
+  </div>
 
-    <!-- API Key -->
-    <div class="a-section-label">Postavke</div>
-    <div class="api-key-section">
-      <div class="fg" style="margin-bottom:6px;">
-        <label class="fl2">Anthropic API ključ (za auto-prijevod)</label>
-        <input type="password" class="fi2" id="api-key-input" placeholder="sk-ant-...">
-      </div>
-      <button class="btn-primary" style="width:auto;padding:9px 16px;font-size:13px;" onclick="saveApiKey()">Spremi ključ</button>
-      <div class="api-key-note">Ključ se sprema lokalno u browser, nikad na server.</div>
-    </div>
-
-    <div class="divider"></div>
+  <!-- TAB: OBJEKTI -->
+  <div id="atab-objekti" class="admin-scroll">
     <div class="a-section-label">Objekti</div>
     <div id="a-prop-list"></div>
-    <button class="btn-primary" onclick="toggleAddPropForm()" style="margin-bottom:6px;">+ Dodaj objekt</button>
-
-    <div class="add-form" id="add-prop-form">
+    <button class="btn-primary" onclick="toggleAddPropForm()">+ Dodaj objekt</button>
+    <div class="add-form" id="add-prop-form" style="margin-top:10px;">
       <div class="add-form-title">Novi objekt</div>
       <div class="fg"><label class="fl2">Naziv (HR)</label><input type="text" class="fi2" id="np-name-hr" placeholder="npr. Villa Sunset"></div>
       <div class="fg"><label class="fl2">Naziv (EN)</label><input type="text" class="fi2" id="np-name-en" placeholder="e.g. Villa Sunset"></div>
-      <div class="frow">
-        <div class="fg"><label class="fl2">Mjesto</label><input type="text" class="fi2" id="np-loc" placeholder="Rovinj"></div>
-        <div class="fg"><label class="fl2">Regija</label><input type="text" class="fi2" id="np-region" placeholder="Istra"></div>
+      <div class="fg"><label class="fl2">Regija</label>
+        <select class="fs2" id="np-region"></select>
       </div>
+      <div class="fg"><label class="fl2">Mjesto</label><input type="text" class="fi2" id="np-loc" placeholder="Rovinj"></div>
       <div class="fg"><label class="fl2">Adresa</label><input type="text" class="fi2" id="np-addr" placeholder="Ulica bb, Mjesto"></div>
       <div class="fg"><label class="fl2">Google Maps link</label><input type="text" class="fi2" id="np-maps" placeholder="https://maps.google.com/..."></div>
       <div class="btn-row">
@@ -381,11 +365,34 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
     </div>
 
     <div class="divider"></div>
-    <div class="a-section-label">Uredi sadržaj</div>
+    <div class="a-section-label">Uredi sadržaj objekta</div>
     <select class="admin-prop-select" id="a-prop-select" onchange="onPropSelectChange()">
       <option value="">— Odaberite objekt —</option>
     </select>
-    <div id="a-sections" style="margin-top:14px;"></div>
+    <div id="a-sections"></div>
+  </div>
+
+  <!-- TAB: SADRŽAJ REGIJE -->
+  <div id="atab-sadrzaj" class="admin-scroll" style="display:none;">
+    <div class="a-section-label">Dijeljeni sadržaj po regiji</div>
+    <div class="info-note">Restorani, plaže, usluge i atrakcije koje se dijele između više objekata u istoj regiji.</div>
+    <select class="admin-prop-select" id="a-region-select" onchange="onRegionSelectChange()">
+      <option value="">— Odaberite regiju —</option>
+    </select>
+    <div id="a-shared-sections"></div>
+  </div>
+
+  <!-- TAB: POSTAVKE -->
+  <div id="atab-postavke" class="admin-scroll" style="display:none;">
+    <div class="a-section-label">Postavke</div>
+    <div class="api-key-section">
+      <div class="fg" style="margin-bottom:8px;">
+        <label class="fl2">Anthropic API ključ (za auto-prijevod)</label>
+        <input type="password" class="fi2" id="api-key-input" placeholder="sk-ant-...">
+      </div>
+      <button class="btn-primary" style="width:auto;padding:9px 16px;font-size:13px;" onclick="saveApiKey()">Spremi ključ</button>
+      <div class="api-key-note">Ključ se sprema lokalno u browser, nikad na server.</div>
+    </div>
   </div>
 </div>
 
@@ -393,35 +400,45 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 
 <script>
 // ═══════════════════════════════════════════
-// SUPABASE CONFIG
+// CONFIG
 // ═══════════════════════════════════════════
 const SUPABASE_URL = 'https://ifuokfhckulyqlanuxei.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlmdW9rZmhja3VseXFsYW51eGVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY3NzExMTcsImV4cCI6MjA5MjM0NzExN30.sc6OEV8z27tip5OK0Mgkmqm4Sd47OYQLqorHhzrsELA';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ═══════════════════════════════════════════
-// SECTIONS CONFIG
-// ═══════════════════════════════════════════
-const SECTIONS = [
-  { id:'info',      icon:'🏠', hr:'Informacije o objektu', en:'Property Info',       wide:false },
-  { id:'checkin',   icon:'🗝️', hr:'Check-in / Check-out',  en:'Check-in / Check-out', wide:false },
-  { id:'rules',     icon:'📋', hr:'Kućni red',              en:'House Rules',          wide:false },
-  { id:'recommend', icon:'🍽️', hr:'Preporuke',              en:'Recommendations',      wide:false },
-  { id:'services',  icon:'🛎️', hr:'Usluge u okolici',       en:'Local Services',       wide:true  },
-  { id:'phones',    icon:'📞', hr:'Važni brojevi',           en:'Important Numbers',    wide:false },
-  { id:'map',       icon:'📍', hr:'Lokacija',               en:'Location',             wide:false },
+// Lokalne sekcije (jedinstven sadržaj po objektu)
+const LOCAL_SECTIONS = [
+  { id:'info',    icon:'🏠', hr:'Informacije o objektu', en:'Property Info',       wide:false },
+  { id:'checkin', icon:'🗝️', hr:'Check-in / Check-out',  en:'Check-in / Check-out', wide:false },
+  { id:'rules',   icon:'📋', hr:'Kućni red',              en:'House Rules',          wide:false },
+  { id:'phones',  icon:'📞', hr:'Važni brojevi',           en:'Important Numbers',    wide:false },
+  { id:'map',     icon:'📍', hr:'Lokacija',               en:'Location',             wide:false },
+];
+
+// Dijeljene sekcije (sadržaj po regiji)
+const SHARED_SECTIONS = [
+  { id:'recommend', icon:'🍽️', hr:'Preporuke',        en:'Recommendations', wide:false },
+  { id:'services',  icon:'🛎️', hr:'Usluge u okolici', en:'Local Services',  wide:true  },
+];
+
+const ALL_GUEST_SECTIONS = [...LOCAL_SECTIONS.filter(s => s.id !== 'phones' && s.id !== 'map'), ...SHARED_SECTIONS,
+  { id:'phones', icon:'📞', hr:'Važni brojevi', en:'Important Numbers', wide:false },
+  { id:'map',    icon:'📍', hr:'Lokacija',      en:'Location',          wide:false },
 ];
 
 // ═══════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════
-let currentProp = null;      // full property object (with items loaded)
+let currentProp = null;
 let currentSectionId = null;
 let lang = 'hr';
-let allProperties = [];      // list for admin
+let allProperties = [];
+let allRegions = [];
+let adminPropData = null;
+let adminRegionData = null;
 
 // ═══════════════════════════════════════════
-// SCREEN NAVIGATION
+// NAVIGATION
 // ═══════════════════════════════════════════
 function show(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -437,30 +454,31 @@ function goAdminLogin() {
   });
 }
 
+function switchAdminTab(tab, btn) {
+  document.querySelectorAll('.admin-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  ['objekti','sadrzaj','postavke'].forEach(t => {
+    const el = document.getElementById('atab-'+t);
+    if (el) el.style.display = t===tab ? 'block' : 'none';
+  });
+  // Fix: objekti tab uses flex
+  if (tab === 'objekti') document.getElementById('atab-objekti').style.display = '';
+}
+
 // ═══════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════
 async function init() {
   show('screen-loading');
-
-  // Check URL for villa slug
   const params = new URLSearchParams(window.location.search);
   const slug = params.get('villa');
-
   if (slug) {
-    // Guest mode: load specific property
     const prop = await loadProperty(slug);
-    if (prop) {
-      currentProp = prop;
-      goHome();
-      return;
-    }
+    if (prop) { currentProp = prop; goHome(); return; }
   }
-
-  // No slug: check if admin is logged in
   const { data } = await sb.auth.getSession();
   if (data.session) {
-    await loadAllProperties();
+    await loadAdminData();
     renderAdmin();
     show('screen-admin');
   } else {
@@ -469,41 +487,36 @@ async function init() {
 }
 
 // ═══════════════════════════════════════════
-// DATA: LOAD PROPERTY (GUEST)
+// GUEST: LOAD PROPERTY
 // ═══════════════════════════════════════════
 async function loadProperty(slug) {
-  const { data: prop, error } = await sb
-    .from('properties')
-    .select('*')
-    .eq('slug', slug)
-    .single();
-  if (error || !prop) return null;
+  const { data: prop } = await sb.from('properties').select('*, regions(*)').eq('slug', slug).single();
+  if (!prop) return null;
 
-  // Load items and phones
-  const { data: items } = await sb.from('items').select('*').eq('property_id', prop.id).order('sort_order');
+  const { data: localItems } = await sb.from('local_items').select('*').eq('property_id', prop.id).order('sort_order');
   const { data: phones } = await sb.from('phones').select('*').eq('property_id', prop.id).order('sort_order');
 
-  // Group items by section
-  prop.sections = {};
-  SECTIONS.forEach(s => prop.sections[s.id] = []);
-  (items || []).forEach(item => {
-    if (prop.sections[item.section]) prop.sections[item.section].push(item);
-  });
-  prop.phones = phones || [];
+  // Load shared items that are linked to this property
+  const { data: links } = await sb.from('property_shared_items').select('shared_item_id').eq('property_id', prop.id);
+  const sharedIds = (links||[]).map(l => l.shared_item_id);
+  let sharedItems = [];
+  if (sharedIds.length) {
+    const { data: si } = await sb.from('shared_items').select('*').in('id', sharedIds).order('sort_order');
+    sharedItems = si || [];
+  }
 
+  // Group
+  prop.sections = {};
+  LOCAL_SECTIONS.forEach(s => prop.sections[s.id] = []);
+  SHARED_SECTIONS.forEach(s => prop.sections[s.id] = []);
+  (localItems||[]).forEach(item => { if(prop.sections[item.section]) prop.sections[item.section].push(item); });
+  sharedItems.forEach(item => { if(prop.sections[item.section]) prop.sections[item.section].push(item); });
+  prop.phones = phones || [];
   return prop;
 }
 
 // ═══════════════════════════════════════════
-// DATA: LOAD ALL PROPERTIES (ADMIN)
-// ═══════════════════════════════════════════
-async function loadAllProperties() {
-  const { data, error } = await sb.from('properties').select('*').order('created_at');
-  allProperties = data || [];
-}
-
-// ═══════════════════════════════════════════
-// GUEST: HOME (Level 1)
+// GUEST: HOME
 // ═══════════════════════════════════════════
 function setLang(l, btn) {
   lang = l;
@@ -516,29 +529,38 @@ function renderHome() {
   const prop = currentProp;
   if (!prop) return;
   const name = lang==='hr' ? prop.name_hr : (prop.name_en || prop.name_hr);
-  const loc = prop.location + ', ' + prop.region;
+  const region = prop.regions ? (lang==='hr' ? prop.regions.name_hr : prop.regions.name_en) : '';
 
   document.getElementById('g-prop-name').textContent = name;
-  document.getElementById('g-prop-loc').textContent = loc;
+  document.getElementById('g-prop-loc').textContent = (prop.location||'') + (region ? ', ' + region : '');
   document.getElementById('g-welcome').textContent = lang==='hr' ? 'Dobrodošli' : 'Welcome';
   document.getElementById('g-hero-name').textContent = name;
-  document.getElementById('g-hero-loc').textContent = prop.location + ' · ' + prop.region;
+  document.getElementById('g-hero-loc').textContent = (prop.location||'') + (region ? ' · ' + region : '');
 
   const grid = document.getElementById('g-section-grid');
   grid.innerHTML = '';
 
-  const activeSections = SECTIONS.filter(s => {
-    if (s.id === 'map') return !!(prop.address || prop.maps_link);
-    if (s.id === 'phones') return prop.phones && prop.phones.length > 0;
-    return (prop.sections[s.id] || []).length > 0;
-  });
+  // Build ordered sections for guest
+  const guestSections = [
+    ...LOCAL_SECTIONS.filter(s => s.id !== 'phones' && s.id !== 'map'),
+    ...SHARED_SECTIONS,
+    LOCAL_SECTIONS.find(s => s.id === 'phones'),
+    LOCAL_SECTIONS.find(s => s.id === 'map'),
+  ];
 
-  activeSections.forEach(s => {
+  guestSections.forEach(s => {
+    if (!s) return;
+    let hasContent = false;
+    if (s.id === 'map') hasContent = !!(prop.address || prop.maps_link);
+    else if (s.id === 'phones') hasContent = prop.phones && prop.phones.length > 0;
+    else hasContent = (prop.sections[s.id]||[]).length > 0;
+    if (!hasContent) return;
+
     const label = lang==='hr' ? s.hr : s.en;
-    const items = s.id === 'phones' ? prop.phones : (prop.sections[s.id] || []);
-    const count = (s.id === 'map' || s.id === 'phones') ? '' : `${items.length} ${lang==='hr'?'stavki':'items'}`;
+    const items = s.id === 'phones' ? prop.phones : (prop.sections[s.id]||[]);
+    const count = (s.id==='map'||s.id==='phones') ? '' : `${items.length} ${lang==='hr'?'stavki':'items'}`;
     const card = document.createElement('div');
-    card.className = 'section-card' + (s.wide ? ' wide' : '');
+    card.className = 'section-card' + (s.wide?' wide':'');
     if (s.wide) {
       card.innerHTML = `<div style="font-size:22px">${s.icon}</div><div class="section-card-text"><div class="section-card-label">${label}</div>${count?`<div class="section-card-count">${count}</div>`:''}</div><div class="section-card-arrow">›</div>`;
     } else {
@@ -550,118 +572,85 @@ function renderHome() {
 }
 
 // ═══════════════════════════════════════════
-// GUEST: SUBS (Level 2)
+// GUEST: SUBS
 // ═══════════════════════════════════════════
 function renderSubs(sectionId) {
   const prop = currentProp;
-  const sec = SECTIONS.find(s => s.id === sectionId);
+  const allSecs = [...LOCAL_SECTIONS, ...SHARED_SECTIONS];
+  const sec = allSecs.find(s => s.id === sectionId);
   const name = lang==='hr' ? prop.name_hr : (prop.name_en || prop.name_hr);
 
   document.getElementById('g-prop-name2').textContent = name;
-  document.getElementById('g-prop-loc2').textContent = prop.location + ', ' + prop.region;
+  document.getElementById('g-prop-loc2').textContent = prop.location||'';
   document.getElementById('bc-home-label').textContent = lang==='hr' ? 'Početak' : 'Home';
   document.getElementById('g-sub-title').textContent = sec.icon + ' ' + (lang==='hr' ? sec.hr : sec.en);
 
   const container = document.getElementById('g-sub-items');
   container.innerHTML = '';
 
-  // Special: phones
   if (sectionId === 'phones') {
     const phones = prop.phones || [];
     if (!phones.length) { container.innerHTML = emptyState(sec.icon); return; }
     phones.forEach(ph => {
-      const name = lang==='hr' ? ph.name_hr : (ph.name_en || ph.name_hr);
-      container.innerHTML += `
-        <div class="phone-item">
-          <div class="phone-item-info">
-            <div class="phone-cat">${catLabel(ph.category, lang)}</div>
-            <div class="phone-name">${ph.icon||''} ${name}</div>
-          </div>
-          <a class="phone-call" href="tel:${ph.number}">${ph.number}</a>
-        </div>`;
+      const pname = lang==='hr' ? ph.name_hr : (ph.name_en||ph.name_hr);
+      container.innerHTML += `<div class="phone-item"><div class="phone-item-info"><div class="phone-cat">${catLabel(ph.category,lang)}</div><div class="phone-name">${ph.icon||''} ${pname}</div></div><a class="phone-call" href="tel:${ph.number}">${ph.number}</a></div>`;
     });
     return;
   }
 
-  // Special: map → go direct to content
   if (sectionId === 'map') { renderMapContent(); show('screen-content'); return; }
 
   const items = prop.sections[sectionId] || [];
   if (!items.length) { container.innerHTML = emptyState(sec.icon); return; }
 
   items.forEach(item => {
-    const title = lang==='hr' ? item.title_hr : (item.title_en || item.title_hr);
-    const body  = lang==='hr' ? item.body_hr  : (item.body_en  || item.body_hr);
+    const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
+    const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
     const preview = (body||'').split('\n')[0].substring(0, 55);
     const div = document.createElement('div');
     div.className = 'sub-item';
-    div.innerHTML = `
-      <div class="sub-item-left">
-        <div class="sub-item-icon">${item.icon || sec.icon}</div>
-        <div class="sub-item-text">
-          <div class="sub-item-title">${title}</div>
-          <div class="sub-item-preview">${preview}…</div>
-        </div>
-      </div>
-      <div class="sub-item-arrow">›</div>`;
+    div.innerHTML = `<div class="sub-item-left"><div class="sub-item-icon">${item.icon||sec.icon}</div><div class="sub-item-text"><div class="sub-item-title">${title}</div><div class="sub-item-preview">${preview}…</div></div></div><div class="sub-item-arrow">›</div>`;
     div.onclick = () => { renderItemContent(sectionId, item.id); show('screen-content'); };
     container.appendChild(div);
   });
 }
 
 // ═══════════════════════════════════════════
-// GUEST: CONTENT (Level 3)
+// GUEST: CONTENT
 // ═══════════════════════════════════════════
 function renderItemContent(sectionId, itemId) {
   const prop = currentProp;
-  const sec  = SECTIONS.find(s => s.id === sectionId);
+  const allSecs = [...LOCAL_SECTIONS, ...SHARED_SECTIONS];
+  const sec = allSecs.find(s => s.id === sectionId);
   const item = (prop.sections[sectionId]||[]).find(i => i.id === itemId);
   if (!item) return;
 
-  const name = lang==='hr' ? prop.name_hr : (prop.name_en || prop.name_hr);
+  const name = lang==='hr' ? prop.name_hr : (prop.name_en||prop.name_hr);
   document.getElementById('g-prop-name3').textContent = name;
-  document.getElementById('g-prop-loc3').textContent = prop.location + ', ' + prop.region;
+  document.getElementById('g-prop-loc3').textContent = prop.location||'';
   document.getElementById('bc-section-label').textContent = lang==='hr' ? sec.hr : sec.en;
 
-  const title = lang==='hr' ? item.title_hr : (item.title_en || item.title_hr);
-  const body  = lang==='hr' ? item.body_hr  : (item.body_en  || item.body_hr);
+  const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
+  const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
   const bodyHtml = (body||'').split('\n').map(l => l ? `<p>${l}</p>` : '').join('');
 
-  document.getElementById('g-content-inner').innerHTML = `
-    <div class="content-area">
-      <div class="content-icon">${item.icon || sec.icon}</div>
-      <div class="content-title">${title}</div>
-      <div class="content-body">${bodyHtml}</div>
-    </div>`;
+  document.getElementById('g-content-inner').innerHTML = `<div class="content-area"><div class="content-icon">${item.icon||sec.icon}</div><div class="content-title">${title}</div><div class="content-body">${bodyHtml}</div></div>`;
 }
 
 function renderMapContent() {
   const prop = currentProp;
-  const name = lang==='hr' ? prop.name_hr : (prop.name_en || prop.name_hr);
+  const name = lang==='hr' ? prop.name_hr : (prop.name_en||prop.name_hr);
   document.getElementById('g-prop-name3').textContent = name;
-  document.getElementById('g-prop-loc3').textContent = prop.location + ', ' + prop.region;
+  document.getElementById('g-prop-loc3').textContent = prop.location||'';
   document.getElementById('bc-section-label').textContent = lang==='hr' ? 'Lokacija' : 'Location';
-  document.getElementById('g-content-inner').innerHTML = `
-    <div class="map-section">
-      <div class="map-placeholder"><div class="mi">📍</div><div>${prop.location}, ${prop.region}</div></div>
-      <div class="map-info">
-        <div class="map-label">${lang==='hr'?'Adresa':'Address'}</div>
-        <div class="map-address">${prop.address || '—'}</div>
-        <a class="map-btn" href="${prop.maps_link||'#'}" target="_blank">↗ ${lang==='hr'?'Otvori u Google Maps':'Open in Google Maps'}</a>
-      </div>
-    </div>`;
+  document.getElementById('g-content-inner').innerHTML = `<div class="map-section"><div class="map-placeholder"><div class="mi">📍</div><div>${prop.location||''}</div></div><div class="map-info"><div class="map-label">${lang==='hr'?'Adresa':'Address'}</div><div class="map-address">${prop.address||'—'}</div><a class="map-btn" href="${prop.maps_link||'#'}" target="_blank">↗ ${lang==='hr'?'Otvori u Google Maps':'Open in Google Maps'}</a></div></div>`;
 }
 
-function emptyState(icon) {
-  return `<div class="empty"><div class="empty-icon">${icon}</div><div class="empty-text">Nema sadržaja.</div></div>`;
-}
-function catLabel(cat, l) {
-  const m = { hitno:{hr:'Hitno',en:'Emergency'}, agencija:{hr:'Agencija',en:'Agency'}, domacin:{hr:'Domaćin',en:'Host'}, ostalo:{hr:'Ostalo',en:'Other'} };
-  return (m[cat]||m.ostalo)[l];
-}
+function emptyState(icon) { return `<div class="empty"><div class="empty-icon">${icon}</div><div class="empty-text">Nema sadržaja.</div></div>`; }
+function catLabel(cat, l) { const m={hitno:{hr:'Hitno',en:'Emergency'},agencija:{hr:'Agencija',en:'Agency'},domacin:{hr:'Domaćin',en:'Host'},ostalo:{hr:'Ostalo',en:'Other'}}; return (m[cat]||m.ostalo)[l]; }
 
 // ═══════════════════════════════════════════
-// ADMIN LOGIN (Supabase Auth)
+// AUTH
 // ═══════════════════════════════════════════
 async function doLogin() {
   const email = document.getElementById('l-user').value.trim();
@@ -671,60 +660,49 @@ async function doLogin() {
   err.style.display = 'none';
   btn.disabled = true; btn.textContent = 'Prijava...';
   const { error } = await sb.auth.signInWithPassword({ email, password: pass });
-  if (error) {
-    err.style.display = 'block';
-    btn.disabled = false; btn.textContent = 'Prijava';
-  } else {
-    await loadAllProperties();
-    renderAdmin();
-    show('screen-admin');
-    btn.disabled = false; btn.textContent = 'Prijava';
-  }
+  if (error) { err.style.display='block'; btn.disabled=false; btn.textContent='Prijava'; }
+  else { await loadAdminData(); renderAdmin(); show('screen-admin'); btn.disabled=false; btn.textContent='Prijava'; }
 }
+async function doLogout() { await sb.auth.signOut(); goHome(); }
 
-async function doLogout() {
-  await sb.auth.signOut();
-  goHome();
+// ═══════════════════════════════════════════
+// ADMIN DATA
+// ═══════════════════════════════════════════
+async function loadAdminData() {
+  const [{ data: props }, { data: regions }] = await Promise.all([
+    sb.from('properties').select('*, regions(name_hr)').order('created_at'),
+    sb.from('regions').select('*').order('sort_order'),
+  ]);
+  allProperties = props || [];
+  allRegions = regions || [];
 }
 
 // ═══════════════════════════════════════════
-// ADMIN: API KEY
-// ═══════════════════════════════════════════
-function saveApiKey() {
-  const key = document.getElementById('api-key-input').value.trim();
-  if (!key) { toast('Unesite API ključ!', 'error'); return; }
-  localStorage.setItem('villsy_api_key', key);
-  toast('API ključ spremljen!', 'success');
-}
-function getApiKey() { return localStorage.getItem('villsy_api_key') || ''; }
-
-// ═══════════════════════════════════════════
-// ADMIN: PROPERTY LIST
+// ADMIN RENDER
 // ═══════════════════════════════════════════
 function renderAdmin() {
-  // load saved api key
   const k = getApiKey();
   if (k) document.getElementById('api-key-input').value = k;
   renderAdminPropList();
   renderAdminPropSelect();
+  renderRegionSelect();
 }
 
 function renderAdminPropList() {
   const c = document.getElementById('a-prop-list');
   c.innerHTML = '';
-  if (!allProperties.length) {
-    c.innerHTML = '<div style="font-size:13px;color:var(--text-light);padding:4px 0 10px;">Nema objekata.</div>';
-    return;
-  }
+  if (!allProperties.length) { c.innerHTML = '<div style="font-size:13px;color:var(--text-light);padding:4px 0 10px;">Nema objekata.</div>'; return; }
   allProperties.forEach(prop => {
     const url = window.location.href.split('?')[0] + '?villa=' + prop.slug;
+    const regionName = prop.regions ? prop.regions.name_hr : '';
     const div = document.createElement('div');
     div.className = 'prop-item';
     div.innerHTML = `
       <div class="prop-item-top">
         <div>
           <div class="prop-item-name">${prop.name_hr}</div>
-          <div class="prop-item-loc">${prop.location||''}, ${prop.region||''}</div>
+          <div class="prop-item-loc">${prop.location||''}</div>
+          ${regionName ? `<div class="prop-item-region">${regionName}</div>` : ''}
         </div>
         <button class="btn-del" onclick="deleteProp('${prop.id}')">🗑</button>
       </div>
@@ -737,154 +715,244 @@ function renderAdminPropList() {
   });
 }
 
-function copyUrl(slug) {
-  const url = window.location.href.split('?')[0] + '?villa=' + slug;
-  navigator.clipboard.writeText(url).then(() => toast('Link kopiran!','success'));
-}
-
-function toggleAddPropForm() {
-  document.getElementById('add-prop-form').classList.toggle('open');
-}
-
-async function addProperty() {
-  const name_hr = v('np-name-hr'), name_en = v('np-name-en');
-  const location = v('np-loc'), region = v('np-region');
-  const address = v('np-addr'), maps_link = v('np-maps');
-  if (!name_hr || !location) { toast('Unesite naziv i mjesto!','error'); return; }
-  const slug = name_hr.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'') + '-' + Date.now();
-  const btn = document.getElementById('btn-add-prop');
-  btn.disabled = true;
-  const { error } = await sb.from('properties').insert({ slug, name_hr, name_en: name_en||name_hr, location, region, address, maps_link });
-  btn.disabled = false;
-  if (error) { toast('Greška: ' + error.message,'error'); return; }
-  await loadAllProperties();
-  toggleAddPropForm();
-  renderAdmin();
-  ['np-name-hr','np-name-en','np-loc','np-region','np-addr','np-maps'].forEach(id => document.getElementById(id).value='');
-  toast('Objekt dodan!','success');
-}
-
-async function deleteProp(id) {
-  if (!confirm('Obrisati objekt i sve podatke?')) return;
-  await sb.from('properties').delete().eq('id', id);
-  await loadAllProperties();
-  renderAdmin();
-  document.getElementById('a-sections').innerHTML = '';
-  toast('Objekt obrisan.','success');
-}
-
-// ═══════════════════════════════════════════
-// ADMIN: SECTIONS
-// ═══════════════════════════════════════════
 function renderAdminPropSelect() {
   const sel = document.getElementById('a-prop-select');
   const cur = sel.value;
   sel.innerHTML = '<option value="">— Odaberite objekt —</option>';
   allProperties.forEach(p => {
     const o = document.createElement('option');
-    o.value = p.id; o.textContent = p.name_hr + ' — ' + (p.location||'');
+    o.value = p.id; o.textContent = p.name_hr + (p.location ? ' — ' + p.location : '');
     if (p.id === cur) o.selected = true;
     sel.appendChild(o);
   });
 }
 
-let adminPropData = null; // full prop with items loaded for admin editing
+function renderRegionSelect() {
+  const sel = document.getElementById('a-region-select');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">— Odaberite regiju —</option>';
+  allRegions.forEach(r => {
+    const o = document.createElement('option');
+    o.value = r.id; o.textContent = r.name_hr;
+    if (r.id === cur) o.selected = true;
+    sel.appendChild(o);
+  });
+  // Also populate new prop region select
+  const npReg = document.getElementById('np-region');
+  if (npReg) {
+    npReg.innerHTML = '<option value="">— Odaberite regiju —</option>';
+    allRegions.forEach(r => { const o=document.createElement('option'); o.value=r.id; o.textContent=r.name_hr; npReg.appendChild(o); });
+  }
+}
 
+function copyUrl(slug) {
+  const url = window.location.href.split('?')[0] + '?villa=' + slug;
+  navigator.clipboard.writeText(url).then(() => toast('Link kopiran!','success'));
+}
+
+function toggleAddPropForm() { document.getElementById('add-prop-form').classList.toggle('open'); }
+
+async function addProperty() {
+  const name_hr=v('np-name-hr'), name_en=v('np-name-en'), location=v('np-loc');
+  const address=v('np-addr'), maps_link=v('np-maps'), region_id=v('np-region');
+  if (!name_hr || !location) { toast('Unesite naziv i mjesto!','error'); return; }
+  const slug = name_hr.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'') + '-' + Date.now();
+  const btn = document.getElementById('btn-add-prop');
+  btn.disabled = true;
+  const { error } = await sb.from('properties').insert({ slug, name_hr, name_en:name_en||name_hr, location, address, maps_link, region_id:region_id||null });
+  btn.disabled = false;
+  if (error) { toast('Greška: '+error.message,'error'); return; }
+  await loadAdminData();
+  toggleAddPropForm();
+  renderAdmin();
+  ['np-name-hr','np-name-en','np-loc','np-addr','np-maps'].forEach(id => document.getElementById(id).value='');
+  toast('Objekt dodan!','success');
+}
+
+async function deleteProp(id) {
+  if (!confirm('Obrisati objekt i sve podatke?')) return;
+  await sb.from('properties').delete().eq('id', id);
+  await loadAdminData();
+  renderAdmin();
+  document.getElementById('a-sections').innerHTML = '';
+  toast('Objekt obrisan.','success');
+}
+
+// ═══════════════════════════════════════════
+// ADMIN: LOCAL SECTIONS (po objektu)
+// ═══════════════════════════════════════════
 async function onPropSelectChange() {
   const propId = document.getElementById('a-prop-select').value;
   const c = document.getElementById('a-sections');
   c.innerHTML = '';
   if (!propId) return;
   c.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-light);font-size:13px;">Učitavam...</div>';
-  adminPropData = await loadPropertyById(propId);
-  renderAdminSections();
+  adminPropData = await loadPropertyAdminById(propId);
+  renderAdminLocalSections();
 }
 
-async function loadPropertyById(id) {
+async function loadPropertyAdminById(id) {
   const { data: prop } = await sb.from('properties').select('*').eq('id', id).single();
-  const { data: items } = await sb.from('items').select('*').eq('property_id', id).order('sort_order');
+  const { data: localItems } = await sb.from('local_items').select('*').eq('property_id', id).order('sort_order');
   const { data: phones } = await sb.from('phones').select('*').eq('property_id', id).order('sort_order');
-  prop.items = items || [];
+  const { data: links } = await sb.from('property_shared_items').select('shared_item_id').eq('property_id', id);
+
+  prop.localItems = localItems || [];
   prop.phones = phones || [];
-  // group
+  prop.linkedSharedIds = (links||[]).map(l => l.shared_item_id);
+
+  // group local items
   prop.sections = {};
-  SECTIONS.forEach(s => prop.sections[s.id] = []);
-  prop.items.forEach(item => { if(prop.sections[item.section]) prop.sections[item.section].push(item); });
+  LOCAL_SECTIONS.forEach(s => prop.sections[s.id] = []);
+  prop.localItems.forEach(item => { if(prop.sections[item.section]) prop.sections[item.section].push(item); });
   return prop;
 }
 
-function renderAdminSections() {
+function renderAdminLocalSections() {
   const prop = adminPropData;
   const c = document.getElementById('a-sections');
   c.innerHTML = '';
 
-  SECTIONS.forEach(sec => {
+  // Local content sections
+  LOCAL_SECTIONS.forEach(sec => {
     const card = document.createElement('div');
     card.className = 'a-card';
     card.id = 'acard-' + sec.id;
-    const items = sec.id === 'phones' ? prop.phones : (prop.sections[sec.id] || []);
-    const cnt = (sec.id !== 'map') ? ` (${items.length})` : '';
+    const items = sec.id==='phones' ? prop.phones : (prop.sections[sec.id]||[]);
+    const cnt = sec.id!=='map' ? ` (${items.length})` : '';
     card.innerHTML = `
       <div class="a-card-hdr" onclick="toggleACard('${sec.id}')">
         <div class="a-card-title"><span class="a-card-icon">${sec.icon}</span>${sec.hr}${cnt}</div>
         <div class="a-chevron">▾</div>
       </div>
-      <div class="a-card-body" id="abody-${sec.id}">
-        ${renderAdminSecBody(sec, prop)}
-      </div>`;
+      <div class="a-card-body" id="abody-${sec.id}">${renderLocalSecBody(sec, prop)}</div>`;
     c.appendChild(card);
   });
+
+  // Shared content assignment
+  const sharedCard = document.createElement('div');
+  sharedCard.className = 'a-card';
+  sharedCard.id = 'acard-shared';
+  sharedCard.innerHTML = `
+    <div class="a-card-hdr" onclick="toggleACard('shared')">
+      <div class="a-card-title"><span class="a-card-icon">🔗</span>Dijeljeni sadržaj regije</div>
+      <div class="a-chevron">▾</div>
+    </div>
+    <div class="a-card-body" id="abody-shared">
+      <div style="font-size:13px;color:var(--text-light);padding:4px 0 8px;">Učitavam dijeljeni sadržaj...</div>
+    </div>`;
+  c.appendChild(sharedCard);
 }
 
-function toggleACard(sid) { document.getElementById('acard-'+sid).classList.toggle('open'); }
+async function toggleACard(sid) {
+  const card = document.getElementById('acard-'+sid);
+  card.classList.toggle('open');
+  // Lazy load shared items
+  if (sid === 'shared' && card.classList.contains('open')) {
+    await renderSharedAssignment();
+  }
+}
 
-function renderAdminSecBody(sec, prop) {
+async function renderSharedAssignment() {
+  const prop = adminPropData;
+  if (!prop.region_id) {
+    document.getElementById('abody-shared').innerHTML = '<div class="info-note">Objekt nema dodijeljenu regiju. Uredi objekt i dodaj regiju.</div>';
+    return;
+  }
+  const { data: sharedItems } = await sb.from('shared_items').select('*').eq('region_id', prop.region_id).order('section').order('sort_order');
+  const items = sharedItems || [];
+
+  if (!items.length) {
+    document.getElementById('abody-shared').innerHTML = '<div class="info-note">Nema dijeljenog sadržaja za ovu regiju. Dodaj ga u tab "Sadržaj regije".</div>';
+    return;
+  }
+
+  // Group by section
+  const grouped = {};
+  SHARED_SECTIONS.forEach(s => grouped[s.id] = []);
+  items.forEach(item => { if(grouped[item.section]) grouped[item.section].push(item); });
+
+  let h = '<div class="info-note">Označi što se prikazuje gostima ovog objekta.</div>';
+  SHARED_SECTIONS.forEach(sec => {
+    const secItems = grouped[sec.id];
+    if (!secItems.length) return;
+    h += `<div style="font-size:12px;font-weight:500;color:var(--navy);margin:12px 0 6px;">${sec.icon} ${sec.hr}</div>`;
+    h += '<div class="check-list">';
+    secItems.forEach(item => {
+      const checked = prop.linkedSharedIds.includes(item.id) ? 'checked' : '';
+      h += `<label class="check-item">
+        <input type="checkbox" ${checked} onchange="toggleSharedItem('${item.id}', this.checked)">
+        <div><div class="check-item-label">${item.icon||''} ${item.title_hr}</div><div class="check-item-sub">${(item.body_hr||'').substring(0,50)}…</div></div>
+      </label>`;
+    });
+    h += '</div>';
+  });
+  h += '<button class="btn-primary" style="margin-top:8px;" onclick="saveSharedItems()">Spremi odabir</button>';
+  document.getElementById('abody-shared').innerHTML = h;
+}
+
+async function toggleSharedItem(sharedItemId, checked) {
+  if (checked) {
+    if (!adminPropData.linkedSharedIds.includes(sharedItemId)) adminPropData.linkedSharedIds.push(sharedItemId);
+  } else {
+    adminPropData.linkedSharedIds = adminPropData.linkedSharedIds.filter(id => id !== sharedItemId);
+  }
+}
+
+async function saveSharedItems() {
+  const propId = adminPropData.id;
+  // Delete all existing links then reinsert
+  await sb.from('property_shared_items').delete().eq('property_id', propId);
+  if (adminPropData.linkedSharedIds.length) {
+    const rows = adminPropData.linkedSharedIds.map(sid => ({ property_id: propId, shared_item_id: sid }));
+    const { error } = await sb.from('property_shared_items').insert(rows);
+    if (error) { toast('Greška!','error'); return; }
+  }
+  toast('Dijeljeni sadržaj spremljen!','success');
+}
+
+function renderLocalSecBody(sec, prop) {
   if (sec.id === 'map') return renderAdminMap(prop);
   if (sec.id === 'phones') return renderAdminPhones(prop);
-  return renderAdminItems(sec, prop);
+  return renderAdminLocalItems(sec, prop);
 }
 
-function renderAdminItems(sec, prop) {
+function renderAdminLocalItems(sec, prop) {
   const items = prop.sections[sec.id] || [];
   let h = '';
   if (!items.length) h += `<div style="font-size:13px;color:var(--text-light);padding:4px 0 10px;">Nema stavki.</div>`;
   else items.forEach(item => {
-    h += `
-      <div class="sub-item-admin">
-        <div class="sia-content">
-          <div class="sia-title">${item.icon||''} ${item.title_hr}</div>
-          <div class="sia-preview">${(item.body_hr||'').substring(0,55)}…</div>
-        </div>
-        <div class="sia-actions">
-          <button class="btn-sm-icon" onclick="editItem('${sec.id}','${item.id}')">✏️</button>
-          <button class="btn-sm-icon del" onclick="deleteItem('${sec.id}','${item.id}')">🗑</button>
-        </div>
-      </div>`;
+    h += `<div class="shared-item-admin">
+      <div class="sia-content"><div class="sia-title">${item.icon||''} ${item.title_hr}</div><div class="sia-preview">${(item.body_hr||'').substring(0,55)}…</div></div>
+      <div class="sia-actions">
+        <button class="btn-sm-icon" onclick="editLocalItem('${sec.id}','${item.id}')">✏️</button>
+        <button class="btn-sm-icon del" onclick="deleteLocalItem('${sec.id}','${item.id}')">🗑</button>
+      </div>
+    </div>`;
   });
-  h += `
-    <div class="add-form" id="af-${sec.id}">
-      <div class="add-form-title" id="aft-${sec.id}">Nova stavka</div>
-      <input type="hidden" id="aeid-${sec.id}">
-      <div class="fg"><label class="fl2">Ikona (emoji)</label><input type="text" class="fi2" id="aicon-${sec.id}" placeholder="npr. 📶" style="width:80px;"></div>
-      <div class="ltabs">
-        <button class="ltab active" onclick="switchFL('${sec.id}','hr',this)">🇭🇷 HR</button>
-        <button class="ltab" onclick="switchFL('${sec.id}','en',this)">🇬🇧 EN</button>
-      </div>
-      <div class="lfield active" id="lf-hr-${sec.id}">
-        <div class="fg"><label class="fl2">Naslov (HR)</label><input type="text" class="fi2" id="athr-${sec.id}"></div>
-        <div class="fg"><label class="fl2">Sadržaj (HR)</label><textarea class="ft2" id="abhr-${sec.id}"></textarea></div>
-      </div>
-      <div class="lfield" id="lf-en-${sec.id}">
-        <div class="fg"><label class="fl2">Title (EN)</label><input type="text" class="fi2" id="aten-${sec.id}"></div>
-        <div class="fg"><label class="fl2">Content (EN)</label><textarea class="ft2" id="aben-${sec.id}"></textarea></div>
-      </div>
-      <button class="btn-translate" id="atr-${sec.id}" onclick="autoTranslate('${sec.id}')">🤖 Auto-prijevod HR → EN</button>
-      <div class="btn-row">
-        <button class="btn-secondary" onclick="closeAddForm('${sec.id}')">Odustani</button>
-        <button class="btn-gold" onclick="saveItem('${sec.id}')">Spremi</button>
-      </div>
+  h += `<div class="add-form" id="af-${sec.id}">
+    <div class="add-form-title" id="aft-${sec.id}">Nova stavka</div>
+    <input type="hidden" id="aeid-${sec.id}">
+    <div class="fg"><label class="fl2">Ikona (emoji)</label><input type="text" class="fi2" id="aicon-${sec.id}" placeholder="npr. 📶" style="width:80px;"></div>
+    <div class="ltabs">
+      <button class="ltab active" onclick="switchFL('${sec.id}','hr',this)">🇭🇷 HR</button>
+      <button class="ltab" onclick="switchFL('${sec.id}','en',this)">🇬🇧 EN</button>
     </div>
-    <button class="btn-primary" style="margin-top:10px;" onclick="openAddForm('${sec.id}')">+ Dodaj stavku</button>`;
+    <div class="lfield active" id="lf-hr-${sec.id}">
+      <div class="fg"><label class="fl2">Naslov (HR)</label><input type="text" class="fi2" id="athr-${sec.id}"></div>
+      <div class="fg"><label class="fl2">Sadržaj (HR)</label><textarea class="ft2" id="abhr-${sec.id}"></textarea></div>
+    </div>
+    <div class="lfield" id="lf-en-${sec.id}">
+      <div class="fg"><label class="fl2">Title (EN)</label><input type="text" class="fi2" id="aten-${sec.id}"></div>
+      <div class="fg"><label class="fl2">Content (EN)</label><textarea class="ft2" id="aben-${sec.id}"></textarea></div>
+    </div>
+    <button class="btn-translate" id="atr-${sec.id}" onclick="autoTranslate('${sec.id}')">🤖 Auto-prijevod HR → EN</button>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="closeAddForm('${sec.id}')">Odustani</button>
+      <button class="btn-gold" onclick="saveLocalItem('${sec.id}')">Spremi</button>
+    </div>
+  </div>
+  <button class="btn-primary" style="margin-top:10px;" onclick="openAddForm('${sec.id}')">+ Dodaj stavku</button>`;
   return h;
 }
 
@@ -893,75 +961,133 @@ function renderAdminPhones(prop) {
   let h = '';
   if (!phones.length) h += `<div style="font-size:13px;color:var(--text-light);padding:4px 0 10px;">Nema kontakata.</div>`;
   else phones.forEach(ph => {
-    h += `
-      <div class="sub-item-admin">
-        <div class="sia-content">
-          <div class="sia-title">${ph.icon||'📞'} ${ph.name_hr}</div>
-          <div class="sia-preview">${ph.number}</div>
-        </div>
-        <div class="sia-actions">
-          <button class="btn-sm-icon del" onclick="deletePhone('${ph.id}')">🗑</button>
-        </div>
-      </div>`;
+    h += `<div class="shared-item-admin">
+      <div class="sia-content"><div class="sia-title">${ph.icon||'📞'} ${ph.name_hr}</div><div class="sia-preview">${ph.number}</div></div>
+      <div class="sia-actions"><button class="btn-sm-icon del" onclick="deletePhone('${ph.id}')">🗑</button></div>
+    </div>`;
   });
-  h += `
-    <div class="add-form" id="af-phones">
-      <div class="add-form-title">Novi kontakt</div>
-      <div class="fg"><label class="fl2">Ikona</label><input type="text" class="fi2" id="ph-icon" placeholder="📞" style="width:70px;"></div>
-      <div class="frow">
-        <div class="fg"><label class="fl2">Naziv (HR)</label><input type="text" class="fi2" id="ph-hr" placeholder="Hitna pomoć"></div>
-        <div class="fg"><label class="fl2">Naziv (EN)</label><input type="text" class="fi2" id="ph-en" placeholder="Emergency"></div>
-      </div>
-      <div class="frow">
-        <div class="fg"><label class="fl2">Broj</label><input type="text" class="fi2" id="ph-num" placeholder="+385 91..."></div>
-        <div class="fg"><label class="fl2">Kategorija</label>
-          <select class="fs2" id="ph-cat">
-            <option value="domacin">Domaćin</option>
-            <option value="agencija">Agencija</option>
-            <option value="hitno">Hitno</option>
-            <option value="ostalo">Ostalo</option>
-          </select>
-        </div>
-      </div>
-      <div class="btn-row">
-        <button class="btn-secondary" onclick="closeAddForm('phones')">Odustani</button>
-        <button class="btn-gold" onclick="savePhone()">Spremi</button>
+  h += `<div class="add-form" id="af-phones">
+    <div class="add-form-title">Novi kontakt</div>
+    <div class="fg"><label class="fl2">Ikona</label><input type="text" class="fi2" id="ph-icon" placeholder="📞" style="width:70px;"></div>
+    <div class="frow">
+      <div class="fg"><label class="fl2">Naziv (HR)</label><input type="text" class="fi2" id="ph-hr" placeholder="Hitna pomoć"></div>
+      <div class="fg"><label class="fl2">Naziv (EN)</label><input type="text" class="fi2" id="ph-en" placeholder="Emergency"></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label class="fl2">Broj</label><input type="text" class="fi2" id="ph-num" placeholder="+385 91..."></div>
+      <div class="fg"><label class="fl2">Kategorija</label>
+        <select class="fs2" id="ph-cat">
+          <option value="domacin">Domaćin</option>
+          <option value="agencija">Agencija</option>
+          <option value="hitno">Hitno</option>
+          <option value="ostalo">Ostalo</option>
+        </select>
       </div>
     </div>
-    <button class="btn-primary" style="margin-top:10px;" onclick="openAddForm('phones')">+ Dodaj kontakt</button>`;
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="closeAddForm('phones')">Odustani</button>
+      <button class="btn-gold" onclick="savePhone()">Spremi</button>
+    </div>
+  </div>
+  <button class="btn-primary" style="margin-top:10px;" onclick="openAddForm('phones')">+ Dodaj kontakt</button>`;
   return h;
 }
 
 function renderAdminMap(prop) {
-  return `
-    <div class="fg"><label class="fl2">Adresa</label><input type="text" class="fi2" id="map-addr" value="${prop.address||''}" placeholder="Ulica bb, Mjesto"></div>
+  return `<div class="fg"><label class="fl2">Adresa</label><input type="text" class="fi2" id="map-addr" value="${prop.address||''}" placeholder="Ulica bb, Mjesto"></div>
     <div class="fg"><label class="fl2">Google Maps link</label><input type="text" class="fi2" id="map-link" value="${prop.maps_link||''}" placeholder="https://maps.google.com/..."></div>
     <button class="btn-primary" onclick="saveMap()">Spremi lokaciju</button>`;
 }
 
 // ═══════════════════════════════════════════
-// ADMIN: ITEM CRUD
+// ADMIN: SHARED SECTIONS (po regiji)
 // ═══════════════════════════════════════════
-function openAddForm(sid) {
-  const f = document.getElementById('af-'+sid);
-  if (f) { f.classList.add('open'); const eid = document.getElementById('aeid-'+sid); if(eid) eid.value=''; const t = document.getElementById('aft-'+sid); if(t) t.textContent='Nova stavka'; }
-}
-function closeAddForm(sid) {
-  const f = document.getElementById('af-'+sid);
-  if (f) {
-    f.classList.remove('open');
-    ['athr-','abhr-','aten-','aben-','aicon-'].forEach(pre => { const el = document.getElementById(pre+sid); if(el) el.value=''; });
-  }
-}
-function switchFL(sid, l, btn) {
-  const f = document.getElementById('af-'+sid);
-  f.querySelectorAll('.ltab').forEach(b => b.classList.remove('active')); btn.classList.add('active');
-  f.querySelectorAll('.lfield').forEach(lf => lf.classList.remove('active'));
-  document.getElementById('lf-'+l+'-'+sid).classList.add('active');
+async function onRegionSelectChange() {
+  const regionId = document.getElementById('a-region-select').value;
+  const c = document.getElementById('a-shared-sections');
+  c.innerHTML = '';
+  if (!regionId) return;
+  c.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-light);font-size:13px;">Učitavam...</div>';
+
+  const { data: items } = await sb.from('shared_items').select('*').eq('region_id', regionId).order('sort_order');
+  adminRegionData = { id: regionId, items: items || [] };
+
+  // Group by section
+  adminRegionData.sections = {};
+  SHARED_SECTIONS.forEach(s => adminRegionData.sections[s.id] = []);
+  adminRegionData.items.forEach(item => { if(adminRegionData.sections[item.section]) adminRegionData.sections[item.section].push(item); });
+
+  renderSharedSections();
 }
 
-function editItem(sid, itemId) {
-  const item = (adminPropData.sections[sid]||[]).find(i => i.id===itemId);
+function renderSharedSections() {
+  const c = document.getElementById('a-shared-sections');
+  c.innerHTML = '';
+  SHARED_SECTIONS.forEach(sec => {
+    const card = document.createElement('div');
+    card.className = 'a-card';
+    card.id = 'ascard-' + sec.id;
+    const items = adminRegionData.sections[sec.id] || [];
+    card.innerHTML = `
+      <div class="a-card-hdr" onclick="toggleASCard('${sec.id}')">
+        <div class="a-card-title"><span class="a-card-icon">${sec.icon}</span>${sec.hr} (${items.length})</div>
+        <div class="a-chevron">▾</div>
+      </div>
+      <div class="a-card-body" id="ascbody-${sec.id}">${renderSharedSecBody(sec)}</div>`;
+    c.appendChild(card);
+  });
+}
+
+function toggleASCard(sid) { document.getElementById('ascard-'+sid).classList.toggle('open'); }
+
+function renderSharedSecBody(sec) {
+  const items = adminRegionData.sections[sec.id] || [];
+  let h = '';
+  if (!items.length) h += `<div style="font-size:13px;color:var(--text-light);padding:4px 0 10px;">Nema stavki.</div>`;
+  else items.forEach(item => {
+    h += `<div class="shared-item-admin">
+      <div class="sia-content"><div class="sia-title">${item.icon||''} ${item.title_hr}</div><div class="sia-preview">${(item.body_hr||'').substring(0,55)}…</div></div>
+      <div class="sia-actions">
+        <button class="btn-sm-icon" onclick="editSharedItem('${sec.id}','${item.id}')">✏️</button>
+        <button class="btn-sm-icon del" onclick="deleteSharedItem('${sec.id}','${item.id}')">🗑</button>
+      </div>
+    </div>`;
+  });
+  h += `<div class="add-form" id="saf-${sec.id}">
+    <div class="add-form-title" id="saft-${sec.id}">Nova stavka</div>
+    <input type="hidden" id="saeid-${sec.id}">
+    <div class="fg"><label class="fl2">Ikona (emoji)</label><input type="text" class="fi2" id="saicon-${sec.id}" placeholder="npr. 🍷" style="width:80px;"></div>
+    <div class="ltabs">
+      <button class="ltab active" onclick="switchSFL('${sec.id}','hr',this)">🇭🇷 HR</button>
+      <button class="ltab" onclick="switchSFL('${sec.id}','en',this)">🇬🇧 EN</button>
+    </div>
+    <div class="lfield active" id="slf-hr-${sec.id}">
+      <div class="fg"><label class="fl2">Naslov (HR)</label><input type="text" class="fi2" id="sathr-${sec.id}"></div>
+      <div class="fg"><label class="fl2">Sadržaj (HR)</label><textarea class="ft2" id="sabhr-${sec.id}"></textarea></div>
+    </div>
+    <div class="lfield" id="slf-en-${sec.id}">
+      <div class="fg"><label class="fl2">Title (EN)</label><input type="text" class="fi2" id="saten-${sec.id}"></div>
+      <div class="fg"><label class="fl2">Content (EN)</label><textarea class="ft2" id="saben-${sec.id}"></textarea></div>
+    </div>
+    <button class="btn-translate" id="satr-${sec.id}" onclick="autoTranslateShared('${sec.id}')">🤖 Auto-prijevod HR → EN</button>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="closeSAddForm('${sec.id}')">Odustani</button>
+      <button class="btn-gold" onclick="saveSharedItem('${sec.id}')">Spremi</button>
+    </div>
+  </div>
+  <button class="btn-primary" style="margin-top:10px;" onclick="openSAddForm('${sec.id}')">+ Dodaj stavku</button>`;
+  return h;
+}
+
+// ═══════════════════════════════════════════
+// LOCAL ITEM CRUD
+// ═══════════════════════════════════════════
+function openAddForm(sid) { const f=document.getElementById('af-'+sid); if(f){f.classList.add('open'); const e=document.getElementById('aeid-'+sid); if(e) e.value=''; const t=document.getElementById('aft-'+sid); if(t) t.textContent='Nova stavka';} }
+function closeAddForm(sid) { const f=document.getElementById('af-'+sid); if(f){f.classList.remove('open'); ['athr-','abhr-','aten-','aben-','aicon-'].forEach(p=>{const el=document.getElementById(p+sid); if(el) el.value='';});} }
+function switchFL(sid,l,btn) { const f=document.getElementById('af-'+sid); f.querySelectorAll('.ltab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); f.querySelectorAll('.lfield').forEach(lf=>lf.classList.remove('active')); document.getElementById('lf-'+l+'-'+sid).classList.add('active'); }
+
+function editLocalItem(sid, itemId) {
+  const item = (adminPropData.sections[sid]||[]).find(i=>i.id===itemId);
   if (!item) return;
   openAddForm(sid);
   document.getElementById('aeid-'+sid).value = itemId;
@@ -973,71 +1099,66 @@ function editItem(sid, itemId) {
   document.getElementById('aben-'+sid).value = item.body_en||'';
 }
 
-async function saveItem(sid) {
-  const title_hr = v('athr-'+sid), body_hr = v('abhr-'+sid);
-  const title_en = v('aten-'+sid), body_en = v('aben-'+sid);
-  const icon = v('aicon-'+sid);
+async function saveLocalItem(sid) {
+  const title_hr=v('athr-'+sid), body_hr=v('abhr-'+sid), title_en=v('aten-'+sid), body_en=v('aben-'+sid), icon=v('aicon-'+sid);
   if (!title_hr) { toast('Unesite naslov!','error'); return; }
   const editId = v('aeid-'+sid);
-
   if (editId) {
-    const { error } = await sb.from('items').update({ icon, title_hr, body_hr, title_en, body_en }).eq('id', editId);
+    const { error } = await sb.from('local_items').update({icon,title_hr,body_hr,title_en,body_en}).eq('id',editId);
     if (error) { toast('Greška!','error'); return; }
     toast('Ažurirano!','success');
   } else {
-    const sortOrder = (adminPropData.sections[sid]||[]).length;
-    const { error } = await sb.from('items').insert({ property_id: adminPropData.id, section: sid, icon, title_hr, body_hr, title_en, body_en, sort_order: sortOrder });
+    const sort_order = (adminPropData.sections[sid]||[]).length;
+    const { error } = await sb.from('local_items').insert({property_id:adminPropData.id,section:sid,icon,title_hr,body_hr,title_en,body_en,sort_order});
     if (error) { toast('Greška!','error'); return; }
     toast('Dodano!','success');
   }
-  // reload
-  adminPropData = await loadPropertyById(adminPropData.id);
+  adminPropData = await loadPropertyAdminById(adminPropData.id);
   closeAddForm(sid);
-  reRenderSec(sid);
+  reRenderLocalSec(sid);
 }
 
-async function deleteItem(sid, itemId) {
+async function deleteLocalItem(sid, itemId) {
   if (!confirm('Obrisati stavku?')) return;
-  await sb.from('items').delete().eq('id', itemId);
-  adminPropData = await loadPropertyById(adminPropData.id);
-  reRenderSec(sid);
+  await sb.from('local_items').delete().eq('id',itemId);
+  adminPropData = await loadPropertyAdminById(adminPropData.id);
+  reRenderLocalSec(sid);
   toast('Obrisano.','success');
 }
 
 async function savePhone() {
-  const name_hr = v('ph-hr'), name_en = v('ph-en');
-  const number = v('ph-num'), category = v('ph-cat'), icon = v('ph-icon');
-  if (!name_hr || !number) { toast('Unesite naziv i broj!','error'); return; }
-  const sortOrder = (adminPropData.phones||[]).length;
-  const { error } = await sb.from('phones').insert({ property_id: adminPropData.id, icon: icon||'📞', name_hr, name_en: name_en||name_hr, number, category, sort_order: sortOrder });
+  const name_hr=v('ph-hr'), name_en=v('ph-en'), number=v('ph-num'), category=v('ph-cat'), icon=v('ph-icon');
+  if (!name_hr||!number) { toast('Unesite naziv i broj!','error'); return; }
+  const sort_order = (adminPropData.phones||[]).length;
+  const { error } = await sb.from('phones').insert({property_id:adminPropData.id,icon:icon||'📞',name_hr,name_en:name_en||name_hr,number,category,sort_order});
   if (error) { toast('Greška!','error'); return; }
-  adminPropData = await loadPropertyById(adminPropData.id);
+  adminPropData = await loadPropertyAdminById(adminPropData.id);
   closeAddForm('phones');
-  reRenderSec('phones');
+  reRenderLocalSec('phones');
   toast('Kontakt dodan!','success');
 }
 
 async function deletePhone(phoneId) {
   if (!confirm('Obrisati kontakt?')) return;
-  await sb.from('phones').delete().eq('id', phoneId);
-  adminPropData = await loadPropertyById(adminPropData.id);
-  reRenderSec('phones');
+  await sb.from('phones').delete().eq('id',phoneId);
+  adminPropData = await loadPropertyAdminById(adminPropData.id);
+  reRenderLocalSec('phones');
   toast('Obrisano.','success');
 }
 
 async function saveMap() {
-  const address = v('map-addr'), maps_link = v('map-link');
-  const { error } = await sb.from('properties').update({ address, maps_link }).eq('id', adminPropData.id);
+  const address=v('map-addr'), maps_link=v('map-link');
+  const { error } = await sb.from('properties').update({address,maps_link}).eq('id',adminPropData.id);
   if (error) { toast('Greška!','error'); return; }
-  adminPropData.address = address; adminPropData.maps_link = maps_link;
-  await loadAllProperties();
+  adminPropData.address=address; adminPropData.maps_link=maps_link;
+  await loadAdminData();
   toast('Lokacija spremljena!','success');
 }
 
-function reRenderSec(sid) {
-  const sec = SECTIONS.find(s => s.id===sid);
+function reRenderLocalSec(sid) {
+  const sec = LOCAL_SECTIONS.find(s=>s.id===sid);
   const body = document.getElementById('abody-'+sid);
-  if (body) body.innerHTML = renderAdminSecBody(sec, adminPropData);
+  if (body) body.innerHTML = renderLocalSecBody(sec, adminPropData);
   const card = document.getElementById('acard-'+sid);
   if (card) {
     const items = sid==='phones' ? adminPropData.phones : (adminPropData.sections[sid]||[]);
@@ -1049,48 +1170,131 @@ function reRenderSec(sid) {
 }
 
 // ═══════════════════════════════════════════
+// SHARED ITEM CRUD
+// ═══════════════════════════════════════════
+function openSAddForm(sid) { const f=document.getElementById('saf-'+sid); if(f){f.classList.add('open'); const e=document.getElementById('saeid-'+sid); if(e) e.value=''; const t=document.getElementById('saft-'+sid); if(t) t.textContent='Nova stavka';} }
+function closeSAddForm(sid) { const f=document.getElementById('saf-'+sid); if(f){f.classList.remove('open'); ['sathr-','sabhr-','saten-','saben-','saicon-'].forEach(p=>{const el=document.getElementById(p+sid); if(el) el.value='';});} }
+function switchSFL(sid,l,btn) { const f=document.getElementById('saf-'+sid); f.querySelectorAll('.ltab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); f.querySelectorAll('.lfield').forEach(lf=>lf.classList.remove('active')); document.getElementById('slf-'+l+'-'+sid).classList.add('active'); }
+
+function editSharedItem(sid, itemId) {
+  const item = (adminRegionData.sections[sid]||[]).find(i=>i.id===itemId);
+  if (!item) return;
+  openSAddForm(sid);
+  document.getElementById('saeid-'+sid).value = itemId;
+  document.getElementById('saft-'+sid).textContent = 'Uredi stavku';
+  document.getElementById('saicon-'+sid).value = item.icon||'';
+  document.getElementById('sathr-'+sid).value = item.title_hr||'';
+  document.getElementById('sabhr-'+sid).value = item.body_hr||'';
+  document.getElementById('saten-'+sid).value = item.title_en||'';
+  document.getElementById('saben-'+sid).value = item.body_en||'';
+}
+
+async function saveSharedItem(sid) {
+  const title_hr=v('sathr-'+sid), body_hr=v('sabhr-'+sid), title_en=v('saten-'+sid), body_en=v('saben-'+sid), icon=v('saicon-'+sid);
+  if (!title_hr) { toast('Unesite naslov!','error'); return; }
+  const editId = v('saeid-'+sid);
+  if (editId) {
+    const { error } = await sb.from('shared_items').update({icon,title_hr,body_hr,title_en,body_en}).eq('id',editId);
+    if (error) { toast('Greška!','error'); return; }
+    toast('Ažurirano!','success');
+  } else {
+    const sort_order = (adminRegionData.sections[sid]||[]).length;
+    const { error } = await sb.from('shared_items').insert({region_id:adminRegionData.id,section:sid,icon,title_hr,body_hr,title_en,body_en,sort_order});
+    if (error) { toast('Greška!','error'); return; }
+    toast('Dodano!','success');
+  }
+  // Reload
+  const { data: items } = await sb.from('shared_items').select('*').eq('region_id',adminRegionData.id).order('sort_order');
+  adminRegionData.items = items||[];
+  adminRegionData.sections = {};
+  SHARED_SECTIONS.forEach(s => adminRegionData.sections[s.id]=[]);
+  adminRegionData.items.forEach(item => { if(adminRegionData.sections[item.section]) adminRegionData.sections[item.section].push(item); });
+  closeSAddForm(sid);
+  reRenderSharedSec(sid);
+}
+
+async function deleteSharedItem(sid, itemId) {
+  if (!confirm('Obrisati stavku? Bit će uklonjena sa svih objekata.')) return;
+  await sb.from('shared_items').delete().eq('id',itemId);
+  const { data: items } = await sb.from('shared_items').select('*').eq('region_id',adminRegionData.id).order('sort_order');
+  adminRegionData.items = items||[];
+  adminRegionData.sections = {};
+  SHARED_SECTIONS.forEach(s => adminRegionData.sections[s.id]=[]);
+  adminRegionData.items.forEach(item => { if(adminRegionData.sections[item.section]) adminRegionData.sections[item.section].push(item); });
+  reRenderSharedSec(sid);
+  toast('Obrisano sa svih objekata.','success');
+}
+
+function reRenderSharedSec(sid) {
+  const sec = SHARED_SECTIONS.find(s=>s.id===sid);
+  const body = document.getElementById('ascbody-'+sid);
+  if (body) body.innerHTML = renderSharedSecBody(sec);
+  const card = document.getElementById('ascard-'+sid);
+  if (card) {
+    const items = adminRegionData.sections[sid]||[];
+    const title = card.querySelector('.a-card-title');
+    if (title) title.innerHTML = `<span class="a-card-icon">${sec.icon}</span>${sec.hr} (${items.length})`;
+    if (!card.classList.contains('open')) card.classList.add('open');
+  }
+}
+
+// ═══════════════════════════════════════════
 // AUTO TRANSLATE
 // ═══════════════════════════════════════════
 async function autoTranslate(sid) {
-  const title_hr = v('athr-'+sid), body_hr = v('abhr-'+sid);
-  if (!title_hr && !body_hr) { toast('Unesite HR sadržaj!','error'); return; }
+  const title_hr=v('athr-'+sid), body_hr=v('abhr-'+sid);
+  if (!title_hr&&!body_hr) { toast('Unesite HR sadržaj!','error'); return; }
+  await doTranslate(sid, title_hr, body_hr, 'aten-'+sid, 'aben-'+sid, 'atr-'+sid, 'af-'+sid);
+}
+
+async function autoTranslateShared(sid) {
+  const title_hr=v('sathr-'+sid), body_hr=v('sabhr-'+sid);
+  if (!title_hr&&!body_hr) { toast('Unesite HR sadržaj!','error'); return; }
+  await doTranslate(sid, title_hr, body_hr, 'saten-'+sid, 'saben-'+sid, 'satr-'+sid, 'saf-'+sid);
+}
+
+async function doTranslate(sid, title_hr, body_hr, enTitleId, enBodyId, btnId, formId) {
   const apiKey = getApiKey();
   if (!apiKey) { toast('Unesite Anthropic API ključ u Postavke!','error'); return; }
-  const btn = document.getElementById('atr-'+sid);
+  const btn = document.getElementById(btnId);
   btn.classList.add('loading'); btn.textContent = '⏳ Prevodim...';
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method:'POST',
-      headers:{ 'Content-Type':'application/json', 'x-api-key': apiKey, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
-      body: JSON.stringify({
-        model:'claude-sonnet-4-20250514', max_tokens:1000,
-        messages:[{ role:'user', content:`Prevedi s hrvatskog na engleski. Vrati SAMO JSON: {"title_en":"...","body_en":"..."}\n\nNaslov: ${title_hr}\nSadržaj: ${body_hr}` }]
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:1000,
+        messages:[{role:'user',content:`Prevedi s hrvatskog na engleski. Vrati SAMO JSON: {"title_en":"...","body_en":"..."}\n\nNaslov: ${title_hr}\nSadržaj: ${body_hr}`}]
       })
     });
     const data = await res.json();
     const parsed = JSON.parse(data.content[0].text.replace(/```json|```/g,'').trim());
-    document.getElementById('aten-'+sid).value = parsed.title_en||'';
-    document.getElementById('aben-'+sid).value = parsed.body_en||'';
-    const enBtn = document.querySelector(`#af-${sid} .ltab:last-child`);
-    if (enBtn) switchFL(sid, 'en', enBtn);
+    document.getElementById(enTitleId).value = parsed.title_en||'';
+    document.getElementById(enBodyId).value = parsed.body_en||'';
+    // Switch to EN tab
+    const form = document.getElementById(formId);
+    const enBtn = form.querySelector('.ltab:last-child');
+    const enField = form.querySelectorAll('.lfield')[1];
+    form.querySelectorAll('.ltab').forEach(b=>b.classList.remove('active'));
+    form.querySelectorAll('.lfield').forEach(f=>f.classList.remove('active'));
+    if(enBtn) enBtn.classList.add('active');
+    if(enField) enField.classList.add('active');
     toast('Prijevod gotov!','success');
   } catch(e) { toast('Greška pri prijevodu.','error'); }
   finally { btn.classList.remove('loading'); btn.textContent = '🤖 Auto-prijevod HR → EN'; }
 }
 
 // ═══════════════════════════════════════════
-// HELPERS
+// API KEY
 // ═══════════════════════════════════════════
-function v(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
-function toast(msg, type) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'toast '+(type||''); t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2600);
-}
+function saveApiKey() { const k=document.getElementById('api-key-input').value.trim(); if(!k){toast('Unesite API ključ!','error');return;} localStorage.setItem('villsy_api_key',k); toast('API ključ spremljen!','success'); }
+function getApiKey() { return localStorage.getItem('villsy_api_key')||''; }
 
 // ═══════════════════════════════════════════
-// START
+// HELPERS
 // ═══════════════════════════════════════════
+function v(id) { const el=document.getElementById(id); return el?el.value.trim():''; }
+function toast(msg,type) { const t=document.getElementById('toast'); t.textContent=msg; t.className='toast '+(type||''); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
+
 init();
 </script>
 </body>
