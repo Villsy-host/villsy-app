@@ -613,7 +613,7 @@ async function init() {
 // GUEST: LOAD PROPERTY
 // ═══════════════════════════════════════════
 async function loadProperty(slug) {
-  const { data: prop } = await sb.from('properties').select('*, regions(*)').eq('slug', slug).single();
+  const { data: prop } = await sb.from('properties').select('*, regions!region_id(*)').eq('slug', slug).single();
   if (!prop) return null;
 
   const { data: localItems } = await sb.from('local_items').select('*').eq('property_id', prop.id).order('sort_order');
@@ -1158,7 +1158,7 @@ async function doLogout() { await sb.auth.signOut(); goHome(); }
 // ═══════════════════════════════════════════
 async function loadAdminData() {
   const [{ data: props }, { data: regions }] = await Promise.all([
-    sb.from('properties').select('*, regions(name_hr)').order('created_at'),
+    sb.from('properties').select('*, regions!region_id(name_hr)').order('created_at'),
     sb.from('regions').select('*').order('sort_order'),
   ]);
   allProperties = props || [];
