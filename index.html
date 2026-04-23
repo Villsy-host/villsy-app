@@ -124,6 +124,18 @@ body { font-family: 'Roboto', sans-serif; background: var(--cream); color: var(-
 .sub-item-preview { font-size: 12px; color: var(--text-light); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
 .sub-item-arrow { color: var(--stone-dark); font-size: 16px; flex-shrink: 0; }
 
+
+/* CONTACT ACTION BUTTONS */
+.contact-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.contact-btn { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-radius: var(--r-sm); font-size: 15px; font-family: 'Roboto', sans-serif; font-weight: 500; text-decoration: none; cursor: pointer; border: none; flex: 1; min-width: 130px; justify-content: center; transition: opacity 0.15s; }
+.contact-btn:active { opacity: 0.8; }
+.contact-btn.call { background: var(--navy); color: var(--gold); }
+.contact-btn.maps { background: #4285f4; color: #fff; }
+.contact-btn.web  { background: var(--stone); color: var(--navy); border: 0.5px solid var(--stone-mid); }
+.contact-btn.mail { background: var(--stone); color: var(--navy); border: 0.5px solid var(--stone-mid); }
+.contact-address { display: flex; align-items: flex-start; gap: 10px; padding: 14px 0; border-top: 0.5px solid var(--stone-mid); margin-top: 16px; font-size: 15px; color: var(--text-mid); }
+.contact-address-icon { font-size: 18px; flex-shrink: 0; }
+
 /* WIFI SCREEN */
 .wifi-screen { padding: 28px 20px 40px; }
 .wifi-card { background: var(--white); border-radius: var(--r); padding: 24px 20px; box-shadow: var(--shadow-md); border: 0.5px solid rgba(13,27,42,0.06); }
@@ -1035,6 +1047,7 @@ function renderSubs(sectionId) {
     document.getElementById('g-sub-title').textContent = '⭐ ' + (lang==='hr' ? 'Owner Recommends' : 'Owner Recommends');
     const items = prop.sections['recommends'] || [];
     if (!items.length) { container.innerHTML = emptyState('⭐'); return; }
+    const recsSub = { hr: 'Owner Recommends', en: 'Owner Recommends', icon: '⭐' };
     items.forEach(item => {
       const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
       const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
@@ -1042,10 +1055,48 @@ function renderSubs(sectionId) {
       const div = document.createElement('div');
       div.className = 'sub-item';
       div.innerHTML = `<div class="sub-item-left"><div class="sub-item-icon">${item.icon||'⭐'}</div><div class="sub-item-text"><div class="sub-item-title">${title}</div><div class="sub-item-preview">${preview}</div></div></div><div class="sub-item-arrow">›</div>`;
-      div.onclick = () => { renderItemContentDirect('recommends', item.id); show('screen-content'); };
+      div.onclick = () => { renderSharedItemDetail(item, recsSub); show('screen-content'); };
       container.appendChild(div);
     });
   }
+}
+
+
+// ═══════════════════════════════════════════
+// GUEST: SHARED ITEM DETAIL (Level 3)
+// ═══════════════════════════════════════════
+function renderSharedItemDetail(item, sectionOrSub) {
+  setPropHeader3();
+  const label = sectionOrSub ? (lang==='hr' ? sectionOrSub.hr : sectionOrSub.en) : '';
+  document.getElementById('bc-section-label').textContent = label;
+
+  const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
+  const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
+  const bodyHtml = (body||'').split('\n').map(l => l ? `<p>${l}</p>` : '').join('');
+
+  // Contact action buttons
+  let actionsHtml = '';
+  const actions = [];
+  if (item.phone)     actions.push(`<a class="contact-btn call" href="tel:${item.phone}">📞 ${item.phone}</a>`);
+  if (item.maps_link) actions.push(`<a class="contact-btn maps" href="${item.maps_link}" target="_blank">🗺️ ${lang==='hr'?'Mapa':'Map'}</a>`);
+  if (item.website)   actions.push(`<a class="contact-btn web" href="${item.website}" target="_blank">🌐 ${lang==='hr'?'Web':'Website'}</a>`);
+  if (item.email)     actions.push(`<a class="contact-btn mail" href="mailto:${item.email}">✉️ ${lang==='hr'?'Email':'Email'}</a>`);
+  if (actions.length) actionsHtml = `<div class="contact-actions">${actions.join('')}</div>`;
+
+  // Address
+  let addressHtml = '';
+  if (item.address) {
+    addressHtml = `<div class="contact-address"><div class="contact-address-icon">📍</div><div>${item.address}</div></div>`;
+  }
+
+  document.getElementById('g-content-inner').innerHTML = `
+    <div class="content-area">
+      <div class="content-icon">${item.icon||sectionOrSub?.icon||'📄'}</div>
+      <div class="content-title">${title}</div>
+      ${body ? `<div class="content-body">${bodyHtml}</div>` : ''}
+      ${addressHtml}
+      ${actionsHtml}
+    </div>`;
 }
 
 // ═══════════════════════════════════════════
@@ -1077,18 +1128,27 @@ function renderVillaSub(sub) {
 
 function renderTodoSub(sub) {
   const items = currentProp.sections['todo'][sub.id] || [];
-  setPropHeader3();
-  document.getElementById('bc-section-label').textContent = lang==='hr' ? sub.hr : sub.en;
-  let h = `<div class="content-area"><div class="content-icon">${sub.icon}</div><div class="content-title">${lang==='hr'?sub.hr:sub.en}</div>`;
-  if (!items.length) { h += `<div class="empty-text">${lang==='hr'?'Nema preporuka.':'No recommendations yet.'}</div>`; }
+  const name = lang==='hr' ? currentProp.name_hr : (currentProp.name_en||currentProp.name_hr);
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-name2'),name);
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc2'),currentProp.location||'');
+  document.getElementById('bc-home-label').textContent = lang==='hr' ? 'Početak' : 'Home';
+  document.getElementById('g-sub-title').textContent = sub.icon + ' ' + (lang==='hr' ? sub.hr : sub.en);
+
+  const container = document.getElementById('g-sub-items');
+  container.innerHTML = '';
+
+  if (!items.length) { container.innerHTML = emptyState(sub.icon); return; }
+
   items.forEach(item => {
     const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
     const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
-    const bodyHtml = (body||'').split('\n').map(l => l ? `<p>${l}</p>` : '').join('');
-    h += `<div style="margin-bottom:20px;padding-bottom:20px;border-bottom:0.5px solid var(--stone-mid);"><div class="content-body" style="font-weight:500;color:var(--navy);margin-bottom:6px;">${item.icon||sub.icon} ${title}</div><div class="content-body">${bodyHtml}</div></div>`;
+    const preview = (body||'').split('\n')[0].substring(0,55);
+    const div = document.createElement('div');
+    div.className = 'sub-item';
+    div.innerHTML = `<div class="sub-item-left"><div class="sub-item-icon">${item.icon||sub.icon}</div><div class="sub-item-text"><div class="sub-item-title">${title}</div><div class="sub-item-preview">${preview}</div></div></div><div class="sub-item-arrow">›</div>`;
+    div.onclick = () => { renderSharedItemDetail(item, sub); show('screen-content'); };
+    container.appendChild(div);
   });
-  h += '</div>';
-  document.getElementById('g-content-inner').innerHTML = h;
 }
 
 function renderItemContentDirect(section, itemId) {
@@ -1909,14 +1969,21 @@ function renderSharedTodoBody() {
         <button class="ltab" onclick="switchSFL2('todo-${sub.id}','en',this)">🇬🇧 EN</button>
       </div>
       <div class="lfield active" id="slf-hr-todo-${sub.id}">
-        <div class="fg"><label class="fl2">Naslov (HR)</label><input type="text" class="fi2" id="sathr-todo-${sub.id}"></div>
-        <div class="fg"><label class="fl2">Sadržaj (HR)</label><textarea class="ft2" id="sabhr-todo-${sub.id}"></textarea></div>
+        <div class="fg"><label class="fl2">Naziv (HR)</label><input type="text" class="fi2" id="sathr-todo-${sub.id}"></div>
+        <div class="fg"><label class="fl2">Opis (HR)</label><textarea class="ft2" id="sabhr-todo-${sub.id}" style="min-height:60px;"></textarea></div>
       </div>
       <div class="lfield" id="slf-en-todo-${sub.id}">
-        <div class="fg"><label class="fl2">Title (EN)</label><input type="text" class="fi2" id="saten-todo-${sub.id}"></div>
-        <div class="fg"><label class="fl2">Content (EN)</label><textarea class="ft2" id="saben-todo-${sub.id}"></textarea></div>
+        <div class="fg"><label class="fl2">Name (EN)</label><input type="text" class="fi2" id="saten-todo-${sub.id}"></div>
+        <div class="fg"><label class="fl2">Description (EN)</label><textarea class="ft2" id="saben-todo-${sub.id}" style="min-height:60px;"></textarea></div>
       </div>
       <button class="btn-translate" id="satr-todo-${sub.id}" onclick="autoTranslateSharedTodo('${sub.id}')">🤖 Auto-prijevod HR → EN</button>
+      <div class="divider"></div>
+      <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px;">Kontakt podaci</div>
+      <div class="fg"><label class="fl2">📞 Telefon</label><input type="tel" class="fi2" id="saphone-todo-${sub.id}" placeholder="+385 52 123 456"></div>
+      <div class="fg"><label class="fl2">📍 Adresa</label><input type="text" class="fi2" id="saaddress-todo-${sub.id}" placeholder="Ulica bb, Mjesto"></div>
+      <div class="fg"><label class="fl2">🗺️ Google Maps link</label><input type="text" class="fi2" id="samaps-todo-${sub.id}" placeholder="https://maps.google.com/..."></div>
+      <div class="fg"><label class="fl2">🌐 Web / Facebook</label><input type="text" class="fi2" id="saweb-todo-${sub.id}" placeholder="https://..."></div>
+      <div class="fg"><label class="fl2">✉️ Email</label><input type="email" class="fi2" id="saemail-todo-${sub.id}" placeholder="info@..."></div>
       <div class="btn-row">
         <button class="btn-secondary" onclick="closeSAddFormTodo('${sub.id}')">Odustani</button>
         <button class="btn-gold" onclick="saveSharedTodoItem('${sub.id}')">Spremi</button>
@@ -1950,14 +2017,21 @@ function renderSharedSimpleBody(sec, defaultIcon) {
       <button class="ltab" onclick="switchSFL('${sec}','en',this)">🇬🇧 EN</button>
     </div>
     <div class="lfield active" id="slf-hr-${sec}">
-      <div class="fg"><label class="fl2">Naslov (HR)</label><input type="text" class="fi2" id="sathr-${sec}"></div>
-      <div class="fg"><label class="fl2">Sadržaj (HR)</label><textarea class="ft2" id="sabhr-${sec}"></textarea></div>
+      <div class="fg"><label class="fl2">Naziv (HR)</label><input type="text" class="fi2" id="sathr-${sec}"></div>
+      <div class="fg"><label class="fl2">Opis (HR)</label><textarea class="ft2" id="sabhr-${sec}" style="min-height:60px;"></textarea></div>
     </div>
     <div class="lfield" id="slf-en-${sec}">
-      <div class="fg"><label class="fl2">Title (EN)</label><input type="text" class="fi2" id="saten-${sec}"></div>
-      <div class="fg"><label class="fl2">Content (EN)</label><textarea class="ft2" id="saben-${sec}"></textarea></div>
+      <div class="fg"><label class="fl2">Name (EN)</label><input type="text" class="fi2" id="saten-${sec}"></div>
+      <div class="fg"><label class="fl2">Description (EN)</label><textarea class="ft2" id="saben-${sec}" style="min-height:60px;"></textarea></div>
     </div>
     <button class="btn-translate" id="satr-${sec}" onclick="autoTranslateShared('${sec}')">🤖 Auto-prijevod HR → EN</button>
+    <div class="divider"></div>
+    <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px;">Kontakt podaci</div>
+    <div class="fg"><label class="fl2">📞 Telefon</label><input type="tel" class="fi2" id="saphone-${sec}" placeholder="+385 52 123 456"></div>
+    <div class="fg"><label class="fl2">📍 Adresa</label><input type="text" class="fi2" id="saaddress-${sec}" placeholder="Ulica bb, Mjesto"></div>
+    <div class="fg"><label class="fl2">🗺️ Google Maps link</label><input type="text" class="fi2" id="samaps-${sec}" placeholder="https://maps.google.com/..."></div>
+    <div class="fg"><label class="fl2">🌐 Web / Facebook</label><input type="text" class="fi2" id="saweb-${sec}" placeholder="https://..."></div>
+    <div class="fg"><label class="fl2">✉️ Email</label><input type="email" class="fi2" id="saemail-${sec}" placeholder="info@..."></div>
     <div class="btn-row">
       <button class="btn-secondary" onclick="closeSAddForm('${sec}')">Odustani</button>
       <button class="btn-gold" onclick="saveSharedSimpleItem('${sec}')">Spremi</button>
@@ -1994,19 +2068,27 @@ function editSharedTodoItem(subId, itemId) {
   document.getElementById('sabhr-todo-'+subId).value = item.body_hr||'';
   document.getElementById('saten-todo-'+subId).value = item.title_en||'';
   document.getElementById('saben-todo-'+subId).value = item.body_en||'';
+  const setVal = (id, val) => { const el=document.getElementById(id); if(el) el.value=val||''; };
+  setVal('saphone-todo-'+subId, item.phone);
+  setVal('saaddress-todo-'+subId, item.address);
+  setVal('samaps-todo-'+subId, item.maps_link);
+  setVal('saweb-todo-'+subId, item.website);
+  setVal('saemail-todo-'+subId, item.email);
 }
 
 async function saveSharedTodoItem(subId) {
   const title_hr=v('sathr-todo-'+subId), body_hr=v('sabhr-todo-'+subId);
   const title_en=v('saten-todo-'+subId), body_en=v('saben-todo-'+subId), icon=v('saicon-todo-'+subId);
+  const phone=v('saphone-todo-'+subId), address=v('saaddress-todo-'+subId);
+  const maps_link=v('samaps-todo-'+subId), website=v('saweb-todo-'+subId), email=v('saemail-todo-'+subId);
   if (!title_hr) { toast('Unesite naslov!','error'); return; }
   const editId = v('saeid-todo-'+subId);
   if (editId) {
-    await sb.from('shared_items').update({icon,title_hr,body_hr,title_en,body_en}).eq('id',editId);
+    await sb.from('shared_items').update({icon,title_hr,body_hr,title_en,body_en,phone,address,maps_link,website,email}).eq('id',editId);
     toast('Ažurirano!','success');
   } else {
     const sort_order = ((adminRegionData.sections['todo']||{})[subId]||[]).length;
-    const { error } = await sb.from('shared_items').insert({region_id:adminRegionData.id,section:'todo',subsection:subId,icon,title_hr,body_hr,title_en,body_en,sort_order});
+    const { error } = await sb.from('shared_items').insert({region_id:adminRegionData.id,section:'todo',subsection:subId,icon,title_hr,body_hr,title_en,body_en,phone,address,maps_link,website,email,sort_order});
     if (error) { toast('Greška!','error'); return; }
     toast('Dodano!','success');
   }
@@ -2026,18 +2108,26 @@ function editSharedSimpleItem(sec, itemId) {
   document.getElementById('sabhr-'+sec).value = item.body_hr||'';
   document.getElementById('saten-'+sec).value = item.title_en||'';
   document.getElementById('saben-'+sec).value = item.body_en||'';
+  const setVal = (id, val) => { const el=document.getElementById(id); if(el) el.value=val||''; };
+  setVal('saphone-'+sec, item.phone);
+  setVal('saaddress-'+sec, item.address);
+  setVal('samaps-'+sec, item.maps_link);
+  setVal('saweb-'+sec, item.website);
+  setVal('saemail-'+sec, item.email);
 }
 
 async function saveSharedSimpleItem(sec) {
   const title_hr=v('sathr-'+sec), body_hr=v('sabhr-'+sec), title_en=v('saten-'+sec), body_en=v('saben-'+sec), icon=v('saicon-'+sec);
+  const phone=v('saphone-'+sec), address=v('saaddress-'+sec);
+  const maps_link=v('samaps-'+sec), website=v('saweb-'+sec), email=v('saemail-'+sec);
   if (!title_hr) { toast('Unesite naslov!','error'); return; }
   const editId = v('saeid-'+sec);
   if (editId) {
-    await sb.from('shared_items').update({icon,title_hr,body_hr,title_en,body_en}).eq('id',editId);
+    await sb.from('shared_items').update({icon,title_hr,body_hr,title_en,body_en,phone,address,maps_link,website,email}).eq('id',editId);
     toast('Ažurirano!','success');
   } else {
     const sort_order = (adminRegionData.sections[sec]||[]).length;
-    const { error } = await sb.from('shared_items').insert({region_id:adminRegionData.id,section:sec,icon,title_hr,body_hr,title_en,body_en,sort_order});
+    const { error } = await sb.from('shared_items').insert({region_id:adminRegionData.id,section:sec,icon,title_hr,body_hr,title_en,body_en,phone,address,maps_link,website,email,sort_order});
     if (error) { toast('Greška!','error'); return; }
     toast('Dodano!','success');
   }
