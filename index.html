@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Villsy — Digitalni vodič</title>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;500;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
@@ -63,6 +64,14 @@ body { font-family: 'Roboto', sans-serif; background: var(--cream); color: var(-
 .scroll-area { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: 90px; }
 
 
+
+/* PHOSPHOR ICONS — gold */
+ph-icon, [class^="ph-"] { color: var(--gold); }
+.section-card-ph-icon { font-size: 0; line-height: 1; margin-bottom: 4px; }
+.section-card-ph-icon ph-icon { display: block; }
+.card-icon-wrap { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(182,157,92,0.12); border-radius: 10px; margin-bottom: 6px; flex-shrink: 0; }
+.sub-icon-wrap { width: 36px; height: 36px; background: rgba(182,157,92,0.1); border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
 /* FIXED BACK BUTTON */
 .fixed-back-btn {
   position: fixed;
@@ -97,7 +106,7 @@ body { font-family: 'Roboto', sans-serif; background: var(--cream); color: var(-
 .home-villa-loc { font-size: 13px; color: var(--gold); margin-top: 4px; }
 .home-divider { width: 32px; height: 1px; background: var(--gold); opacity: 0.4; margin: 14px auto 0; }
 .section-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px 16px 32px; }
-.section-card { background: var(--white); border-radius: var(--r); padding: 18px 14px 16px; box-shadow: var(--shadow); cursor: pointer; border: 0.5px solid rgba(13,27,42,0.06); display: flex; flex-direction: column; align-items: flex-start; gap: 8px; transition: all 0.15s; position: relative; overflow: hidden; min-height: 100px; }
+.section-card { background: var(--white); border-radius: var(--r); padding: 16px 14px 14px; box-shadow: var(--shadow); cursor: pointer; border: 0.5px solid rgba(13,27,42,0.06); display: flex; flex-direction: column; align-items: flex-start; gap: 6px; transition: all 0.15s; position: relative; overflow: hidden; min-height: 100px; }
 .section-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--gold); opacity: 0; transition: opacity 0.15s; }
 .section-card:active { box-shadow: var(--shadow-md); }
 .section-card:active::after { opacity: 1; }
@@ -516,6 +525,7 @@ body { font-family: 'Roboto', sans-serif; background: var(--cream); color: var(-
 <div class="toast" id="toast"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" type="module"></script>
 <script>
 // ═══════════════════════════════════════════
 // CONFIG
@@ -584,6 +594,58 @@ let allRegions = [];
 let adminPropData = null;
 let adminRegionData = null;
 
+
+
+// ═══════════════════════════════════════════
+// PHOSPHOR ICON HELPERS
+// ═══════════════════════════════════════════
+const PH_ICONS = {
+  // Home grid sections
+  wifi:       { name: 'wifi-high',        weight: 'light' },
+  checkin:    { name: 'key',              weight: 'light' },
+  villa:      { name: 'house',            weight: 'light' },
+  emergency:  { name: 'first-aid-kit',    weight: 'light' },
+  contacts:   { name: 'phone',            weight: 'light' },
+  airport:    { name: 'airplane-takeoff', weight: 'light' },
+  food:       { name: 'fork-knife',       weight: 'light' },
+  explore:    { name: 'compass',          weight: 'light' },
+  recommends: { name: 'star',             weight: 'light' },
+  // Villa subsections
+  address:    { name: 'map-pin',          weight: 'light' },
+  fuses:      { name: 'lightning',        weight: 'light' },
+  rules:      { name: 'clipboard-text',   weight: 'light' },
+  ac:         { name: 'wind',             weight: 'light' },
+  sauna:      { name: 'thermometer-hot',  weight: 'light' },
+  jacuzzi:    { name: 'bathtub',          weight: 'light' },
+  garbage:    { name: 'trash',            weight: 'light' },
+  // Food subsections
+  restaurants:{ name: 'fork-knife',       weight: 'light' },
+  bars:       { name: 'wine',             weight: 'light' },
+  wineries:   { name: 'wine',             weight: 'light' },
+  olive:      { name: 'plant',            weight: 'light' },
+  other_food: { name: 'storefront',       weight: 'light' },
+  // Explore subsections
+  places:     { name: 'buildings',        weight: 'light' },
+  activities: { name: 'person-simple-swim',weight:'light' },
+  other_exp:  { name: 'sparkle',          weight: 'light' },
+  // Global
+  hospital:   { name: 'hospital',         weight: 'light' },
+  transfer:   { name: 'car',              weight: 'light' },
+};
+
+function phIcon(key, size = 28) {
+  const ic = PH_ICONS[key];
+  if (!ic) return `<i class="ph-light ph-${key}" style="font-size:${size}px;color:var(--gold);"></i>`;
+  return `<i class="ph-light ph-${ic.name}" style="font-size:${size}px;color:var(--gold);"></i>`;
+}
+
+function phIconCard(key, size = 28) {
+  return `<div class="card-icon-wrap">${phIcon(key, size)}</div>`;
+}
+
+function phIconSub(key, size = 20) {
+  return `<div class="sub-icon-wrap">${phIcon(key, size)}</div>`;
+}
 
 // ═══════════════════════════════════════════
 // UTILS: Haversine distance + coord parser
@@ -762,7 +824,7 @@ function renderHome() {
   const wifiName = prop.wifi_name || '';
   const wifiCard = document.createElement('div');
   wifiCard.className = 'section-card';
-  wifiCard.innerHTML = `<div class="section-card-icon">📶</div><div class="section-card-label">${lang==='hr'?'WiFi':'WiFi'}</div>${wifiName?`<div class="wifi-preview">${wifiName}</div>`:''}<div class="section-card-arrow">›</div>`;
+  wifiCard.innerHTML = `${phIconCard('wifi')} <div class="section-card-label">WiFi</div>${wifiName?`<div class="wifi-preview">${wifiName}</div>`:''}<div class="section-card-arrow">›</div>`;
   wifiCard.onclick = () => renderWifi();
   grid.appendChild(wifiCard);
 
@@ -771,49 +833,49 @@ function renderHome() {
   const coTime = prop.checkout_time || '10:00';
   const ciCard = document.createElement('div');
   ciCard.className = 'section-card';
-  ciCard.innerHTML = `<div class="section-card-icon">🗝️</div><div class="section-card-label">${lang==='hr'?'Check-in / Check-out':'Check-in / Check-out'}</div><div class="wifi-preview">${ciTime} / ${coTime}</div><div class="section-card-arrow">›</div>`;
+  ciCard.innerHTML = `${phIconCard('checkin')} <div class="section-card-label">Check-in / Check-out</div><div class="wifi-preview">${ciTime} / ${coTime}</div><div class="section-card-arrow">›</div>`;
   ciCard.onclick = () => renderCheckin();
   grid.appendChild(ciCard);
 
   // 3. O vili
   const villaCard = document.createElement('div');
   villaCard.className = 'section-card wide';
-  villaCard.innerHTML = `<div style="font-size:22px">🏡</div><div class="section-card-text"><div class="section-card-label">${lang==='hr'?'O vili':'About the Villa'}</div></div><div class="section-card-arrow">›</div>`;
+  villaCard.innerHTML = `${phIcon('villa', 24)}<div class="section-card-text"><div class="section-card-label">${lang==='hr'?'O vili':'About the Villa'}</div></div><div class="section-card-arrow">›</div>`;
   villaCard.onclick = () => { currentSectionId = 'villa'; renderSubs('villa'); show('screen-subs'); };
   grid.appendChild(villaCard);
 
   // 4. Emergency (wide)
   const emergCard = document.createElement('div');
   emergCard.className = 'section-card wide';
-  emergCard.innerHTML = `<div style="font-size:22px">🚨</div><div class="section-card-text"><div class="section-card-label">${lang==='hr'?'In Case of Emergency':'In Case of Emergency'}</div></div><div class="section-card-arrow">›</div>`;
+  emergCard.innerHTML = `${phIcon('emergency', 24)}<div class="section-card-text"><div class="section-card-label">${lang==='hr'?'In Case of Emergency':'In Case of Emergency'}</div></div><div class="section-card-arrow">›</div>`;
   emergCard.onclick = () => renderEmergency();
   grid.appendChild(emergCard);
 
   // 5. Useful contacts
   const contactsCard = document.createElement('div');
   contactsCard.className = 'section-card';
-  contactsCard.innerHTML = `<div class="section-card-icon">📞</div><div class="section-card-label">${lang==='hr'?'Useful Contacts':'Useful Contacts'}</div><div class="section-card-arrow">›</div>`;
+  contactsCard.innerHTML = `${phIconCard('contacts')} <div class="section-card-label">${lang==='hr'?'Useful Contacts':'Useful Contacts'}</div><div class="section-card-arrow">›</div>`;
   contactsCard.onclick = () => { currentSectionId = 'contacts'; renderContacts(); show('screen-subs'); };
   grid.appendChild(contactsCard);
 
   // 6. Airport & Transferi (global)
   const airportCard = document.createElement('div');
   airportCard.className = 'section-card';
-  airportCard.innerHTML = `<div class="section-card-icon">✈️</div><div class="section-card-label">${lang==='hr'?'Aerodromi & Transferi':'Airports & Transfers'}</div><div class="section-card-arrow">›</div>`;
+  airportCard.innerHTML = `${phIconCard('airport')} <div class="section-card-label">${lang==='hr'?'Aerodromi & Transferi':'Airports & Transfers'}</div><div class="section-card-arrow">›</div>`;
   airportCard.onclick = () => { renderGlobalSection(); show('screen-subs'); };
   grid.appendChild(airportCard);
 
   // 7. Hrana i piće
   const foodCard = document.createElement('div');
   foodCard.className = 'section-card';
-  foodCard.innerHTML = `<div class="section-card-icon">🍽️</div><div class="section-card-label">${lang==='hr'?'Hrana i piće':'Food & Drinks'}</div><div class="section-card-arrow">›</div>`;
+  foodCard.innerHTML = `${phIconCard('food')} <div class="section-card-label">${lang==='hr'?'Hrana i piće':'Food & Drinks'}</div><div class="section-card-arrow">›</div>`;
   foodCard.onclick = () => { currentSectionId = 'food'; renderSubs('food'); show('screen-subs'); };
   grid.appendChild(foodCard);
 
   // 8. Kamo otići
   const exploreCard = document.createElement('div');
   exploreCard.className = 'section-card';
-  exploreCard.innerHTML = `<div class="section-card-icon">🧭</div><div class="section-card-label">${lang==='hr'?'Kamo otići':'Things to Explore'}</div><div class="section-card-arrow">›</div>`;
+  exploreCard.innerHTML = `${phIconCard('explore')} <div class="section-card-label">${lang==='hr'?'Kamo otići':'Things to Explore'}</div><div class="section-card-arrow">›</div>`;
   exploreCard.onclick = () => { currentSectionId = 'explore'; renderSubs('explore'); show('screen-subs'); };
   grid.appendChild(exploreCard);
 
@@ -822,7 +884,7 @@ function renderHome() {
   if (recsItems.length) {
     const recsCard = document.createElement('div');
     recsCard.className = 'section-card';
-    recsCard.innerHTML = `<div class="section-card-icon">⭐</div><div class="section-card-label">${lang==='hr'?'Preporuke vlasnika':'Owner Recommends'}</div><div class="section-card-arrow">›</div>`;
+    recsCard.innerHTML = `${phIconCard('recommends')} <div class="section-card-label">${lang==='hr'?'Preporuke vlasnika':'Owner Recommends'}</div><div class="section-card-arrow">›</div>`;
     recsCard.onclick = () => { currentSectionId = 'recommends'; renderSubs('recommends'); show('screen-subs'); };
     grid.appendChild(recsCard);
   }
@@ -845,7 +907,7 @@ function renderWifi() {
   const c = document.getElementById('g-wifi-content');
   c.innerHTML = `
     <div class="wifi-card">
-      <div class="wifi-icon-big">📶</div>
+      <div class="wifi-icon-big" style="text-align:center;">${phIcon('wifi', 52)}</div>
       <div class="wifi-field">
         <div class="wifi-label">${lang==='hr'?'Naziv mreže':'Network Name'}</div>
         <div class="wifi-value" id="wifi-ssid-val">${wifiName || '—'}</div>
@@ -897,7 +959,7 @@ function renderCheckin() {
   document.getElementById('g-checkin-content').innerHTML = `
     <div class="checkin-card">
       <div class="checkin-row">
-        <div class="checkin-icon">🔑</div>
+        <div class="checkin-icon">${phIcon('checkin', 28)}</div>
         <div class="checkin-info">
           <div class="checkin-lbl">${lang==='hr'?'Check-in od':'Check-in from'}</div>
           <div class="checkin-time">${ciTime}</div>
@@ -905,14 +967,14 @@ function renderCheckin() {
         </div>
       </div>
       <div class="checkin-row">
-        <div class="checkin-icon">🚪</div>
+        <div class="checkin-icon">${phIcon('explore', 28)}</div>
         <div class="checkin-info">
           <div class="checkin-lbl">${lang==='hr'?'Check-out do':'Check-out by'}</div>
           <div class="checkin-time">${coTime}</div>
           ${coNote ? `<div class="checkin-note">${coNote}</div>` : ''}
         </div>
       </div>
-      ${extraNote ? `<div class="checkin-row"><div class="checkin-icon">📝</div><div class="checkin-info"><div class="checkin-lbl">${lang==='hr'?'Napomena':'Note'}</div><div class="checkin-note" style="font-size:15px;margin-top:2px;">${extraNote}</div></div></div>` : ''}
+      ${extraNote ? `<div class="checkin-row"><div class="checkin-icon">${phIcon('rules', 28)}</div><div class="checkin-info"><div class="checkin-lbl">${lang==='hr'?'Napomena':'Note'}</div><div class="checkin-note" style="font-size:15px;margin-top:2px;">${extraNote}</div></div></div>` : ''}
     </div>
     ${addrHtml}`;
 
@@ -1149,7 +1211,7 @@ function renderSubs(sectionId) {
         if (!prop.address && !prop.maps_link) return;
         const div = document.createElement('div');
         div.className = 'sub-item';
-        div.innerHTML = `<div class="sub-item-left"><div class="sub-item-icon">${sub.icon}</div><div class="sub-item-text"><div class="sub-item-title">${lang==='hr'?sub.hr:sub.en}</div><div class="sub-item-preview">${prop.address||''}</div></div></div><div class="sub-item-arrow">›</div>`;
+        div.innerHTML = `<div class="sub-item-left">${phIconSub(sub.id)}<div class="sub-item-text"><div class="sub-item-title">${lang==='hr'?sub.hr:sub.en}</div><div class="sub-item-preview">${prop.address||''}</div></div></div><div class="sub-item-arrow">›</div>`;
         div.onclick = () => { renderMapContent(); show('screen-content'); };
         container.appendChild(div);
         return;
@@ -1164,13 +1226,13 @@ function renderSubs(sectionId) {
         const preview = (body||'').split('\n')[0].substring(0,55);
         const div = document.createElement('div');
         div.className = 'sub-item';
-        div.innerHTML = `<div class="sub-item-left"><div class="sub-item-icon">${sub.icon}</div><div class="sub-item-text"><div class="sub-item-title">${lang==='hr'?sub.hr:sub.en}</div><div class="sub-item-preview">${preview}</div></div></div><div class="sub-item-arrow">›</div>`;
+        div.innerHTML = `<div class="sub-item-left">${phIconSub(sub.id)}<div class="sub-item-text"><div class="sub-item-title">${lang==='hr'?sub.hr:sub.en}</div><div class="sub-item-preview">${preview}</div></div></div><div class="sub-item-arrow">›</div>`;
         div.onclick = () => { currentSectionId = 'villa'; currentSubsectionId = sub.id; renderVillaItemContent(sub, item); show('screen-content'); };
         container.appendChild(div);
       } else {
         const div = document.createElement('div');
         div.className = 'sub-item';
-        div.innerHTML = `<div class="sub-item-left"><div class="sub-item-icon">${sub.icon}</div><div class="sub-item-text"><div class="sub-item-title">${lang==='hr'?sub.hr:sub.en}</div><div class="sub-item-preview">${items.length} ${lang==='hr'?'stavki':'items'}</div></div></div><div class="sub-item-arrow">›</div>`;
+        div.innerHTML = `<div class="sub-item-left">${phIconSub(sub.id)}<div class="sub-item-text"><div class="sub-item-title">${lang==='hr'?sub.hr:sub.en}</div><div class="sub-item-preview">${items.length} ${lang==='hr'?'stavki':'items'}</div></div></div><div class="sub-item-arrow">›</div>`;
         div.onclick = () => { currentSectionId = 'villa'; currentSubsectionId = sub.id; renderVillaSub(sub); show('screen-content'); };
         container.appendChild(div);
       }
@@ -1186,7 +1248,7 @@ function renderSubs(sectionId) {
       if (!items.length) return;
       const div = document.createElement('div');
       div.className = 'sub-item';
-      div.innerHTML = `<div class="sub-item-left"><div class="sub-item-icon">${sub.icon}</div><div class="sub-item-text"><div class="sub-item-title">${lang==='hr'?sub.hr:sub.en}</div><div class="sub-item-preview">${items.length} ${lang==='hr'?'stavki':'items'}</div></div></div><div class="sub-item-arrow">›</div>`;
+      div.innerHTML = `<div class="sub-item-left">${phIconSub(sub.id)}<div class="sub-item-text"><div class="sub-item-title">${lang==='hr'?sub.hr:sub.en}</div><div class="sub-item-preview">${items.length} ${lang==='hr'?'stavki':'items'}</div></div></div><div class="sub-item-arrow">›</div>`;
       div.onclick = () => { currentSubsectionId = sub.id; renderFoodSub(sub); show('screen-subs'); };
       container.appendChild(div);
     });
@@ -1201,7 +1263,7 @@ function renderSubs(sectionId) {
       if (!items.length) return;
       const div = document.createElement('div');
       div.className = 'sub-item';
-      div.innerHTML = `<div class="sub-item-left"><div class="sub-item-icon">${sub.icon}</div><div class="sub-item-text"><div class="sub-item-title">${lang==='hr'?sub.hr:sub.en}</div><div class="sub-item-preview">${items.length} ${lang==='hr'?'stavki':'items'}</div></div></div><div class="sub-item-arrow">›</div>`;
+      div.innerHTML = `<div class="sub-item-left">${phIconSub(sub.id)}<div class="sub-item-text"><div class="sub-item-title">${lang==='hr'?sub.hr:sub.en}</div><div class="sub-item-preview">${items.length} ${lang==='hr'?'stavki':'items'}</div></div></div><div class="sub-item-arrow">›</div>`;
       div.onclick = () => { currentSubsectionId = sub.id; renderExploreSub(sub); show('screen-subs'); };
       container.appendChild(div);
     });
@@ -1314,7 +1376,8 @@ function renderSubItemList(items, sub, parentSectionId) {
     const dist = item._dist !== undefined && item._dist < 9999 ? distLabel(item._dist) : '';
     const div = document.createElement('div');
     div.className = 'sub-item';
-    div.innerHTML = `<div class="sub-item-left"><div class="sub-item-icon">${item.icon||sub.icon}</div><div class="sub-item-text"><div class="sub-item-title">${title}</div><div class="sub-item-preview">${preview}</div></div></div>${dist ? `<div style="font-size:12px;color:var(--text-light);white-space:nowrap;flex-shrink:0;">📍 ${dist}</div>` : '<div class="sub-item-arrow">›</div>'}`;
+    const itemIconHtml = item.icon ? `<div class="sub-icon-wrap" style="font-size:20px;">${item.icon}</div>` : phIconSub(sub.id);
+    div.innerHTML = `<div class="sub-item-left">${itemIconHtml}<div class="sub-item-text"><div class="sub-item-title">${title}</div><div class="sub-item-preview">${preview}</div></div></div>${dist ? `<div style="font-size:12px;color:var(--text-light);white-space:nowrap;flex-shrink:0;">📍 ${dist}</div>` : '<div class="sub-item-arrow">›</div>'}`;
     div.onclick = () => { renderSharedItemDetail(item, sub); show('screen-content'); };
     container.appendChild(div);
   });
@@ -1361,7 +1424,7 @@ function renderMapContent() {
   const mapsBtn = prop.maps_link ? `<a class="contact-btn maps" href="${prop.maps_link}" target="_blank" style="margin-top:14px;display:flex;">🗺️ ${lang==='hr'?'Otvori u Google Maps':'Open in Google Maps'}</a>` : '';
   document.getElementById('g-content-inner').innerHTML = `
     <div class="content-area">
-      <div class="content-icon">📍</div>
+      <div class="content-icon">{phIcon('address', 36)}</div>
       <div class="content-title">${lang==='hr'?'Adresa & Navigacija':'Address & Navigation'}</div>
       <div class="map-info" style="padding:0;">
         <div class="map-label">${lang==='hr'?'Adresa':'Address'}</div>
@@ -2681,6 +2744,7 @@ function renderGlobalCatBody(cat) {
     <div class="fg"><label class="fl2">🗺️ Google Maps link</label><input type="text" class="fi2" id="gamaps-${cat.id}" placeholder="https://maps.google.com/..."></div>
     <div class="fg"><label class="fl2">🌐 Web stranica</label><input type="text" class="fi2" id="gaweb-${cat.id}" placeholder="https://..."></div>
     <div class="fg"><label class="fl2">✉️ Email</label><input type="email" class="fi2" id="gaemail-${cat.id}" placeholder="info@..."></div>
+    <div class="fg"><label class="fl2">📌 Koordinate (desni klik Google Maps)</label><input type="text" class="fi2" id="gacoords-${cat.id}" placeholder="45.3271, 13.5526" oninput="previewCoords(this,'gacoords-preview-${cat.id}')"><div id="gacoords-preview-${cat.id}" style="font-size:11px;margin-top:4px;"></div></div>
     <div class="btn-row">
       <button class="btn-secondary" onclick="closeGlobalForm('${cat.id}')">Odustani</button>
       <button class="btn-gold" onclick="saveGlobalItem('${cat.id}')">Spremi</button>
@@ -2698,7 +2762,7 @@ function closeGlobalForm(catId) {
   const f = document.getElementById('gaf-'+catId);
   if (!f) return;
   f.classList.remove('open');
-  [`gaeid-`,`gaicon-`,`ganame-hr-`,`gadesc-hr-`,`ganame-en-`,`gadesc-en-`,`gaphone-`,`gaaddress-`,`gamaps-`,`gaweb-`,`gaemail-`].forEach(p => { const el=document.getElementById(p+catId); if(el) el.value=''; });
+  [`gaeid-`,`gaicon-`,`ganame-hr-`,`gadesc-hr-`,`ganame-en-`,`gadesc-en-`,`gaphone-`,`gaaddress-`,`gamaps-`,`gaweb-`,`gaemail-`,`gacoords-`].forEach(p => { const el=document.getElementById(p+catId); if(el) el.value=''; });
 }
 function switchGFL(catId, l, btn) {
   const f = document.getElementById('gaf-'+catId);
@@ -2724,6 +2788,7 @@ function editGlobalItem(catId, itemId) {
   setVal('gamaps-'+catId, item.maps_link);
   setVal('gaweb-'+catId, item.website);
   setVal('gaemail-'+catId, item.email);
+  if (item.lat && item.lng) setVal('gacoords-'+catId, `${item.lat}, ${item.lng}`);
   const t = document.getElementById('gaft-'+catId); if(t) t.textContent='Uredi unos';
 }
 
@@ -2733,15 +2798,17 @@ async function saveGlobalItem(catId) {
   const description_hr=v('gadesc-hr-'+catId), description_en=v('gadesc-en-'+catId);
   const icon=v('gaicon-'+catId), phone=v('gaphone-'+catId), address=v('gaaddress-'+catId);
   const maps_link=v('gamaps-'+catId), website=v('gaweb-'+catId), email=v('gaemail-'+catId);
+  const coordsRaw=v('gacoords-'+catId), coords=parseCoords(coordsRaw);
+  const lat=coords?coords.lat:null, lng=coords?coords.lng:null;
   if (!name_hr) { toast('Unesite naziv!','error'); return; }
   const editId = v('gaeid-'+catId);
   if (editId) {
-    const {error} = await sb.from('global_items').update({icon,name_hr,name_en,description_hr,description_en,phone,address,maps_link,website,email}).eq('id',editId);
+    const {error} = await sb.from('global_items').update({icon,name_hr,name_en,description_hr,description_en,phone,address,maps_link,website,email,lat,lng}).eq('id',editId);
     if (error) { toast('Greška!','error'); return; }
     toast('Ažurirano!','success');
   } else {
     const sort_order = (globalItemsData[catId]||[]).length;
-    const {error} = await sb.from('global_items').insert({category:catId,icon,name_hr,name_en,description_hr,description_en,phone,address,maps_link,website,email,sort_order});
+    const {error} = await sb.from('global_items').insert({category:catId,icon,name_hr,name_en,description_hr,description_en,phone,address,maps_link,website,email,lat,lng,sort_order});
     if (error) { toast('Greška!','error'); return; }
     toast('Dodano!','success');
   }
