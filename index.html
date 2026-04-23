@@ -610,7 +610,7 @@ async function loadProperty(slug) {
 
   const { data: localItems } = await sb.from('local_items').select('*').eq('property_id', prop.id).order('sort_order');
   const { data: phones }     = await sb.from('phones').select('*').eq('property_id', prop.id).order('sort_order');
-  const { data: emContacts } = await sb.from('emergency_contacts').select('*').eq('property_id', prop.id).order('sort_order');
+  const { data: emContacts } = await sb.from('emergency_contacts').select('*').eq('property_id', prop.id).order('sort_order', {ascending: true});
 
   // Shared items linked to this property
   const { data: links } = await sb.from('property_shared_items').select('shared_item_id').eq('property_id', prop.id);
@@ -677,8 +677,8 @@ function renderHome() {
   const name = lang==='hr' ? prop.name_hr : (prop.name_en || prop.name_hr);
   const region = prop.regions ? (lang==='hr' ? prop.regions.name_hr : prop.regions.name_en) : '';
 
-  document.getElementById('g-prop-name').textContent = name;
-  document.getElementById('g-prop-loc').textContent = (prop.location||'') + (region ? ', ' + region : '');
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-name'),name);
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc'),(prop.location||'') + (region ? ', ' + region : ''));
   document.getElementById('g-welcome').textContent = lang==='hr' ? 'Dobrodošli' : 'Welcome';
   document.getElementById('g-hero-name').textContent = name;
   document.getElementById('g-hero-loc').textContent = (prop.location||'') + (region ? ' · ' + region : '');
@@ -760,8 +760,8 @@ function renderHome() {
 function renderWifi() {
   const prop = currentProp;
   const name = lang==='hr' ? prop.name_hr : (prop.name_en||prop.name_hr);
-  document.getElementById('g-prop-name-wifi').textContent = name;
-  document.getElementById('g-prop-loc-wifi').textContent = prop.location||'';
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-name-wifi'),name);
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc-wifi'),prop.location||'');
   document.getElementById('bc-wifi-home').textContent = lang==='hr' ? 'Početak' : 'Home';
 
   const wifiName = prop.wifi_name || '';
@@ -811,8 +811,8 @@ function copyText(text, msg) {
 function renderCheckin() {
   const prop = currentProp;
   const name = lang==='hr' ? prop.name_hr : (prop.name_en||prop.name_hr);
-  document.getElementById('g-prop-name-checkin').textContent = name;
-  document.getElementById('g-prop-loc-checkin').textContent = prop.location||'';
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-name-checkin'),name);
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc-checkin'),prop.location||'');
   document.getElementById('bc-checkin-home').textContent = lang==='hr' ? 'Početak' : 'Home';
 
   const ciTime = prop.checkin_time || '16:00';
@@ -849,8 +849,8 @@ function renderCheckin() {
 function renderEmergency() {
   const prop = currentProp;
   const name = lang==='hr' ? prop.name_hr : (prop.name_en||prop.name_hr);
-  document.getElementById('g-prop-name-emerg').textContent = name;
-  document.getElementById('g-prop-loc-emerg').textContent = prop.location||'';
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-name-emerg'),name);
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc-emerg'),prop.location||'');
   document.getElementById('bc-emerg-home').textContent = lang==='hr' ? 'Početak' : 'Home';
 
   const c = document.getElementById('g-emergency-content');
@@ -897,8 +897,8 @@ function renderEmergency() {
 function renderContacts() {
   const prop = currentProp;
   const name = lang==='hr' ? prop.name_hr : (prop.name_en||prop.name_hr);
-  document.getElementById('g-prop-name2').textContent = name;
-  document.getElementById('g-prop-loc2').textContent = prop.location||'';
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-name2'),name);
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc2'),prop.location||'');
   document.getElementById('bc-home-label').textContent = lang==='hr' ? 'Početak' : 'Home';
   document.getElementById('g-sub-title').textContent = '📞 ' + (lang==='hr' ? 'Useful Contacts' : 'Useful Contacts');
 
@@ -934,8 +934,8 @@ function renderContacts() {
 function renderAirport() {
   const prop = currentProp;
   const name = lang==='hr' ? prop.name_hr : (prop.name_en||prop.name_hr);
-  document.getElementById('g-prop-name2').textContent = name;
-  document.getElementById('g-prop-loc2').textContent = prop.location||'';
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-name2'),name);
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc2'),prop.location||'');
   document.getElementById('bc-home-label').textContent = lang==='hr' ? 'Početak' : 'Home';
   document.getElementById('g-sub-title').textContent = '✈️ ' + (lang==='hr' ? 'Airport & Transferi' : 'Airport & Transfers');
 
@@ -971,8 +971,8 @@ function renderSubs(sectionId) {
   const prop = currentProp;
   const name = lang==='hr' ? prop.name_hr : (prop.name_en || prop.name_hr);
 
-  document.getElementById('g-prop-name2').textContent = name;
-  document.getElementById('g-prop-loc2').textContent = prop.location||'';
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-name2'),name);
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc2'),prop.location||'');
   document.getElementById('bc-home-label').textContent = lang==='hr' ? 'Početak' : 'Home';
 
   const container = document.getElementById('g-sub-items');
@@ -1123,8 +1123,8 @@ function renderMapContent() {
 function setPropHeader3() {
   const prop = currentProp;
   const name = lang==='hr' ? prop.name_hr : (prop.name_en||prop.name_hr);
-  document.getElementById('g-prop-name3').textContent = name;
-  document.getElementById('g-prop-loc3').textContent = prop.location||'';
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-name3'),name);
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc3'),prop.location||'');
 }
 
 function emptyState(icon) { return `<div class="empty"><div class="empty-icon">${icon}</div><div class="empty-text">${lang==='hr'?'Nema sadržaja.':'No content yet.'}</div></div>`; }
@@ -1283,7 +1283,7 @@ async function onPropSelectChange() {
 async function loadPropertyAdminById(id) {
   const { data: prop } = await sb.from('properties').select('*').eq('id', id).single();
   const { data: localItems } = await sb.from('local_items').select('*').eq('property_id', id).order('sort_order');
-  const { data: emContacts } = await sb.from('emergency_contacts').select('*').eq('property_id', id).order('sort_order');
+  const { data: emContacts } = await sb.from('emergency_contacts').select('*').eq('property_id', id).order('sort_order', {ascending: true});
   const { data: links } = await sb.from('property_shared_items').select('shared_item_id').eq('property_id', id);
 
   prop.localItems = localItems || [];
