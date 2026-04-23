@@ -515,8 +515,9 @@ const LOCAL_SECTIONS = [
 
 // Dijeljene sekcije po regiji
 const SHARED_SECTIONS = [
-  { id:'todo',     icon:'🗺️', hr:'Things to Do',       en:'Things to Do',       wide:false },
-  { id:'recommends',icon:'⭐',hr:'Owner Recommends',    en:'Owner Recommends',   wide:false },
+  { id:'todo',      icon:'🗺️', hr:'Things to Do',       en:'Things to Do',       wide:false },
+  { id:'recommends',icon:'⭐', hr:'Owner Recommends',   en:'Owner Recommends',   wide:false },
+  { id:'emergency', icon:'🏥', hr:'Bolnice & Ambulante', en:'Hospitals & Clinics', wide:false },
 ];
 
 // Podsekcije "O vili" — fiksne, admin unosi sadržaj
@@ -610,7 +611,6 @@ async function loadProperty(slug) {
 
   const { data: localItems } = await sb.from('local_items').select('*').eq('property_id', prop.id).order('sort_order');
   const { data: phones }     = await sb.from('phones').select('*').eq('property_id', prop.id).order('sort_order');
-  const { data: emContacts } = await sb.from('emergency_contacts').select('*').eq('property_id', prop.id).order('sort_order');
 
   // Shared items linked to this property
   const { data: links } = await sb.from('property_shared_items').select('shared_item_id').eq('property_id', prop.id);
@@ -630,9 +630,10 @@ async function loadProperty(slug) {
   VILLA_SUBSECTIONS.forEach(sub => prop.sections['villa'][sub.id] = []);
   // Todo subsections
   TODO_SUBSECTIONS.forEach(sub => prop.sections['todo'][sub.id] = []);
-  // Contacts, airport — flat list
+  // Contacts, airport, emergency — flat list
   prop.sections['contacts'] = [];
   prop.sections['airport'] = [];
+  prop.sections['emergency'] = [];
 
   (localItems||[]).forEach(item => {
     const sec = item.section;
@@ -653,11 +654,14 @@ async function loadProperty(slug) {
     } else if (item.section === 'recommends') {
       if (!prop.sections['recommends']) prop.sections['recommends'] = [];
       prop.sections['recommends'].push(item);
+    } else if (item.section === 'emergency') {
+      if (!prop.sections['emergency']) prop.sections['emergency'] = [];
+      prop.sections['emergency'].push(item);
     }
   });
 
   prop.phones = phones || [];
-  prop.emergencyContacts = emContacts || [];
+  prop.emergencyContacts = [];
   return prop;
 }
 
@@ -848,42 +852,38 @@ function renderCheckin() {
 // ═══════════════════════════════════════════
 function renderEmergency() {
   const prop = currentProp;
-  const name = lang==='hr' ? prop.name_hr : (prop.name_en||prop.name_hr);
-  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-name-emerg'),name);
-  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc-emerg'),prop.location||'');
-  document.getElementById('bc-emerg-home').textContent = lang==='hr' ? 'Početak' : 'Home';
 
   const c = document.getElementById('g-emergency-content');
   const title = lang==='hr' ? 'In Case of Emergency' : 'In Case of Emergency';
   let h = `<div class="sub-list-title">🚨 ${title}</div>`;
 
-  // Fixed emergency numbers (use prop override if set, else fixed)
-  h += `<div class="emergency-section-title">${lang==='hr'?'Hitni brojevi':'Emergency Numbers'}</div>`;
+  // Fixed: 112 for everything
+  h += `<div class="emergency-section-title">${lang==='hr'?'Hitni broj':'Emergency Number'}</div>`;
+  h += `<div class="emergency-fixed">
+    <div class="phone-item-info"><div class="phone-name">🆘 ${lang==='hr'?'Hitne službe (hitna, vatrogasci, policija)':'Emergency Services (medical, fire, police)'}</div></div>
+    <a class="emergency-call" href="tel:112">112</a>
+  </div>`;
 
-  // Build map of overrides
-  const overrideMap = {};
-  (prop.emergencyContacts||[]).forEach(c => { if(c.is_override) overrideMap[c.override_key] = c; });
-
-  EMERGENCY_FIXED.forEach(ec => {
-    const override = overrideMap[ec.number];
-    const num = override ? override.number : ec.number;
-    const nameDisp = override ? (lang==='hr' ? override.name_hr : (override.name_en||override.name_hr)) : (lang==='hr' ? ec.name_hr : ec.name_en);
-    h += `<div class="emergency-fixed">
-      <div class="phone-item-info"><div class="phone-name">${ec.icon} ${nameDisp}</div></div>
-      <a class="emergency-call" href="tel:${num}">${num}</a>
-    </div>`;
-  });
-
-  // Local hospitals/ambulances from DB
-  const locals = (prop.emergencyContacts||[]).filter(c => !c.is_override);
+  // Regional hospitals/ambulances from shared items
+  const locals = prop.sections['emergency'] || [];
   if (locals.length) {
     h += `<div class="emergency-section-title">${lang==='hr'?'Bolnice & Ambulante':'Hospitals & Clinics'}</div>`;
     locals.forEach(ec => {
-      const n = lang==='hr' ? ec.name_hr : (ec.name_en||ec.name_hr);
-      h += `<div class="phone-item" style="margin-bottom:10px;">
-        <div class="phone-item-info"><div class="phone-cat">${ec.type||''}</div><div class="phone-name">${ec.icon||'🏥'} ${n}</div></div>
-        <a class="phone-call" href="tel:${ec.number}">${ec.number}</a>
-      </div>`;
+      const n = lang==='hr' ? ec.title_hr : (ec.title_en||ec.title_hr);
+      const body = lang==='hr' ? ec.body_hr : (ec.body_en||ec.body_hr);
+      // Check if body contains a phone number
+      const phoneMatch = (body||'').match(/[\+\d][\d\s\-]{6,}/);
+      const phone = phoneMatch ? phoneMatch[0].trim() : null;
+      if (phone) {
+        h += `<div class="phone-item" style="margin-bottom:10px;">
+          <div class="phone-item-info"><div class="phone-cat">${ec.icon||'🏥'}</div><div class="phone-name">${n}</div></div>
+          <a class="phone-call" href="tel:${phone}">${phone}</a>
+        </div>`;
+      } else {
+        h += `<div class="phone-item" style="margin-bottom:10px;">
+          <div class="phone-item-info"><div class="phone-name">${ec.icon||'🏥'} ${n}</div>${body?`<div class="phone-cat">${body}</div>`:''}</div>
+        </div>`;
+      }
     });
   }
 
@@ -1325,10 +1325,6 @@ function renderAdminLocalSections() {
   // ── Villa subsections ──
   const villaCard = makeAdminCard('villa', '🏡', 'O vili — podsekcije', renderAdminVilla(prop));
   c.appendChild(villaCard);
-
-  // ── Emergency ──
-  const emergCard = makeAdminCard('emergency', '🚨', 'In Case of Emergency', renderAdminEmergency(prop));
-  c.appendChild(emergCard);
 
   // ── Contacts ──
   const contactsCard = makeAdminCard('contacts', '📞', 'Useful Contacts', renderAdminContacts(prop));
@@ -1833,20 +1829,16 @@ async function onRegionSelectChange() {
 
   const { data: items } = await sb.from('shared_items').select('*').eq('region_id', regionId).order('sort_order');
   adminRegionData = { id: regionId, items: items || [] };
-  adminRegionData.sections = {};
-  SHARED_SECTIONS.forEach(s => adminRegionData.sections[s.id] = {});
-  // For todo, group by subsection too
-  TODO_SUBSECTIONS.forEach(sub => {
-    if (!adminRegionData.sections['todo']) adminRegionData.sections['todo'] = {};
-    adminRegionData.sections['todo'][sub.id] = [];
-  });
-  if (!adminRegionData.sections['recommends']) adminRegionData.sections['recommends'] = [];
+  adminRegionData.sections = { todo:{}, recommends:[], emergency:[] };
+  TODO_SUBSECTIONS.forEach(sub => adminRegionData.sections['todo'][sub.id] = []);
   adminRegionData.items.forEach(item => {
     if (item.section === 'todo' && item.subsection) {
       if (!adminRegionData.sections['todo'][item.subsection]) adminRegionData.sections['todo'][item.subsection]=[];
       adminRegionData.sections['todo'][item.subsection].push(item);
     } else if (item.section === 'recommends') {
       adminRegionData.sections['recommends'].push(item);
+    } else if (item.section === 'emergency') {
+      adminRegionData.sections['emergency'].push(item);
     }
   });
 
@@ -1880,6 +1872,18 @@ function renderSharedSections() {
     </div>
     <div class="a-card-body" id="ascbody-recommends">${renderSharedSimpleBody('recommends','⭐')}</div>`;
   c.appendChild(recsCard);
+
+  // Bolnice & Ambulante
+  const emergCard = document.createElement('div');
+  emergCard.className = 'a-card';
+  emergCard.id = 'ascard-emergency';
+  emergCard.innerHTML = `
+    <div class="a-card-hdr" onclick="toggleASCard('emergency')">
+      <div class="a-card-title"><span class="a-card-icon">🏥</span>Bolnice & Ambulante (${(adminRegionData.sections['emergency']||[]).length})</div>
+      <div class="a-chevron">▾</div>
+    </div>
+    <div class="a-card-body" id="ascbody-emergency">${renderSharedSimpleBody('emergency','🏥')}</div>`;
+  c.appendChild(emergCard);
 }
 
 function renderSharedTodoBody() {
@@ -2041,7 +2045,12 @@ async function saveSharedSimpleItem(sec) {
   closeSAddForm(sec);
   document.getElementById('ascbody-'+sec).innerHTML = renderSharedSimpleBody(sec, sec==='recommends'?'⭐':'📄');
   const card = document.getElementById('ascard-'+sec);
-  if (card) { const t=card.querySelector('.a-card-title'); if(t) t.innerHTML=`<span class="a-card-icon">${sec==='recommends'?'⭐':'📄'}</span>${sec==='recommends'?'Owner Recommends':'Stavke'} (${(adminRegionData.sections[sec]||[]).length})`; }
+  if (card) {
+    const icons = {recommends:'⭐', emergency:'🏥'};
+    const labels = {recommends:'Owner Recommends', emergency:'Bolnice & Ambulante'};
+    const t=card.querySelector('.a-card-title');
+    if(t) t.innerHTML=`<span class="a-card-icon">${icons[sec]||'📄'}</span>${labels[sec]||'Stavke'} (${(adminRegionData.sections[sec]||[]).length})`;
+  }
 }
 
 async function deleteSharedItem(sec, itemId, subId) {
@@ -2049,6 +2058,7 @@ async function deleteSharedItem(sec, itemId, subId) {
   await sb.from('shared_items').delete().eq('id',itemId);
   await reloadRegionData();
   if (sec === 'todo') document.getElementById('ascbody-todo').innerHTML = renderSharedTodoBody();
+  else if (sec === 'emergency') document.getElementById('ascbody-emergency').innerHTML = renderSharedSimpleBody('emergency','🏥');
   else document.getElementById('ascbody-'+sec).innerHTML = renderSharedSimpleBody(sec, '⭐');
   toast('Obrisano.','success');
 }
@@ -2056,7 +2066,7 @@ async function deleteSharedItem(sec, itemId, subId) {
 async function reloadRegionData() {
   const { data: items } = await sb.from('shared_items').select('*').eq('region_id',adminRegionData.id).order('sort_order');
   adminRegionData.items = items||[];
-  adminRegionData.sections = { todo:{}, recommends:[] };
+  adminRegionData.sections = { todo:{}, recommends:[], emergency:[] };
   TODO_SUBSECTIONS.forEach(sub => adminRegionData.sections['todo'][sub.id]=[]);
   adminRegionData.items.forEach(item => {
     if (item.section==='todo' && item.subsection) {
@@ -2064,6 +2074,8 @@ async function reloadRegionData() {
       adminRegionData.sections['todo'][item.subsection].push(item);
     } else if (item.section==='recommends') {
       adminRegionData.sections['recommends'].push(item);
+    } else if (item.section==='emergency') {
+      adminRegionData.sections['emergency'].push(item);
     }
   });
 }
