@@ -1602,6 +1602,7 @@ function makeAdminCard(sid, icon, label, bodyHtml) {
 
 async function toggleACard(sid) {
   const card = document.getElementById('acard-'+sid);
+  if (!card) return;
   card.classList.toggle('open');
   if (sid === 'shared' && card.classList.contains('open')) {
     await renderSharedAssignment();
@@ -2102,34 +2103,9 @@ async function onRegionSelectChange() {
 }
 
 function renderSharedSections() {
+  // Regija tab is now empty — food/explore moved to Globalno tab
   const c = document.getElementById('a-shared-sections');
-  c.innerHTML = '';
-
-  // Hrana i piće
-  const foodCard = document.createElement('div');
-  foodCard.className = 'a-card';
-  foodCard.id = 'ascard-food';
-  foodCard.innerHTML = `
-    <div class="a-card-hdr" onclick="toggleASCard('food')">
-      <div class="a-card-title"><span class="a-card-icon">🍽️</span>Hrana i piće</div>
-      <div class="a-chevron">▾</div>
-    </div>
-    <div class="a-card-body" id="ascbody-food">${renderSharedSubsBody('food', FOOD_SUBSECTIONS)}</div>`;
-  c.appendChild(foodCard);
-
-  // Kamo otići
-  const exploreCard = document.createElement('div');
-  exploreCard.className = 'a-card';
-  exploreCard.id = 'ascard-explore';
-  exploreCard.innerHTML = `
-    <div class="a-card-hdr" onclick="toggleASCard('explore')">
-      <div class="a-card-title"><span class="a-card-icon">🧭</span>Kamo otići</div>
-      <div class="a-chevron">▾</div>
-    </div>
-    <div class="a-card-body" id="ascbody-explore">${renderSharedSubsBody('explore', EXPLORE_SUBSECTIONS)}</div>`;
-  c.appendChild(exploreCard);
-
-
+  c.innerHTML = '<div class="info-note">Hrana i piće i Kamo otići su premješteni u tab "Globalno".</div>';
 }
 
 function renderSharedSubsBody(secId, subsections) {
@@ -2500,14 +2476,168 @@ async function doTranslate(sid, title_hr, body_hr, enTitleId, enBodyId, btnId, f
 // ADMIN: GLOBAL ITEMS (aerodromi, bolnice, transferi)
 // ═══════════════════════════════════════════
 let globalItemsData = { airport:[], hospital:[], transfer:[] };
+let globalSharedData = { food:{}, explore:{} };
+
+
+function renderGlobalSharedSubsBody(secId, subsections) {
+  let h = '';
+  subsections.forEach(sub => {
+    const items = (globalSharedData[secId]||{})[sub.id] || [];
+    h += `<div style="font-size:12px;font-weight:500;color:var(--navy);margin:10px 0 6px;">${sub.icon} ${sub.hr} (${items.length})</div>`;
+    items.forEach(item => {
+      h += `<div class="shared-item-admin">
+        <div class="sia-content"><div class="sia-title">${item.icon||''} ${item.title_hr}</div><div class="sia-preview">${item.address||(item.body_hr||'').substring(0,50)}</div></div>
+        <div class="sia-actions">
+          <button class="btn-sm-icon" onclick="editGlobalSharedItem('${secId}','${sub.id}','${item.id}')">✏️</button>
+          <button class="btn-sm-icon del" onclick="deleteGlobalSharedItem('${secId}','${sub.id}','${item.id}')">🗑</button>
+        </div>
+      </div>`;
+    });
+    h += `<div class="add-form" id="gsaf-${secId}-${sub.id}">
+      <div class="add-form-title" id="gsaft-${secId}-${sub.id}">Novi unos — ${sub.hr}</div>
+      <input type="hidden" id="gsaeid-${secId}-${sub.id}">
+      <div class="fg"><label class="fl2">Ikona</label><input type="text" class="fi2" id="gsaicon-${secId}-${sub.id}" placeholder="${sub.icon}" style="width:80px;"></div>
+      <div class="ltabs">
+        <button class="ltab active" onclick="switchGSFL('${secId}-${sub.id}','hr',this)">🇭🇷 HR</button>
+        <button class="ltab" onclick="switchGSFL('${secId}-${sub.id}','en',this)">🇬🇧 EN</button>
+      </div>
+      <div class="lfield active" id="gslf-hr-${secId}-${sub.id}">
+        <div class="fg"><label class="fl2">Naziv (HR)</label><input type="text" class="fi2" id="gsathr-${secId}-${sub.id}"></div>
+        <div class="fg"><label class="fl2">Opis (HR)</label><textarea class="ft2" id="gsabhr-${secId}-${sub.id}" style="min-height:60px;"></textarea></div>
+      </div>
+      <div class="lfield" id="gslf-en-${secId}-${sub.id}">
+        <div class="fg"><label class="fl2">Name (EN)</label><input type="text" class="fi2" id="gsaten-${secId}-${sub.id}"></div>
+        <div class="fg"><label class="fl2">Description (EN)</label><textarea class="ft2" id="gsaben-${secId}-${sub.id}" style="min-height:60px;"></textarea></div>
+      </div>
+      <div class="divider"></div>
+      <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px;">Kontakt podaci</div>
+      <div class="fg"><label class="fl2">📞 Telefon</label><input type="tel" class="fi2" id="gsaphone-${secId}-${sub.id}" placeholder="+385 52 123 456"></div>
+      <div class="fg"><label class="fl2">📍 Adresa</label><input type="text" class="fi2" id="gsaaddress-${secId}-${sub.id}" placeholder="Ulica bb, Mjesto"></div>
+      <div class="fg"><label class="fl2">🌐 Web / Facebook</label><input type="text" class="fi2" id="gsaweb-${secId}-${sub.id}" placeholder="https://..."></div>
+      <div class="fg"><label class="fl2">✉️ Email</label><input type="email" class="fi2" id="gsaemail-${secId}-${sub.id}" placeholder="info@..."></div>
+      <div class="fg"><label class="fl2">📌 Koordinate (desni klik Google Maps)</label>
+        <input type="text" class="fi2" id="gsacoords-${secId}-${sub.id}" placeholder="45.3271, 13.5526" oninput="previewCoords(this,'gsacoords-preview-${secId}-${sub.id}')">
+        <div id="gsacoords-preview-${secId}-${sub.id}" style="font-size:11px;margin-top:4px;"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="closeGSForm('${secId}','${sub.id}')">Odustani</button>
+        <button class="btn-gold" onclick="saveGlobalSharedItem('${secId}','${sub.id}')">Spremi</button>
+      </div>
+    </div>
+    <button class="btn-primary" style="margin-top:8px;margin-bottom:8px;" onclick="openGSForm('${secId}','${sub.id}')">+ Dodaj ${sub.hr}</button>
+    <div class="divider"></div>`;
+  });
+  return h;
+}
+
+function openGSForm(secId, subId) {
+  const f = document.getElementById(`gsaf-${secId}-${subId}`);
+  if (f) { f.classList.add('open'); const e=document.getElementById(`gsaeid-${secId}-${subId}`); if(e) e.value=''; }
+}
+function closeGSForm(secId, subId) {
+  const f = document.getElementById(`gsaf-${secId}-${subId}`);
+  if (!f) return;
+  f.classList.remove('open');
+  [`gsaeid-`,`gsaicon-`,`gsathr-`,`gsabhr-`,`gsaten-`,`gsaben-`,`gsaphone-`,`gsaaddress-`,`gsaweb-`,`gsaemail-`,`gsacoords-`].forEach(p => {
+    const el = document.getElementById(p+`${secId}-${subId}`); if(el) el.value='';
+  });
+}
+function switchGSFL(sid, l, btn) {
+  const f = document.getElementById(`gsaf-${sid}`);
+  if (!f) return;
+  f.querySelectorAll('.ltab').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
+  f.querySelectorAll('.lfield').forEach(lf=>lf.classList.remove('active'));
+  const tf = document.getElementById(`gslf-${l}-${sid}`); if(tf) tf.classList.add('active');
+}
+
+function editGlobalSharedItem(secId, subId, itemId) {
+  const item = ((globalSharedData[secId]||{})[subId]||[]).find(i=>i.id===itemId);
+  if (!item) return;
+  openGSForm(secId, subId);
+  const setVal = (id,val) => { const el=document.getElementById(id); if(el) el.value=val||''; };
+  setVal(`gsaeid-${secId}-${subId}`, itemId);
+  setVal(`gsaicon-${secId}-${subId}`, item.icon);
+  setVal(`gsathr-${secId}-${subId}`, item.title_hr);
+  setVal(`gsabhr-${secId}-${subId}`, item.body_hr);
+  setVal(`gsaten-${secId}-${subId}`, item.title_en);
+  setVal(`gsaben-${secId}-${subId}`, item.body_en);
+  setVal(`gsaphone-${secId}-${subId}`, item.phone);
+  setVal(`gsaaddress-${secId}-${subId}`, item.address);
+  setVal(`gsaweb-${secId}-${subId}`, item.website);
+  setVal(`gsaemail-${secId}-${subId}`, item.email);
+  if (item.lat && item.lng) setVal(`gsacoords-${secId}-${subId}`, `${item.lat}, ${item.lng}`);
+  const t = document.getElementById(`gsaft-${secId}-${subId}`); if(t) t.textContent = 'Uredi stavku';
+}
+
+async function saveGlobalSharedItem(secId, subId) {
+  const g = id => v(`gs${id}-${secId}-${subId}`);
+  const title_hr=g('athr'), body_hr=g('abhr'), title_en=g('aten'), body_en=g('aben'), icon=g('aicon');
+  const phone=g('aphone'), address=g('aaddress'), website=g('aweb'), email=g('aemail');
+  const coordsRaw=g('acoords'), coords=parseCoords(coordsRaw);
+  const lat=coords?coords.lat:null, lng=coords?coords.lng:null;
+  if (!title_hr) { toast('Unesite naziv!','error'); return; }
+  const editId = g('aeid');
+  if (editId) {
+    const {error} = await sb.from('shared_items').update({icon,title_hr,body_hr,title_en,body_en,phone,address,website,email,lat,lng}).eq('id',editId);
+    if (error) { toast('Greška!','error'); return; }
+    toast('Ažurirano!','success');
+  } else {
+    const sort_order = ((globalSharedData[secId]||{})[subId]||[]).length;
+    const {error} = await sb.from('shared_items').insert({section:secId,subsection:subId,icon,title_hr,body_hr,title_en,body_en,phone,address,website,email,lat,lng,sort_order});
+    if (error) { toast('Greška!','error'); return; }
+    toast('Dodano!','success');
+  }
+  closeGSForm(secId, subId);
+  await renderGlobalAdmin();
+}
+
+async function deleteGlobalSharedItem(secId, subId, itemId) {
+  if (!confirm('Obrisati stavku?')) return;
+  await sb.from('shared_items').delete().eq('id',itemId);
+  await renderGlobalAdmin();
+  toast('Obrisano.','success');
+}
 
 async function renderGlobalAdmin() {
   const c = document.getElementById('a-global-sections');
   c.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-light);font-size:13px;">Učitavam...</div>';
+
+  // Load global_items (aerodromi, bolnice, transferi)
   const { data: items } = await sb.from('global_items').select('*').order('category').order('sort_order');
   globalItemsData = { airport:[], hospital:[], transfer:[] };
   (items||[]).forEach(item => { if(globalItemsData[item.category]) globalItemsData[item.category].push(item); });
+
+  // Load shared_items (food, explore) — globally without region filter
+  const { data: sharedAll } = await sb.from('shared_items').select('*').in('section',['food','explore']).order('sort_order');
+  globalSharedData = { food:{}, explore:{} };
+  FOOD_SUBSECTIONS.forEach(sub => globalSharedData['food'][sub.id] = []);
+  EXPLORE_SUBSECTIONS.forEach(sub => globalSharedData['explore'][sub.id] = []);
+  (sharedAll||[]).forEach(item => {
+    if (item.section === 'food' && item.subsection && globalSharedData['food'][item.subsection]) {
+      globalSharedData['food'][item.subsection].push(item);
+    } else if (item.section === 'explore' && item.subsection && globalSharedData['explore'][item.subsection]) {
+      globalSharedData['explore'][item.subsection].push(item);
+    }
+  });
+
   c.innerHTML = '';
+
+  // Hrana i piće card
+  const foodCard = makeAdminCard('global-food', '🍽️', 'Hrana i piće', renderGlobalSharedSubsBody('food', FOOD_SUBSECTIONS));
+  c.appendChild(foodCard);
+
+  // Kamo otići card
+  const exploreCard = makeAdminCard('global-explore', '🧭', 'Kamo otići', renderGlobalSharedSubsBody('explore', EXPLORE_SUBSECTIONS));
+  c.appendChild(exploreCard);
+
+  // Separator
+  const sep = document.createElement('div');
+  sep.className = 'a-section-label';
+  sep.style.marginTop = '20px';
+  sep.textContent = 'Infrastruktura';
+  c.appendChild(sep);
+
+  // Aerodromi, Bolnice, Transferi
   GLOBAL_CATEGORIES.forEach(cat => {
     const card = makeAdminCard('global-'+cat.id, cat.icon, `${cat.hr} (${(globalItemsData[cat.id]||[]).length})`, renderGlobalCatBody(cat));
     c.appendChild(card);
