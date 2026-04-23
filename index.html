@@ -686,13 +686,27 @@ function distLabel(km) {
 // ═══════════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════════
-function show(id) {
+// Scroll position memory per screen
+const scrollMemory = {};
+
+function show(id, restoreScroll = false) {
+  // Save current scroll before leaving
+  const current = document.querySelector('.screen.active');
+  if (current) scrollMemory[current.id] = window.scrollY;
+
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0,0);
+  const next = document.getElementById(id);
+  next.classList.add('active');
+
+  if (restoreScroll && scrollMemory[id] !== undefined) {
+    requestAnimationFrame(() => window.scrollTo(0, scrollMemory[id]));
+  } else {
+    window.scrollTo(0, 0);
+  }
 }
-function goHome() { renderHome(); show('screen-home'); }
-function goSubs() { renderSubs(currentSectionId); show('screen-subs'); }
+
+function goHome() { renderHome(); show('screen-home', true); }
+function goSubs() { renderSubs(currentSectionId); show('screen-subs', true); }
 function goAdminLogin() {
   sb.auth.getSession().then(({ data }) => {
     if (data.session) { renderAdmin(); show('screen-admin'); }
