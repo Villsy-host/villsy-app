@@ -528,16 +528,16 @@ const HERO_BUCKET = 'villsy';
 // ─── SECTIONS ────────────────────────────────
 // Lokalne sekcije specifične za objekt
 const LOCAL_SECTIONS = [
-  { id:'villa',    icon:'🏡', hr:'O vili',               en:'About the Villa',      wide:false },
-  { id:'emergency',icon:'🚨', hr:'In Case of Emergency', en:'In Case of Emergency', wide:true  },
-  { id:'contacts', icon:'📞', hr:'Useful Contacts',       en:'Useful Contacts',      wide:false },
+  { id:'villa',      icon:'🏡', hr:'O vili',                en:'About the Villa',      wide:false },
+  { id:'emergency',  icon:'🚨', hr:'In Case of Emergency',  en:'In Case of Emergency', wide:true  },
+  { id:'contacts',   icon:'📞', hr:'Useful Contacts',        en:'Useful Contacts',      wide:false },
+  { id:'recommends', icon:'⭐', hr:'Preporuke vlasnika',     en:'Owner Recommends',     wide:false },
 ];
 
 // Dijeljene sekcije po regiji
 const SHARED_SECTIONS = [
-  { id:'food',      icon:'🍽️', hr:'Hrana i piće',      en:'Food & Drinks',        wide:false },
-  { id:'explore',   icon:'🧭', hr:'Kamo otići',         en:'Things to Explore',    wide:false },
-  { id:'recommends',icon:'⭐', hr:'Owner Recommends',   en:'Owner Recommends',     wide:false },
+  { id:'food',    icon:'🍽️', hr:'Hrana i piće',  en:'Food & Drinks',     wide:false },
+  { id:'explore', icon:'🧭', hr:'Kamo otići',     en:'Things to Explore', wide:false },
 ];
 
 // Podsekcije "O vili"
@@ -583,6 +583,42 @@ let allProperties = [];
 let allRegions = [];
 let adminPropData = null;
 let adminRegionData = null;
+
+
+// ═══════════════════════════════════════════
+// UTILS: Haversine distance + coord parser
+// ═══════════════════════════════════════════
+function haversineKm(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLng/2) * Math.sin(dLng/2);
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function parseCoords(input) {
+  // Accepts "45.3271, 13.5526" or "45.3271,13.5526"
+  if (!input) return null;
+  const match = input.trim().match(/(-?\d+\.\d+)[,\s]+(-?\d+\.\d+)/);
+  if (!match) return null;
+  return { lat: parseFloat(match[1]), lng: parseFloat(match[2]) };
+}
+
+function sortByDistance(items, propLat, propLng) {
+  if (!propLat || !propLng) return items;
+  return [...items].map(item => ({
+    ...item,
+    _dist: (item.lat && item.lng) ? haversineKm(propLat, propLng, item.lat, item.lng) : 99999
+  })).sort((a, b) => a._dist - b._dist);
+}
+
+function distLabel(km) {
+  if (km >= 9999) return '';
+  if (km < 1) return `${Math.round(km * 1000)} m`;
+  return `${km.toFixed(1)} km`;
+}
 
 // ═══════════════════════════════════════════
 // NAVIGATION
@@ -642,14 +678,14 @@ async function loadProperty(slug) {
   const { data: localItems } = await sb.from('local_items').select('*').eq('property_id', prop.id).order('sort_order');
   const { data: phones }     = await sb.from('phones').select('*').eq('property_id', prop.id).order('sort_order');
 
-  // Shared items linked to this property
+  // Shared items — food/explore global (no region filter), recommends per property via links
   const { data: links } = await sb.from('property_shared_items').select('shared_item_id').eq('property_id', prop.id);
   const sharedIds = (links||[]).map(l => l.shared_item_id);
-  let sharedItems = [];
-  if (sharedIds.length) {
-    const { data: si } = await sb.from('shared_items').select('*').in('id', sharedIds).order('sort_order');
-    sharedItems = si || [];
-  }
+
+  // Load food & explore globally
+  const { data: globalShared } = await sb.from('shared_items').select('*').in('section',['food','explore']).order('sort_order');
+
+  const sharedItems = globalShared || [];
 
   // Group sections
   prop.sections = { villa:{}, contacts:[], food:{}, explore:[], recommends:[] };
@@ -663,6 +699,7 @@ async function loadProperty(slug) {
     } else if (item.section === 'contacts') {
       prop.sections['contacts'].push(item);
     }
+    // recommends handled below after sharedItems
   });
 
   sharedItems.forEach(item => {
@@ -671,9 +708,16 @@ async function loadProperty(slug) {
     } else if (item.section === 'explore' && item.subsection) {
       if (!prop.sections['explore'][item.subsection]) prop.sections['explore'][item.subsection] = [];
       prop.sections['explore'][item.subsection].push(item);
-    } else if (item.section === 'recommends') {
-      prop.sections['recommends'].push(item);
     }
+  });
+
+  // Recommends from local_items
+  (localItems||[]).forEach(item => {
+  });
+
+  // Recommends from local_items (per property)
+  (localItems||[]).forEach(item => {
+    if (item.section === 'recommends') prop.sections['recommends'].push(item);
   });
 
   prop.phones = phones || [];
@@ -773,12 +817,15 @@ function renderHome() {
   exploreCard.onclick = () => { currentSectionId = 'explore'; renderSubs('explore'); show('screen-subs'); };
   grid.appendChild(exploreCard);
 
-  // 9. Owner Recommends
-  const recsCard = document.createElement('div');
-  recsCard.className = 'section-card';
-  recsCard.innerHTML = `<div class="section-card-icon">⭐</div><div class="section-card-label">${lang==='hr'?'Owner Recommends':'Owner Recommends'}</div><div class="section-card-arrow">›</div>`;
-  recsCard.onclick = () => { currentSectionId = 'recommends'; renderSubs('recommends'); show('screen-subs'); };
-  grid.appendChild(recsCard);
+  // 9. Preporuke vlasnika — only show if has content
+  const recsItems = prop.sections['recommends'] || [];
+  if (recsItems.length) {
+    const recsCard = document.createElement('div');
+    recsCard.className = 'section-card';
+    recsCard.innerHTML = `<div class="section-card-icon">⭐</div><div class="section-card-label">${lang==='hr'?'Preporuke vlasnika':'Owner Recommends'}</div><div class="section-card-arrow">›</div>`;
+    recsCard.onclick = () => { currentSectionId = 'recommends'; renderSubs('recommends'); show('screen-subs'); };
+    grid.appendChild(recsCard);
+  }
 }
 
 // ═══════════════════════════════════════════
@@ -911,6 +958,34 @@ async function renderEmergency() {
   show('screen-emergency');
 }
 
+
+function renderLocalRecommendsDetail(item) {
+  setPropHeader3();
+  document.getElementById('bc-section-label').textContent = lang==='hr' ? 'Preporuke vlasnika' : 'Owner Recommends';
+  const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
+  const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
+  const bodyHtml = (body||'').split('\n').map(l => l ? `<p>${l}</p>` : '').join('');
+
+  const mapsUrl = (item.lat && item.lng)
+    ? `https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}`
+    : null;
+
+  const actions = [];
+  if (item.phone_number) actions.push(`<a class="contact-btn call" href="tel:${item.phone_number}">📞 ${item.phone_number}</a>`);
+  if (mapsUrl)           actions.push(`<a class="contact-btn maps" href="${mapsUrl}" target="_blank">🗺️ ${lang==='hr'?'Navigiraj':'Navigate'}</a>`);
+  if (item.website)      actions.push(`<a class="contact-btn web" href="${item.website}" target="_blank">🌐 Web</a>`);
+  const actionsHtml = actions.length ? `<div class="contact-actions">${actions.join('')}</div>` : '';
+  const addrHtml = item.category ? `<div class="contact-address"><div class="contact-address-icon">📍</div><div>${item.category}</div></div>` : '';
+
+  document.getElementById('g-content-inner').innerHTML = `
+    <div class="content-area">
+      <div class="content-icon">${item.icon||'⭐'}</div>
+      <div class="content-title">${title}</div>
+      ${body ? `<div class="content-body">${bodyHtml}</div>` : ''}
+      ${addrHtml}
+      ${actionsHtml}
+    </div>`;
+}
 
 // ═══════════════════════════════════════════
 // GUEST: GLOBAL SECTION (Aerodromi & Transferi)
@@ -1135,18 +1210,18 @@ function renderSubs(sectionId) {
   }
 
   if (sectionId === 'recommends') {
-    document.getElementById('g-sub-title').textContent = '⭐ ' + (lang==='hr' ? 'Owner Recommends' : 'Owner Recommends');
+    document.getElementById('g-sub-title').textContent = '⭐ ' + (lang==='hr' ? 'Preporuke vlasnika' : 'Owner Recommends');
     const items = prop.sections['recommends'] || [];
     if (!items.length) { container.innerHTML = emptyState('⭐'); return; }
-    const recsSub = { hr: 'Owner Recommends', en: 'Owner Recommends', icon: '⭐' };
+    const recsSub = { hr: 'Preporuke vlasnika', en: 'Owner Recommends', icon: '⭐' };
     items.forEach(item => {
       const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
       const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
-      const preview = item.address || (body||'').split('\n')[0].substring(0,55);
+      const preview = item.category || (body||'').split('\n')[0].substring(0,55);
       const div = document.createElement('div');
       div.className = 'sub-item';
       div.innerHTML = `<div class="sub-item-left"><div class="sub-item-icon">${item.icon||'⭐'}</div><div class="sub-item-text"><div class="sub-item-title">${title}</div><div class="sub-item-preview">${preview}</div></div></div><div class="sub-item-arrow">›</div>`;
-      div.onclick = () => { renderSharedItemDetail(item, recsSub); show('screen-content'); };
+      div.onclick = () => { renderLocalRecommendsDetail(item); show('screen-content'); };
       container.appendChild(div);
     });
   }
@@ -1165,20 +1240,24 @@ function renderSharedItemDetail(item, sectionOrSub) {
   const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
   const bodyHtml = (body||'').split('\n').map(l => l ? `<p>${l}</p>` : '').join('');
 
-  // Contact action buttons
-  let actionsHtml = '';
-  const actions = [];
-  if (item.phone)     actions.push(`<a class="contact-btn call" href="tel:${item.phone}">📞 ${item.phone}</a>`);
-  if (item.maps_link) actions.push(`<a class="contact-btn maps" href="${item.maps_link}" target="_blank">🗺️ ${lang==='hr'?'Mapa':'Map'}</a>`);
-  if (item.website)   actions.push(`<a class="contact-btn web" href="${item.website}" target="_blank">🌐 ${lang==='hr'?'Web':'Website'}</a>`);
-  if (item.email)     actions.push(`<a class="contact-btn mail" href="mailto:${item.email}">✉️ ${lang==='hr'?'Email':'Email'}</a>`);
-  if (actions.length) actionsHtml = `<div class="contact-actions">${actions.join('')}</div>`;
+  // Generate Maps link from coords if available, fallback to maps_link
+  const mapsUrl = (item.lat && item.lng)
+    ? `https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}`
+    : item.maps_link || null;
 
-  // Address
-  let addressHtml = '';
-  if (item.address) {
-    addressHtml = `<div class="contact-address"><div class="contact-address-icon">📍</div><div>${item.address}</div></div>`;
-  }
+  // Distance from villa
+  const dist = item._dist !== undefined && item._dist < 9999 ? distLabel(item._dist) : '';
+
+  const actions = [];
+  if (item.phone)   actions.push(`<a class="contact-btn call" href="tel:${item.phone}">📞 ${item.phone}</a>`);
+  if (mapsUrl)      actions.push(`<a class="contact-btn maps" href="${mapsUrl}" target="_blank">🗺️ ${lang==='hr'?'Navigiraj':'Navigate'}</a>`);
+  if (item.website) actions.push(`<a class="contact-btn web" href="${item.website}" target="_blank">🌐 ${lang==='hr'?'Web':'Website'}</a>`);
+  if (item.email)   actions.push(`<a class="contact-btn mail" href="mailto:${item.email}">✉️ Email</a>`);
+  const actionsHtml = actions.length ? `<div class="contact-actions">${actions.join('')}</div>` : '';
+
+  const addressHtml = item.address
+    ? `<div class="contact-address"><div class="contact-address-icon">📍</div><div>${item.address}${dist ? `<span style="margin-left:8px;font-size:13px;color:var(--text-light);">· ${dist} ${lang==='hr'?'od vile':'from villa'}</span>` : ''}</div></div>`
+    : dist ? `<div class="contact-address"><div class="contact-address-icon">📍</div><div>${dist} ${lang==='hr'?'od vile':'from villa'}</div></div>` : '';
 
   document.getElementById('g-content-inner').innerHTML = `
     <div class="content-area">
@@ -1232,21 +1311,24 @@ function renderSubItemList(items, sub, parentSectionId) {
     const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
     const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
     const preview = item.address || (body||'').split('\n')[0].substring(0,55);
+    const dist = item._dist !== undefined && item._dist < 9999 ? distLabel(item._dist) : '';
     const div = document.createElement('div');
     div.className = 'sub-item';
-    div.innerHTML = `<div class="sub-item-left"><div class="sub-item-icon">${item.icon||sub.icon}</div><div class="sub-item-text"><div class="sub-item-title">${title}</div><div class="sub-item-preview">${preview}</div></div></div><div class="sub-item-arrow">›</div>`;
+    div.innerHTML = `<div class="sub-item-left"><div class="sub-item-icon">${item.icon||sub.icon}</div><div class="sub-item-text"><div class="sub-item-title">${title}</div><div class="sub-item-preview">${preview}</div></div></div>${dist ? `<div style="font-size:12px;color:var(--text-light);white-space:nowrap;flex-shrink:0;">📍 ${dist}</div>` : '<div class="sub-item-arrow">›</div>'}`;
     div.onclick = () => { renderSharedItemDetail(item, sub); show('screen-content'); };
     container.appendChild(div);
   });
 }
 
 function renderFoodSub(sub) {
-  const items = currentProp.sections['food'][sub.id] || [];
+  let items = currentProp.sections['food'][sub.id] || [];
+  items = sortByDistance(items, currentProp.lat, currentProp.lng);
   renderSubItemList(items, sub, 'food');
 }
 
 function renderExploreSub(sub) {
-  const items = (currentProp.sections['explore'][sub.id]||currentProp.sections['explore']||[]);
+  let items = (currentProp.sections['explore'][sub.id]||[]);
+  items = sortByDistance(items, currentProp.lat, currentProp.lng);
   renderSubItemList(Array.isArray(items)?items:[], sub, 'explore');
 }
 
@@ -1461,13 +1543,15 @@ async function loadPropertyAdminById(id) {
   prop.linkedSharedIds = (links||[]).map(l => l.shared_item_id);
 
   // Group
-  prop.sections = { villa:{}, contacts:[] };
+  prop.sections = { villa:{}, contacts:[], recommends:[] };
   VILLA_SUBSECTIONS.forEach(sub => prop.sections['villa'][sub.id] = []);
   prop.localItems.forEach(item => {
     if (item.section === 'villa' && item.subsection) {
       if (prop.sections['villa'][item.subsection]) prop.sections['villa'][item.subsection].push(item);
     } else if (item.section === 'contacts') {
       prop.sections['contacts'].push(item);
+    } else if (item.section === 'recommends') {
+      prop.sections['recommends'].push(item);
     }
   });
   return prop;
@@ -1498,9 +1582,9 @@ function renderAdminLocalSections() {
   const contactsCard = makeAdminCard('contacts', '📞', 'Useful Contacts', renderAdminContacts(prop));
   c.appendChild(contactsCard);
 
-  // ── Shared items assignment ──
-  const sharedCard = makeAdminCard('shared', '🔗', 'Hrana i piće, Kamo otići & Owner Recommends (regija)', '<div style="font-size:13px;color:var(--text-light);">Klikni za učitavanje...</div>');
-  c.appendChild(sharedCard);
+  // ── Preporuke vlasnika ──
+  const recsCard2 = makeAdminCard('recommends', '⭐', 'Preporuke vlasnika', renderAdminRecommends(prop));
+  c.appendChild(recsCard2);
 }
 
 function makeAdminCard(sid, icon, label, bodyHtml) {
@@ -1641,6 +1725,7 @@ function renderAdminVilla(prop) {
       h += `<div style="font-size:12px;font-weight:500;color:var(--navy);margin:10px 0 6px;">${sub.icon} ${sub.hr}</div>
       <div class="fg"><label class="fl2">Adresa</label><input type="text" class="fi2" id="map-addr" value="${prop.address||''}" placeholder="Ulica bb, Mjesto"></div>
       <div class="fg"><label class="fl2">Google Maps link</label><input type="text" class="fi2" id="map-link" value="${prop.maps_link||''}" placeholder="https://maps.google.com/..."></div>
+      <div class="fg"><label class="fl2">📌 Koordinate vile (desni klik na Google Maps)</label><input type="text" class="fi2" id="prop-coords" value="${prop.lat&&prop.lng?prop.lat+', '+prop.lng:''}" placeholder="45.3271, 13.5526" oninput="previewCoords(this,'prop-coords-preview')"><div id="prop-coords-preview" style="font-size:11px;margin-top:4px;color:var(--text-light);"></div></div>
       <button class="btn-gold" style="margin-bottom:14px;" onclick="saveMap()">Spremi adresu</button>
       <div class="divider"></div>`;
       return;
@@ -1742,11 +1827,15 @@ async function deleteLocalItem(section, itemId, subId) {
 
 async function saveMap() {
   const address=v('map-addr'), maps_link=v('map-link');
-  const { error } = await sb.from('properties').update({address,maps_link}).eq('id',adminPropData.id);
+  const coordsRaw = v('prop-coords');
+  const coords = parseCoords(coordsRaw);
+  const lat = coords ? coords.lat : null;
+  const lng = coords ? coords.lng : null;
+  const { error } = await sb.from('properties').update({address,maps_link,lat,lng}).eq('id',adminPropData.id);
   if (error) { toast('Greška!','error'); return; }
-  adminPropData.address=address; adminPropData.maps_link=maps_link;
+  Object.assign(adminPropData, {address,maps_link,lat,lng});
   await loadAdminData();
-  toast('Adresa spremljena!','success');
+  toast('Adresa i koordinate spremljene!','success');
 }
 
 async function autoTranslateVilla(subId) {
@@ -1996,7 +2085,7 @@ async function onRegionSelectChange() {
 
   const { data: items } = await sb.from('shared_items').select('*').eq('region_id', regionId).order('sort_order');
   adminRegionData = { id: regionId, items: items || [] };
-  adminRegionData.sections = { food:{}, explore:{}, recommends:[] };
+  adminRegionData.sections = { food:{}, explore:{} };
   FOOD_SUBSECTIONS.forEach(sub => adminRegionData.sections['food'][sub.id] = []);
   EXPLORE_SUBSECTIONS.forEach(sub => adminRegionData.sections['explore'][sub.id] = []);
   adminRegionData.items.forEach(item => {
@@ -2006,8 +2095,6 @@ async function onRegionSelectChange() {
     } else if (item.section === 'explore' && item.subsection) {
       if (!adminRegionData.sections['explore'][item.subsection]) adminRegionData.sections['explore'][item.subsection]=[];
       adminRegionData.sections['explore'][item.subsection].push(item);
-    } else if (item.section === 'recommends') {
-      adminRegionData.sections['recommends'].push(item);
     }
   });
 
@@ -2042,17 +2129,7 @@ function renderSharedSections() {
     <div class="a-card-body" id="ascbody-explore">${renderSharedSubsBody('explore', EXPLORE_SUBSECTIONS)}</div>`;
   c.appendChild(exploreCard);
 
-  // Owner Recommends
-  const recsCard = document.createElement('div');
-  recsCard.className = 'a-card';
-  recsCard.id = 'ascard-recommends';
-  recsCard.innerHTML = `
-    <div class="a-card-hdr" onclick="toggleASCard('recommends')">
-      <div class="a-card-title"><span class="a-card-icon">⭐</span>Owner Recommends (${(adminRegionData.sections['recommends']||[]).length})</div>
-      <div class="a-chevron">▾</div>
-    </div>
-    <div class="a-card-body" id="ascbody-recommends">${renderSharedSimpleBody('recommends','⭐')}</div>`;
-  c.appendChild(recsCard);
+
 }
 
 function renderSharedSubsBody(secId, subsections) {
@@ -2090,9 +2167,9 @@ function renderSharedSubsBody(secId, subsections) {
       <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px;">Kontakt podaci</div>
       <div class="fg"><label class="fl2">📞 Telefon</label><input type="tel" class="fi2" id="saphone-${secId}-${sub.id}" placeholder="+385 52 123 456"></div>
       <div class="fg"><label class="fl2">📍 Adresa</label><input type="text" class="fi2" id="saaddress-${secId}-${sub.id}" placeholder="Ulica bb, Mjesto"></div>
-      <div class="fg"><label class="fl2">🗺️ Google Maps link</label><input type="text" class="fi2" id="samaps-${secId}-${sub.id}" placeholder="https://maps.google.com/..."></div>
       <div class="fg"><label class="fl2">🌐 Web / Facebook</label><input type="text" class="fi2" id="saweb-${secId}-${sub.id}" placeholder="https://..."></div>
       <div class="fg"><label class="fl2">✉️ Email</label><input type="email" class="fi2" id="saemail-${secId}-${sub.id}" placeholder="info@..."></div>
+      <div class="fg"><label class="fl2">📌 Koordinate (desni klik na Google Maps → kopiraj)</label><input type="text" class="fi2" id="sacoords-${secId}-${sub.id}" placeholder="45.3271, 13.5526" oninput="previewCoords(this,'sacoords-preview-${secId}-${sub.id}')"><div id="sacoords-preview-${secId}-${sub.id}" style="font-size:11px;color:var(--text-light);margin-top:4px;"></div></div>
       <div class="btn-row">
         <button class="btn-secondary" onclick="closeSAddFormSub('${secId}','${sub.id}')">Odustani</button>
         <button class="btn-gold" onclick="saveSharedSubItem('${secId}','${sub.id}')">Spremi</button>
@@ -2275,7 +2352,7 @@ function closeSAddFormSub(secId, subId) {
     f.classList.remove('open');
     [`sathr-${secId}-${subId}`,`sabhr-${secId}-${subId}`,`saten-${secId}-${subId}`,`saben-${secId}-${subId}`,
      `saicon-${secId}-${subId}`,`saeid-${secId}-${subId}`,`saphone-${secId}-${subId}`,`saaddress-${secId}-${subId}`,
-     `samaps-${secId}-${subId}`,`saweb-${secId}-${subId}`,`saemail-${secId}-${subId}`
+     `saweb-${secId}-${subId}`,`saemail-${secId}-${subId}`,`sacoords-${secId}-${subId}`
     ].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
   }
 }
@@ -2293,9 +2370,9 @@ function editSharedSubItem(secId, subId, itemId) {
   setVal(`saben-${secId}-${subId}`, item.body_en);
   setVal(`saphone-${secId}-${subId}`, item.phone);
   setVal(`saaddress-${secId}-${subId}`, item.address);
-  setVal(`samaps-${secId}-${subId}`, item.maps_link);
   setVal(`saweb-${secId}-${subId}`, item.website);
   setVal(`saemail-${secId}-${subId}`, item.email);
+  if (item.lat && item.lng) setVal(`sacoords-${secId}-${subId}`, `${item.lat}, ${item.lng}`);
   const t = document.getElementById(`saft-${secId}-${subId}`);
   if (t) t.textContent = 'Uredi stavku';
 }
@@ -2303,16 +2380,20 @@ function editSharedSubItem(secId, subId, itemId) {
 async function saveSharedSubItem(secId, subId) {
   const g = id => v(`${id}-${secId}-${subId}`);
   const title_hr=g('sathr'), body_hr=g('sabhr'), title_en=g('saten'), body_en=g('saben'), icon=g('saicon');
-  const phone=g('saphone'), address=g('saaddress'), maps_link=g('samaps'), website=g('saweb'), email=g('saemail');
+  const phone=g('saphone'), address=g('saaddress'), website=g('saweb'), email=g('saemail');
+  const coordsRaw = g('sacoords');
+  const coords = parseCoords(coordsRaw);
+  const lat = coords ? coords.lat : null;
+  const lng = coords ? coords.lng : null;
   if (!title_hr) { toast('Unesite naziv!','error'); return; }
   const editId = g('saeid');
   if (editId) {
-    const {error} = await sb.from('shared_items').update({icon,title_hr,body_hr,title_en,body_en,phone,address,maps_link,website,email}).eq('id',editId);
+    const {error} = await sb.from('shared_items').update({icon,title_hr,body_hr,title_en,body_en,phone,address,website,email,lat,lng}).eq('id',editId);
     if (error) { toast('Greška!','error'); return; }
     toast('Ažurirano!','success');
   } else {
     const sort_order = ((adminRegionData.sections[secId]||{})[subId]||[]).length;
-    const {error} = await sb.from('shared_items').insert({region_id:adminRegionData.id,section:secId,subsection:subId,icon,title_hr,body_hr,title_en,body_en,phone,address,maps_link,website,email,sort_order});
+    const {error} = await sb.from('shared_items').insert({section:secId,subsection:subId,icon,title_hr,body_hr,title_en,body_en,phone,address,website,email,lat,lng,sort_order});
     if (error) { toast('Greška!','error'); return; }
     toast('Dodano!','success');
   }
@@ -2339,7 +2420,7 @@ async function autoTranslateSharedSub(secId, subId) {
 async function reloadRegionData() {
   const { data: items } = await sb.from('shared_items').select('*').eq('region_id',adminRegionData.id).order('sort_order');
   adminRegionData.items = items||[];
-  adminRegionData.sections = { food:{}, explore:{}, recommends:[] };
+  adminRegionData.sections = { food:{}, explore:{} };
   FOOD_SUBSECTIONS.forEach(sub => adminRegionData.sections['food'][sub.id]=[]);
   EXPLORE_SUBSECTIONS.forEach(sub => adminRegionData.sections['explore'][sub.id]=[]);
   adminRegionData.items.forEach(item => {
@@ -2543,6 +2624,118 @@ async function deleteGlobalItem(catId, itemId) {
   await sb.from('global_items').delete().eq('id',itemId);
   await renderGlobalAdmin();
   toast('Obrisano.','success');
+}
+
+
+function renderAdminRecommends(prop) {
+  const items = (prop.sections['recommends']||[]);
+  let h = '<div class="info-note">Prikazuje se gostu samo ako je nešto uneseno.</div>';
+  if (!items.length) h += `<div style="font-size:13px;color:var(--text-light);padding:4px 0 10px;">Nema preporuka.</div>`;
+  items.forEach(item => {
+    h += `<div class="shared-item-admin">
+      <div class="sia-content"><div class="sia-title">${item.icon||'⭐'} ${item.title_hr}</div><div class="sia-preview">${item.address||(item.body_hr||'').substring(0,50)}</div></div>
+      <div class="sia-actions">
+        <button class="btn-sm-icon" onclick="editRecommendsItem('${item.id}')">✏️</button>
+        <button class="btn-sm-icon del" onclick="deleteRecommendsItem('${item.id}')">🗑</button>
+      </div>
+    </div>`;
+  });
+  h += `<div class="add-form" id="af-recommends">
+    <div class="add-form-title" id="aft-recommends">Nova preporuka</div>
+    <input type="hidden" id="aeid-recommends">
+    <div class="fg"><label class="fl2">Ikona</label><input type="text" class="fi2" id="aicon-recommends" placeholder="⭐" style="width:80px;"></div>
+    <div class="ltabs">
+      <button class="ltab active" onclick="switchFL('recommends','hr',this)">🇭🇷 HR</button>
+      <button class="ltab" onclick="switchFL('recommends','en',this)">🇬🇧 EN</button>
+    </div>
+    <div class="lfield active" id="lf-hr-recommends">
+      <div class="fg"><label class="fl2">Naziv (HR)</label><input type="text" class="fi2" id="athr-recommends"></div>
+      <div class="fg"><label class="fl2">Opis (HR)</label><textarea class="ft2" id="abhr-recommends" style="min-height:60px;"></textarea></div>
+    </div>
+    <div class="lfield" id="lf-en-recommends">
+      <div class="fg"><label class="fl2">Name (EN)</label><input type="text" class="fi2" id="aten-recommends"></div>
+      <div class="fg"><label class="fl2">Description (EN)</label><textarea class="ft2" id="aben-recommends" style="min-height:60px;"></textarea></div>
+    </div>
+    <button class="btn-translate" id="atr-recommends" onclick="autoTranslateGeneric('recommends')">🤖 Auto-prijevod HR → EN</button>
+    <div class="divider"></div>
+    <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px;">Kontakt podaci (opcionalno)</div>
+    <div class="fg"><label class="fl2">📞 Telefon</label><input type="tel" class="fi2" id="aphone-recommends" placeholder="+385 ..."></div>
+    <div class="fg"><label class="fl2">📍 Adresa</label><input type="text" class="fi2" id="acat-recommends" placeholder="Ulica bb, Mjesto"></div>
+    <div class="fg"><label class="fl2">🌐 Web / Facebook</label><input type="text" class="fi2" id="aweb-recommends" placeholder="https://..."></div>
+    <div class="fg"><label class="fl2">📌 Koordinate</label><input type="text" class="fi2" id="acoords-recommends" placeholder="45.3271, 13.5526" oninput="previewCoords(this,'acoords-preview-recommends')"><div id="acoords-preview-recommends" style="font-size:11px;margin-top:4px;"></div></div>
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="closeAddForm('recommends')">Odustani</button>
+      <button class="btn-gold" onclick="saveRecommendsItem()">Spremi</button>
+    </div>
+  </div>
+  <button class="btn-primary" style="margin-top:10px;" onclick="openAddForm('recommends')">+ Dodaj preporuku</button>`;
+  return h;
+}
+
+function editRecommendsItem(itemId) {
+  const item = (adminPropData.sections['recommends']||[]).find(i=>i.id===itemId);
+  if (!item) return;
+  openAddForm('recommends');
+  document.getElementById('aeid-recommends').value = itemId;
+  document.getElementById('aft-recommends').textContent = 'Uredi preporuku';
+  const setVal = (id,val) => { const el=document.getElementById(id); if(el) el.value=val||''; };
+  setVal('aicon-recommends', item.icon);
+  setVal('athr-recommends', item.title_hr);
+  setVal('abhr-recommends', item.body_hr);
+  setVal('aten-recommends', item.title_en);
+  setVal('aben-recommends', item.body_en);
+  setVal('aphone-recommends', item.phone_number);
+  setVal('acat-recommends', item.category);
+  setVal('aweb-recommends', item.website);
+  if (item.lat && item.lng) setVal('acoords-recommends', `${item.lat}, ${item.lng}`);
+}
+
+async function saveRecommendsItem() {
+  const title_hr=v('athr-recommends'), body_hr=v('abhr-recommends');
+  const title_en=v('aten-recommends'), body_en=v('aben-recommends'), icon=v('aicon-recommends');
+  const phone_number=v('aphone-recommends'), category=v('acat-recommends'), website=v('aweb-recommends');
+  const coordsRaw=v('acoords-recommends'), coords=parseCoords(coordsRaw);
+  const lat=coords?coords.lat:null, lng=coords?coords.lng:null;
+  if (!title_hr) { toast('Unesite naziv!','error'); return; }
+  const editId = v('aeid-recommends');
+  if (editId) {
+    const {error} = await sb.from('local_items').update({icon,title_hr,body_hr,title_en,body_en,phone_number,category,website,lat,lng}).eq('id',editId);
+    if (error) { toast('Greška!','error'); return; }
+    toast('Ažurirano!','success');
+  } else {
+    const sort_order = (adminPropData.sections['recommends']||[]).length;
+    const {error} = await sb.from('local_items').insert({property_id:adminPropData.id,section:'recommends',icon,title_hr,body_hr,title_en,body_en,phone_number,category,website,lat,lng,sort_order});
+    if (error) { toast('Greška!','error'); return; }
+    toast('Dodano!','success');
+  }
+  adminPropData = await loadPropertyAdminById(adminPropData.id);
+  closeAddForm('recommends');
+  document.getElementById('abody-recommends').innerHTML = renderAdminRecommends(adminPropData);
+  if (!document.getElementById('acard-recommends').classList.contains('open'))
+    document.getElementById('acard-recommends').classList.add('open');
+}
+
+async function deleteRecommendsItem(itemId) {
+  if (!confirm('Obrisati preporuku?')) return;
+  await sb.from('local_items').delete().eq('id',itemId);
+  adminPropData = await loadPropertyAdminById(adminPropData.id);
+  document.getElementById('abody-recommends').innerHTML = renderAdminRecommends(adminPropData);
+  toast('Obrisano.','success');
+}
+
+function previewCoords(input, previewId) {
+  const coords = parseCoords(input.value);
+  const el = document.getElementById(previewId);
+  if (!el) return;
+  if (coords) {
+    el.textContent = `✓ ${coords.lat}, ${coords.lng}`;
+    el.style.color = 'var(--success)';
+  } else if (input.value.trim()) {
+    el.textContent = 'Format: 45.3271, 13.5526';
+    el.style.color = 'var(--danger)';
+  } else {
+    el.textContent = '';
+  }
 }
 
 // ═══════════════════════════════════════════
