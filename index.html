@@ -610,7 +610,7 @@ async function loadProperty(slug) {
 
   const { data: localItems } = await sb.from('local_items').select('*').eq('property_id', prop.id).order('sort_order');
   const { data: phones }     = await sb.from('phones').select('*').eq('property_id', prop.id).order('sort_order');
-  const { data: emContacts } = await sb.from('emergency_contacts').select('*').eq('property_id', prop.id).order('sort_order', {ascending: true});
+  const { data: emContacts } = await sb.from('emergency_contacts').select('*').eq('property_id', prop.id).order('sort_order');
 
   // Shared items linked to this property
   const { data: links } = await sb.from('property_shared_items').select('shared_item_id').eq('property_id', prop.id);
@@ -1283,7 +1283,7 @@ async function onPropSelectChange() {
 async function loadPropertyAdminById(id) {
   const { data: prop } = await sb.from('properties').select('*').eq('id', id).single();
   const { data: localItems } = await sb.from('local_items').select('*').eq('property_id', id).order('sort_order');
-  const { data: emContacts } = await sb.from('emergency_contacts').select('*').eq('property_id', id).order('sort_order', {ascending: true});
+  const { data: emContacts } = await sb.from('emergency_contacts').select('*').eq('property_id', id).order('sort_order');
   const { data: links } = await sb.from('property_shared_items').select('shared_item_id').eq('property_id', id);
 
   prop.localItems = localItems || [];
