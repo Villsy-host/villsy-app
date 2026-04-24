@@ -937,7 +937,8 @@ function renderHome() {
     grid.appendChild(recsCard);
   }
 
-  // Reservation banner
+  // Reservation banner — ukloni stari prije dodavanja novog
+  document.querySelectorAll('.reservation-banner').forEach(el => el.remove());
   const banner = document.createElement('div');
   banner.className = 'reservation-banner';
   banner.innerHTML = `
