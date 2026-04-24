@@ -714,7 +714,10 @@ function show(id) {
   const currentActive = document.querySelector('.screen.active');
   if (currentActive) {
     const sa = currentActive.querySelector('.scroll-area');
-    if (sa) scrollPositions[currentActive.id] = sa.scrollTop;
+    if (sa) {
+      scrollPositions[currentActive.id] = sa.scrollTop;
+      console.log('saved scroll for', currentActive.id, ':', sa.scrollTop);
+    }
   }
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   const next = document.getElementById(id);
@@ -726,15 +729,19 @@ function goHome() {
   const savedScroll = scrollPositions['screen-home'] || 0;
   renderHome();
   show('screen-home');
-  const sa = document.querySelector('#screen-home .scroll-area');
-  if (sa && savedScroll) requestAnimationFrame(() => { sa.scrollTop = savedScroll; });
+  if (savedScroll) setTimeout(() => {
+    const sa = document.querySelector('#screen-home .scroll-area');
+    if (sa) sa.scrollTop = savedScroll;
+  }, 50);
 }
 function goSubs() {
   const savedScroll = scrollPositions['screen-subs'] || 0;
   renderSubs(currentSectionId);
   show('screen-subs');
-  const sa = document.querySelector('#screen-subs .scroll-area');
-  if (sa && savedScroll) requestAnimationFrame(() => { sa.scrollTop = savedScroll; });
+  if (savedScroll) setTimeout(() => {
+    const sa = document.querySelector('#screen-subs .scroll-area');
+    if (sa) sa.scrollTop = savedScroll;
+  }, 50);
 }
 function goAdminLogin() {
   sb.auth.getSession().then(({ data }) => {
