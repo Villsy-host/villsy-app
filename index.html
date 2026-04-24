@@ -1187,7 +1187,7 @@ function renderHostContact() {
 
   const actions = [];
   if (host.phone_number) actions.push(`<a class="contact-btn call" href="tel:${host.phone_number}">📞 ${host.phone_number}</a>`);
-  if (host.website)      actions.push(`<a class="contact-btn mail" href="mailto:${host.website}">✉️ Email</a>`);
+  if (host.email)        actions.push(`<a class="contact-btn mail" href="mailto:${host.email}">✉️ ${host.email}</a>`);
   const actionsHtml = actions.length ? `<div class="contact-actions">${actions.join('')}</div>` : '';
 
   container.innerHTML = `
@@ -2178,7 +2178,7 @@ function renderAdminContacts(prop) {
     <button class="btn-translate" id="atr-host" onclick="autoTranslateGeneric('host')">🤖 Auto-prijevod HR → EN</button>
     <div class="divider"></div>
     <div class="fg"><label class="fl2">📞 Telefon</label><input type="tel" class="fi2" id="aphone-host" value="${host?escHtml(host.phone_number||''):''}" placeholder="+385 91 234 5678"></div>
-    <div class="fg"><label class="fl2">✉️ Email</label><input type="email" class="fi2" id="aweb-host" value="${host?escHtml(host.website||''):''}" placeholder="ime@email.com"></div>
+    <div class="fg"><label class="fl2">✉️ Email</label><input type="email" class="fi2" id="aweb-host" value="${host?escHtml(host.email||''):''}" placeholder="ime@email.com"></div>
     <button class="btn-gold" onclick="saveHostContact()">Spremi kontakt domaćina</button>`;
 }
 
@@ -2212,16 +2212,16 @@ async function removeHostPhoto() {
 async function saveHostContact() {
   const title_hr = v('athr-host'), body_hr = v('abhr-host');
   const title_en = v('aten-host'), body_en = v('aben-host');
-  const phone_number = v('aphone-host'), website = v('aweb-host');
+  const phone_number = v('aphone-host'), email = v('aweb-host');
   if (!title_hr) { toast('Unesite ime domaćina!','error'); return; }
   const editId = v('host-item-id');
   const photoUrl = adminPropData._pendingHostPhoto || ((adminPropData.sections['contacts']||[])[0]?.category||'');
   if (editId) {
-    const { error } = await sb.from('local_items').update({title_hr,body_hr,title_en,body_en,phone_number,website,category:photoUrl}).eq('id',editId);
+    const { error } = await sb.from('local_items').update({title_hr,body_hr,title_en,body_en,phone_number,email,category:photoUrl}).eq('id',editId);
     if (error) { console.error('host update error:', error); toast('Greška: '+error.message,'error'); return; }
     toast('Domaćin ažuriran!','success');
   } else {
-    const { error } = await sb.from('local_items').insert({property_id:adminPropData.id,section:'contacts',title_hr,body_hr,title_en,body_en,phone_number,website,category:photoUrl,sort_order:0});
+    const { error } = await sb.from('local_items').insert({property_id:adminPropData.id,section:'contacts',title_hr,body_hr,title_en,body_en,phone_number,email,category:photoUrl,sort_order:0});
     if (error) { console.error('host insert error:', error); toast('Greška: '+error.message,'error'); return; }
     toast('Domaćin dodan!','success');
   }
