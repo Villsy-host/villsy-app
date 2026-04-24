@@ -2216,8 +2216,10 @@ async function saveHostContact() {
   if (!title_hr) { toast('Unesite ime domaćina!','error'); return; }
   const editId = v('host-item-id');
   const photoUrl = adminPropData._pendingHostPhoto || ((adminPropData.sections['contacts']||[])[0]?.category||'');
+  const updateData = {title_hr,body_hr,title_en,body_en,phone_number,email,category:photoUrl};
+  console.log('host save editId:', editId, 'data:', updateData);
   if (editId) {
-    const { error } = await sb.from('local_items').update({title_hr,body_hr,title_en,body_en,phone_number,email,category:photoUrl}).eq('id',editId);
+    const { error } = await sb.from('local_items').update(updateData).eq('id',editId);
     if (error) { console.error('host update error:', error); toast('Greška: '+error.message,'error'); return; }
     toast('Domaćin ažuriran!','success');
   } else {
