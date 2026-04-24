@@ -710,7 +710,7 @@ function distLabel(km) {
 // ═══════════════════════════════════════════
 const scrollPositions = {};
 
-function show(id, restoreScroll) {
+function show(id) {
   const currentActive = document.querySelector('.screen.active');
   if (currentActive) {
     const sa = currentActive.querySelector('.scroll-area');
@@ -720,16 +720,22 @@ function show(id, restoreScroll) {
   const next = document.getElementById(id);
   next.classList.add('active');
   const sa = next.querySelector('.scroll-area');
-  if (sa) {
-    if (restoreScroll && scrollPositions[id] !== undefined) {
-      requestAnimationFrame(() => { sa.scrollTop = scrollPositions[id]; });
-    } else {
-      sa.scrollTop = 0;
-    }
-  }
+  if (sa) sa.scrollTop = 0;
 }
-function goHome() { renderHome(); show('screen-home', true); }
-function goSubs() { renderSubs(currentSectionId); show('screen-subs', true); }
+function goHome() {
+  const savedScroll = scrollPositions['screen-home'] || 0;
+  renderHome();
+  show('screen-home');
+  const sa = document.querySelector('#screen-home .scroll-area');
+  if (sa && savedScroll) requestAnimationFrame(() => { sa.scrollTop = savedScroll; });
+}
+function goSubs() {
+  const savedScroll = scrollPositions['screen-subs'] || 0;
+  renderSubs(currentSectionId);
+  show('screen-subs');
+  const sa = document.querySelector('#screen-subs .scroll-area');
+  if (sa && savedScroll) requestAnimationFrame(() => { sa.scrollTop = savedScroll; });
+}
 function goAdminLogin() {
   sb.auth.getSession().then(({ data }) => {
     if (data.session) { renderAdmin(); show('screen-admin'); }
