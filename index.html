@@ -1538,7 +1538,7 @@ function renderVillaItemContent(sub, item) {
   document.getElementById('g-content-inner').innerHTML = `<div class="content-area">
     <div class="content-icon">${item.icon||sub.icon}</div>
     <div class="content-title">${title}</div>
-    ${body ? `<div class="content-body">${bodyHtml}</div>` : ''}
+    ${body ? `<div class="content-body" style="white-space:normal;word-break:normal;">${bodyHtml}</div>` : ''}
     ${attachmentHtml}
   </div>`;
 }
