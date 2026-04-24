@@ -721,16 +721,10 @@ const scrollPositions = {};
 
 function show(id) {
   const currentActive = document.querySelector('.screen.active');
-  if (currentActive) {
-    const sa = currentActive.querySelector('.scroll-area');
-    console.log('scroll-area scrollTop:', sa?.scrollTop, 'window.scrollY:', window.scrollY, 'body.scrollTop:', document.body.scrollTop, 'html.scrollTop:', document.documentElement.scrollTop);
-    if (sa) scrollPositions[currentActive.id] = sa.scrollTop;
-  }
+  if (currentActive) scrollPositions[currentActive.id] = window.scrollY;
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const next = document.getElementById(id);
-  next.classList.add('active');
-  const sa = next.querySelector('.scroll-area');
-  if (sa) sa.scrollTop = 0;
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
 }
 function goHome() {
   const savedScroll = scrollPositions['screen-home'] || 0;
