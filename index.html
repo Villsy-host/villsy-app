@@ -222,6 +222,15 @@ ph-icon, [class^="ph-"] { color: var(--gold); }
 .host-desc p { margin-bottom: 8px; }
 .host-card .contact-actions { justify-content: center; }
 
+/* ATTACHMENT BUTTON */
+.attachment-btn { display: flex; align-items: center; gap: 14px; background: var(--stone); border: 1px solid var(--stone-mid); border-radius: var(--r-sm); padding: 14px 16px; margin-top: 20px; text-decoration: none; cursor: pointer; transition: background 0.15s; }
+.attachment-btn:active { background: var(--stone-mid); }
+.attachment-icon { font-size: 28px; flex-shrink: 0; }
+.attachment-info { flex: 1; }
+.attachment-name { font-size: 14px; font-weight: 500; color: var(--navy); }
+.attachment-type { font-size: 11px; color: var(--text-light); margin-top: 2px; letter-spacing: 0.5px; text-transform: uppercase; }
+.attachment-arrow { font-size: 18px; color: var(--gold); flex-shrink: 0; }
+
 /* RESERVATION BANNER */
 .reservation-banner { margin: 0 16px 32px; background: var(--navy); border-radius: var(--r); padding: 20px 18px; text-align: center; }
 .reservation-banner-text { font-size: 15px; color: rgba(255,255,255,0.8); line-height: 1.5; margin-bottom: 14px; }
@@ -1405,15 +1414,32 @@ function renderVillaItemContent(sub, item) {
   const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
   const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
   const bodyHtml = (body||'').split('\n').map(l => l ? `<p>${l}</p>` : '').join('');
-  const isPdf = item.image_url && item.image_url.toLowerCase().includes('.pdf');
-  const isImg = item.image_url && !isPdf;
   setPropHeader3();
   document.getElementById('bc-section-label').textContent = lang==='hr' ? sub.hr : sub.en;
+
+  let attachmentHtml = '';
+  if (item.image_url) {
+    const isPdf = item.image_url.toLowerCase().includes('.pdf');
+    if (isPdf) {
+      attachmentHtml = `<a class="attachment-btn" href="${item.image_url}" target="_blank">
+        <div class="attachment-icon">📄</div>
+        <div class="attachment-info"><div class="attachment-name">${lang==='hr'?'Priloženi dokument':'Attached document'}</div><div class="attachment-type">PDF</div></div>
+        <div class="attachment-arrow">↗</div>
+      </a>`;
+    } else {
+      attachmentHtml = `<a class="attachment-btn" href="${item.image_url}" target="_blank">
+        <div class="attachment-icon">🖼️</div>
+        <div class="attachment-info"><div class="attachment-name">${lang==='hr'?'Priložena fotografija':'Attached photo'}</div><div class="attachment-type">${lang==='hr'?'Klikni za prikaz':'Tap to view'}</div></div>
+        <div class="attachment-arrow">↗</div>
+      </a>`;
+    }
+  }
+
   document.getElementById('g-content-inner').innerHTML = `<div class="content-area">
-    ${isImg ? `<img src="${item.image_url}" style="width:100%;max-height:220px;object-fit:cover;border-radius:var(--r);margin-bottom:16px;" onerror="this.style.display='none'">` : `<div class="content-icon">${item.icon||sub.icon}</div>`}
+    <div class="content-icon">${item.icon||sub.icon}</div>
     <div class="content-title">${title}</div>
-    <div class="content-body">${bodyHtml}</div>
-    ${isPdf ? `<div style="margin-top:16px;"><a class="contact-btn" href="${item.image_url}" target="_blank">📄 ${lang==='hr'?'Preuzmi PDF':'Download PDF'}</a></div>` : ''}
+    ${body ? `<div class="content-body">${bodyHtml}</div>` : ''}
+    ${attachmentHtml}
   </div>`;
 }
 
