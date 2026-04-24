@@ -204,7 +204,8 @@ ph-icon, [class^="ph-"] { color: var(--gold); }
 .content-area { padding: 20px 18px 40px; overflow-x: hidden; }
 .content-icon { font-size: 32px; margin-bottom: 10px; }
 .content-title { font-family: 'Roboto Slab', serif; font-size: 30px; font-weight: 500; color: var(--navy); line-height: 1.2; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--stone-mid);  }
-.content-body { font-size: 17px; color: var(--text-mid); line-height: 1.85; overflow-wrap: break-word; overflow-x: hidden; }
+.content-body { font-size: 17px; color: var(--text-mid); line-height: 1.85; overflow-wrap: break-word; overflow-x: hidden; word-break: normal; }
+.content-body * { word-break: normal; }
 .content-body p { margin-bottom: 12px; }
 .content-body p:last-child { margin-bottom: 0; }
 
@@ -253,6 +254,10 @@ ph-icon, [class^="ph-"] { color: var(--gold); }
 .ql-snow.ql-toolbar button.ql-active .ql-fill { fill: var(--gold); }
 .ql-snow.ql-toolbar .ql-picker-label:hover,
 .ql-snow.ql-toolbar .ql-picker-label.ql-active { color: var(--gold); }
+
+/* Override Quill global word-break */
+body, body * { word-break: normal; }
+.ql-editor, .ql-editor * { word-break: break-word; }
 
 /* GUEST: rich text body */
 .content-body {  max-width: 100%; overflow: hidden; }
