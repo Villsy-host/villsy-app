@@ -2218,11 +2218,11 @@ async function saveHostContact() {
   const photoUrl = adminPropData._pendingHostPhoto || ((adminPropData.sections['contacts']||[])[0]?.category||'');
   if (editId) {
     const { error } = await sb.from('local_items').update({title_hr,body_hr,title_en,body_en,phone_number,website,category:photoUrl}).eq('id',editId);
-    if (error) { toast('Greška!','error'); return; }
+    if (error) { console.error('host update error:', error); toast('Greška: '+error.message,'error'); return; }
     toast('Domaćin ažuriran!','success');
   } else {
     const { error } = await sb.from('local_items').insert({property_id:adminPropData.id,section:'contacts',title_hr,body_hr,title_en,body_en,phone_number,website,category:photoUrl,sort_order:0});
-    if (error) { toast('Greška!','error'); return; }
+    if (error) { console.error('host insert error:', error); toast('Greška: '+error.message,'error'); return; }
     toast('Domaćin dodan!','success');
   }
   adminPropData = await loadPropertyAdminById(adminPropData.id);
@@ -3120,12 +3120,12 @@ async function saveRecommendsItem() {
   const editId = v('aeid-recommends');
   if (editId) {
     const {error} = await sb.from('local_items').update({icon,title_hr,body_hr,title_en,body_en}).eq('id',editId);
-    if (error) { toast('Greška: '+error.message,'error'); return; }
+    if (error) { console.error('recommends update error:', error); toast('Greška: '+error.message,'error'); return; }
     toast('Ažurirano!','success');
   } else {
     const sort_order = (adminPropData.sections['recommends']||[]).length;
     const {error} = await sb.from('local_items').insert({property_id:adminPropData.id,section:'recommends',icon,title_hr,body_hr,title_en,body_en,sort_order});
-    if (error) { toast('Greška: '+error.message,'error'); return; }
+    if (error) { console.error('recommends insert error:', error); toast('Greška: '+error.message,'error'); return; }
     toast('Dodano!','success');
   }
   adminPropData = await loadPropertyAdminById(adminPropData.id);
