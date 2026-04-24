@@ -3065,7 +3065,7 @@ function renderAdminRecommends(prop) {
   if (!items.length) h += `<div style="font-size:13px;color:var(--text-light);padding:4px 0 10px;">Nema preporuka.</div>`;
   items.forEach(item => {
     h += `<div class="shared-item-admin">
-      <div class="sia-content"><div class="sia-title">${item.icon||'⭐'} ${item.title_hr}</div><div class="sia-preview">${item.address||(item.body_hr||'').substring(0,50)}</div></div>
+      <div class="sia-content"><div class="sia-title">${item.icon||'⭐'} ${item.title_hr}</div><div class="sia-preview">${(item.body_hr||'').substring(0,60)}</div></div>
       <div class="sia-actions">
         <button class="btn-sm-icon" onclick="editRecommendsItem('${item.id}')">✏️</button>
         <button class="btn-sm-icon del" onclick="deleteRecommendsItem('${item.id}')">🗑</button>
@@ -3082,20 +3082,14 @@ function renderAdminRecommends(prop) {
     </div>
     <div class="lfield active" id="lf-hr-recommends">
       <div class="fg"><label class="fl2">Naziv (HR)</label><input type="text" class="fi2" id="athr-recommends"></div>
-      <div class="fg"><label class="fl2">Opis (HR)</label><textarea class="ft2" id="abhr-recommends" style="min-height:60px;"></textarea></div>
+      <div class="fg"><label class="fl2">Opis (HR)</label><textarea class="ft2" id="abhr-recommends" style="min-height:80px;" placeholder="Kratki opis preporuke..."></textarea></div>
     </div>
     <div class="lfield" id="lf-en-recommends">
       <div class="fg"><label class="fl2">Name (EN)</label><input type="text" class="fi2" id="aten-recommends"></div>
-      <div class="fg"><label class="fl2">Description (EN)</label><textarea class="ft2" id="aben-recommends" style="min-height:60px;"></textarea></div>
+      <div class="fg"><label class="fl2">Description (EN)</label><textarea class="ft2" id="aben-recommends" style="min-height:80px;"></textarea></div>
     </div>
     <button class="btn-translate" id="atr-recommends" onclick="autoTranslateGeneric('recommends')">🤖 Auto-prijevod HR → EN</button>
-    <div class="divider"></div>
-    <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px;">Kontakt podaci (opcionalno)</div>
-    <div class="fg"><label class="fl2">📞 Telefon</label><input type="tel" class="fi2" id="aphone-recommends" placeholder="+385 ..."></div>
-    <div class="fg"><label class="fl2">📍 Adresa</label><input type="text" class="fi2" id="acat-recommends" placeholder="Ulica bb, Mjesto"></div>
-    <div class="fg"><label class="fl2">🌐 Web / Facebook</label><input type="text" class="fi2" id="aweb-recommends" placeholder="https://..."></div>
-    <div class="fg"><label class="fl2">📌 Koordinate</label><input type="text" class="fi2" id="acoords-recommends" placeholder="45.3271, 13.5526" oninput="previewCoords(this,'acoords-preview-recommends')"><div id="acoords-preview-recommends" style="font-size:11px;margin-top:4px;"></div></div>
-    <div class="btn-row">
+    <div class="btn-row" style="margin-top:12px;">
       <button class="btn-secondary" onclick="closeAddForm('recommends')">Odustani</button>
       <button class="btn-gold" onclick="saveRecommendsItem()">Spremi</button>
     </div>
@@ -3116,28 +3110,22 @@ function editRecommendsItem(itemId) {
   setVal('abhr-recommends', item.body_hr);
   setVal('aten-recommends', item.title_en);
   setVal('aben-recommends', item.body_en);
-  setVal('aphone-recommends', item.phone_number);
-  setVal('acat-recommends', item.category);
-  setVal('aweb-recommends', item.website);
-  if (item.lat && item.lng) setVal('acoords-recommends', `${item.lat}, ${item.lng}`);
 }
 
 async function saveRecommendsItem() {
-  const title_hr=v('athr-recommends'), body_hr=v('abhr-recommends');
-  const title_en=v('aten-recommends'), body_en=v('aben-recommends'), icon=v('aicon-recommends');
-  const phone_number=v('aphone-recommends'), category=v('acat-recommends'), website=v('aweb-recommends');
-  const coordsRaw=v('acoords-recommends'), coords=parseCoords(coordsRaw);
-  const lat=coords?coords.lat:null, lng=coords?coords.lng:null;
+  const title_hr = v('athr-recommends'), body_hr = v('abhr-recommends');
+  const title_en = v('aten-recommends'), body_en = v('aben-recommends');
+  const icon = v('aicon-recommends') || '⭐';
   if (!title_hr) { toast('Unesite naziv!','error'); return; }
   const editId = v('aeid-recommends');
   if (editId) {
-    const {error} = await sb.from('local_items').update({icon,title_hr,body_hr,title_en,body_en,phone_number,category,website,lat,lng}).eq('id',editId);
-    if (error) { toast('Greška!','error'); return; }
+    const {error} = await sb.from('local_items').update({icon,title_hr,body_hr,title_en,body_en}).eq('id',editId);
+    if (error) { toast('Greška: '+error.message,'error'); return; }
     toast('Ažurirano!','success');
   } else {
     const sort_order = (adminPropData.sections['recommends']||[]).length;
-    const {error} = await sb.from('local_items').insert({property_id:adminPropData.id,section:'recommends',icon,title_hr,body_hr,title_en,body_en,phone_number,category,website,lat,lng,sort_order});
-    if (error) { toast('Greška!','error'); return; }
+    const {error} = await sb.from('local_items').insert({property_id:adminPropData.id,section:'recommends',icon,title_hr,body_hr,title_en,body_en,sort_order});
+    if (error) { toast('Greška: '+error.message,'error'); return; }
     toast('Dodano!','success');
   }
   adminPropData = await loadPropertyAdminById(adminPropData.id);
