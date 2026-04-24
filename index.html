@@ -1166,8 +1166,7 @@ function renderLocalRecommendsDetail(item) {
   document.getElementById('bc-section-label').textContent = lang==='hr' ? 'Preporuke vlasnika' : 'Owner Recommends';
   const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
   const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
-  const bodyHtml = body ? (body.trim().startsWith('<') ? body : body.split('
-').map(l => l ? `<p>${l}</p>` : '').join('')) : '';
+  const bodyHtml = body ? (body.trim().startsWith('<') ? body : body.split('\n').map(l => l ? `<p>${l}</p>` : '').join('')) : '';
 
   const mapsUrl = (item.lat && item.lng)
     ? `https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}`
@@ -1241,8 +1240,7 @@ function renderGlobalItemDetail(item) {
   document.getElementById('bc-section-label').textContent = catLabel[item.category] || '';
   const n = lang==='hr' ? item.name_hr : (item.name_en||item.name_hr);
   const desc = lang==='hr' ? item.description_hr : (item.description_en||item.description_hr);
-  const descHtml = desc ? (desc.trim().startsWith('<') ? desc : desc.split('
-').map(l => l ? `<p>${l}</p>` : '').join('')) : '';
+  const descHtml = desc ? (desc.trim().startsWith('<') ? desc : desc.split('\n').map(l => l ? `<p>${l}</p>` : '').join('')) : '';
 
   const actions = [];
   if (item.phone)     actions.push(`<a class="contact-btn call" href="tel:${item.phone}">📞 ${item.phone}</a>`);
@@ -1288,8 +1286,7 @@ function renderHostContact() {
   const host = contacts[0];
   const hostName = lang==='hr' ? host.title_hr : (host.title_en||host.title_hr);
   const hostDesc = lang==='hr' ? host.body_hr  : (host.body_en||host.body_hr);
-  const descHtml = hostDesc ? (hostDesc.trim().startsWith('<') ? hostDesc : hostDesc.split('
-').map(l => l ? `<p>${l}</p>` : '').join('')) : '';
+  const descHtml = hostDesc ? (hostDesc.trim().startsWith('<') ? hostDesc : hostDesc.split('\n').map(l => l ? `<p>${l}</p>` : '').join('')) : '';
 
   const actions = [];
   if (host.phone_number) actions.push(`<a class="contact-btn call" href="tel:${host.phone_number}">📞 ${host.phone_number}</a>`);
@@ -1457,8 +1454,7 @@ function renderSharedItemDetail(item, sectionOrSub) {
 
   const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
   const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
-  const bodyHtml = body ? (body.trim().startsWith('<') ? body : body.split('
-').map(l => l ? `<p>${l}</p>` : '').join('')) : '';
+  const bodyHtml = body ? (body.trim().startsWith('<') ? body : body.split('\n').map(l => l ? `<p>${l}</p>` : '').join('')) : '';
 
   // Generate Maps link from coords if available, fallback to maps_link
   const mapsUrl = (item.lat && item.lng)
@@ -1495,8 +1491,7 @@ function renderSharedItemDetail(item, sectionOrSub) {
 function renderVillaItemContent(sub, item) {
   const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
   const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
-  const bodyHtml = body ? (body.trim().startsWith('<') ? body : body.split('
-').map(l => l ? `<p>${l}</p>` : '').join('')) : '';
+  const bodyHtml = body ? (body.trim().startsWith('<') ? body : body.split('\n').map(l => l ? `<p>${l}</p>` : '').join('')) : '';
   setPropHeader3();
   document.getElementById('bc-section-label').textContent = lang==='hr' ? sub.hr : sub.en;
 
@@ -1534,8 +1529,7 @@ function renderVillaSub(sub) {
   items.forEach(item => {
     const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
     const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
-    const bodyHtml = body ? (body.trim().startsWith('<') ? body : body.split('
-').map(l => l ? `<p>${l}</p>` : '').join('')) : '';
+    const bodyHtml = body ? (body.trim().startsWith('<') ? body : body.split('\n').map(l => l ? `<p>${l}</p>` : '').join('')) : '';
     h += `<div style="margin-bottom:20px;padding-bottom:20px;border-bottom:0.5px solid var(--stone-mid);"><div class="content-body" style="font-weight:500;color:var(--navy);margin-bottom:6px;">${item.icon||''} ${title}</div><div class="content-body">${bodyHtml}</div></div>`;
   });
   h += '</div>';
@@ -1595,8 +1589,7 @@ function renderItemContentDirect(section, itemId) {
   if (!item) return;
   const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
   const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
-  const bodyHtml = body ? (body.trim().startsWith('<') ? body : body.split('
-').map(l => l ? `<p>${l}</p>` : '').join('')) : '';
+  const bodyHtml = body ? (body.trim().startsWith('<') ? body : body.split('\n').map(l => l ? `<p>${l}</p>` : '').join('')) : '';
   setPropHeader3();
   document.getElementById('bc-section-label').textContent = sectionLabel;
   document.getElementById('g-content-inner').innerHTML = `<div class="content-area"><div class="content-icon">${item.icon||'📄'}</div><div class="content-title">${title}</div><div class="content-body">${bodyHtml}</div></div>`;
