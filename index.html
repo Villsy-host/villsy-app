@@ -712,22 +712,34 @@ const scrollPositions = {};
 
 function show(id) {
   const currentActive = document.querySelector('.screen.active');
-  if (currentActive) scrollPositions[currentActive.id] = window.scrollY;
+  if (currentActive) {
+    const sa = currentActive.querySelector('.scroll-area');
+    console.log('scroll-area scrollTop:', sa?.scrollTop, 'window.scrollY:', window.scrollY, 'body.scrollTop:', document.body.scrollTop, 'html.scrollTop:', document.documentElement.scrollTop);
+    if (sa) scrollPositions[currentActive.id] = sa.scrollTop;
+  }
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
+  const next = document.getElementById(id);
+  next.classList.add('active');
+  const sa = next.querySelector('.scroll-area');
+  if (sa) sa.scrollTop = 0;
 }
 function goHome() {
   const savedScroll = scrollPositions['screen-home'] || 0;
   renderHome();
   show('screen-home');
-  if (savedScroll) setTimeout(() => window.scrollTo(0, savedScroll), 50);
+  if (savedScroll) setTimeout(() => {
+    const sa = document.querySelector('#screen-home .scroll-area');
+    if (sa) sa.scrollTop = savedScroll;
+  }, 50);
 }
 function goSubs() {
   const savedScroll = scrollPositions['screen-subs'] || 0;
   renderSubs(currentSectionId);
   show('screen-subs');
-  if (savedScroll) setTimeout(() => window.scrollTo(0, savedScroll), 50);
+  if (savedScroll) setTimeout(() => {
+    const sa = document.querySelector('#screen-subs .scroll-area');
+    if (sa) sa.scrollTop = savedScroll;
+  }, 50);
 }
 function goAdminLogin() {
   sb.auth.getSession().then(({ data }) => {
@@ -922,22 +934,19 @@ function renderHome() {
   const recsItems = prop.sections['recommends'] || [];
   if (recsItems.length) {
     const recsCard = document.createElement('div');
-    recsCard.className = 'section-card wide';
-    recsCard.innerHTML = `${phIcon('recommends', 24)}<div class="section-card-text"><div class="section-card-label">${lang==='hr'?'Preporuke vlasnika':'Owner Recommends'}</div></div><div class="section-card-arrow">›</div>`;
+    recsCard.className = 'section-card';
+    recsCard.innerHTML = `${phIconCard('recommends')} <div class="section-card-label">${lang==='hr'?'Preporuke vlasnika':'Owner Recommends'}</div><div class="section-card-arrow">›</div>`;
     recsCard.onclick = () => { currentSectionId = 'recommends'; renderSubs('recommends'); show('screen-subs'); };
     grid.appendChild(recsCard);
   }
 
-  // Reservation banner — remove old one first to avoid duplicates
-  const oldBanner = document.querySelector('.reservation-banner');
-  if (oldBanner) oldBanner.remove();
+  // Reservation banner
   const banner = document.createElement('div');
   banner.className = 'reservation-banner';
-  const propName = lang==='hr' ? prop.name_hr : (prop.name_en||prop.name_hr);
   banner.innerHTML = `
     <div class="reservation-banner-text">${lang==='hr'
-      ? `Sviđa vam se boravak u <strong>${propName}</strong>? Rezervirajte opet s nama po najboljoj cijeni.`
-      : `Enjoying your stay at <strong>${propName}</strong>? Book again with us for the best price.`
+      ? `Sviđa vam se boravak u <strong>${name}</strong>? Rezervirajte opet s nama po najboljoj cijeni.`
+      : `Enjoying your stay at <strong>${name}</strong>? Book again with us for the best price.`
     }</div>
     <a class="reservation-banner-btn" href="https://villsy.com/hr/villas/" target="_blank">${lang==='hr'?'Rezerviraj':'Book Now'}</a>`;
   document.getElementById('g-section-grid').insertAdjacentElement('afterend', banner);
