@@ -1684,6 +1684,10 @@ function renderAdminLocalSections() {
   const c = document.getElementById('a-sections');
   c.innerHTML = '';
 
+  // ── Naziv objekta ──
+  const nameCard = makeAdminCard('propname', '🏷️', 'Naziv objekta', renderAdminPropName(prop));
+  c.appendChild(nameCard);
+
   // ── Hero image ──
   const heroCard = makeAdminCard('hero', '🖼️', 'Hero fotografija', renderAdminHero(prop));
   c.appendChild(heroCard);
@@ -1785,6 +1789,29 @@ async function saveSectionDesc(secId) {
   adminPropData = await loadPropertyAdminById(adminPropData.id);
   document.getElementById('abody-descs').innerHTML = renderAdminSectionDescs(adminPropData);
   toast('Opis spremljen!','success');
+}
+
+// ─── ADMIN: Naziv objekta ─────────────────────
+function renderAdminPropName(prop) {
+  return `
+    <div class="fg"><label class="fl2">Naziv (HR)</label><input type="text" class="fi2" id="pname-hr" value="${escHtml(prop.name_hr||'')}"></div>
+    <div class="fg"><label class="fl2">Name (EN)</label><input type="text" class="fi2" id="pname-en" value="${escHtml(prop.name_en||'')}"></div>
+    <div class="fg"><label class="fl2">Mjesto / lokacija</label><input type="text" class="fi2" id="pname-loc" value="${escHtml(prop.location||'')}"></div>
+    <button class="btn-gold" onclick="savePropName()">Spremi naziv</button>`;
+}
+
+async function savePropName() {
+  const name_hr = v('pname-hr'), name_en = v('pname-en'), location = v('pname-loc');
+  if (!name_hr) { toast('Unesite naziv!','error'); return; }
+  const { error } = await sb.from('properties').update({name_hr, name_en:name_en||name_hr, location}).eq('id', adminPropData.id);
+  if (error) { toast('Greška!','error'); return; }
+  adminPropData.name_hr = name_hr;
+  adminPropData.name_en = name_en;
+  adminPropData.location = location;
+  await loadAdminData();
+  renderAdminPropList();
+  renderAdminPropSelect();
+  toast('Naziv spremljen!','success');
 }
 
 // ─── ADMIN: Hero ─────────────────────────────
