@@ -730,19 +730,13 @@ function goHome() {
   const savedScroll = scrollPositions['screen-home'] || 0;
   renderHome();
   show('screen-home');
-  if (savedScroll) setTimeout(() => {
-    const sa = document.querySelector('#screen-home .scroll-area');
-    if (sa) sa.scrollTop = savedScroll;
-  }, 50);
+  if (savedScroll) setTimeout(() => window.scrollTo(0, savedScroll), 50);
 }
 function goSubs() {
   const savedScroll = scrollPositions['screen-subs'] || 0;
   renderSubs(currentSectionId);
   show('screen-subs');
-  if (savedScroll) setTimeout(() => {
-    const sa = document.querySelector('#screen-subs .scroll-area');
-    if (sa) sa.scrollTop = savedScroll;
-  }, 50);
+  if (savedScroll) setTimeout(() => window.scrollTo(0, savedScroll), 50);
 }
 function goAdminLogin() {
   sb.auth.getSession().then(({ data }) => {
