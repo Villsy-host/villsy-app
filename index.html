@@ -114,13 +114,17 @@ ph-icon, [class^="ph-"] { color: var(--gold); }
 .section-card.wide .section-card-arrow { margin-left: auto; }
 .section-card-icon { font-size: 26px; line-height: 1; }
 .section-card-label { font-size: 16px; font-weight: 500; color: var(--navy); line-height: 1.3; }
-.section-card-count { font-size: 12px; color: var(--text-light); text-align: center; }
+.section-card-count { font-size: 13px; color: var(--text-mid); text-align: center; }
 .section-card-arrow { font-size: 15px; color: var(--stone-dark); }
 .section-card:not(.wide) .section-card-arrow { display: none; }
 .section-card.wide .section-card-text { flex: 1; }
 
+/* SECTION DESC TEXT */
+.section-desc-text { font-size: 15px; color: var(--text-mid); line-height: 1.65; margin-bottom: 16px; padding: 0 2px; }
+.section-desc-text:empty { display: none; }
+
 /* WiFi card special */
-.wifi-preview { font-size: 12px; color: var(--text-light); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px; text-align: center; }
+.wifi-preview { font-size: 13px; color: var(--text-mid); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px; text-align: center; }
 
 /* LEVEL 2 */
 .sub-list { padding: 16px; }
@@ -131,18 +135,18 @@ ph-icon, [class^="ph-"] { color: var(--gold); }
 .sub-item-icon { width: 36px; height: 36px; background: var(--stone); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
 .sub-item-text { min-width: 0; }
 .sub-item-title { font-size: 18px; font-weight: 500; color: var(--navy); }
-.sub-item-preview { font-size: 12px; color: var(--text-light); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+.sub-item-preview { font-size: 14px; color: var(--text-mid); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
 .sub-item-arrow { color: var(--stone-dark); font-size: 16px; flex-shrink: 0; }
 
 
 /* CONTACT ACTION BUTTONS */
-.contact-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
-.contact-btn { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-radius: var(--r-sm); font-size: 15px; font-family: 'Roboto', sans-serif; font-weight: 500; text-decoration: none; cursor: pointer; background: var(--white); color: var(--navy); border: 1.5px solid var(--stone-mid); flex: 1; min-width: 130px; justify-content: center; transition: all 0.15s; }
-.contact-btn:active { background: var(--stone); border-color: var(--gold); }
-.contact-btn.call { border-color: var(--gold); color: var(--navy); }
-.contact-btn.maps { border-color: var(--stone-mid); }
-.contact-btn.web  { border-color: var(--stone-mid); }
-.contact-btn.mail { border-color: var(--stone-mid); }
+.contact-actions { display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 8px; margin-top: 20px; }
+.contact-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 14px 8px; border-radius: var(--r-sm); font-size: 12px; font-family: 'Roboto', sans-serif; font-weight: 500; text-decoration: none; cursor: pointer; background: var(--white); color: var(--navy); border: 1.5px solid var(--gold); transition: all 0.15s; }
+.contact-btn:active { background: rgba(182,157,92,0.08); }
+.contact-btn.call { border-color: var(--gold); }
+.contact-btn.maps { border-color: var(--gold); }
+.contact-btn.web  { border-color: var(--gold); }
+.contact-btn.mail { border-color: var(--gold); }
 .contact-address { display: flex; align-items: flex-start; gap: 10px; padding: 14px 0; border-top: 0.5px solid var(--stone-mid); margin-top: 16px; font-size: 15px; color: var(--text-mid); }
 .contact-address-icon { font-size: 18px; flex-shrink: 0; }
 
@@ -151,7 +155,7 @@ ph-icon, [class^="ph-"] { color: var(--gold); }
 .wifi-card { background: var(--white); border-radius: var(--r); padding: 24px 20px; box-shadow: var(--shadow-md); border: 0.5px solid rgba(13,27,42,0.06); }
 .wifi-icon-big { font-size: 44px; text-align: center; margin-bottom: 16px; }
 .wifi-field { margin-bottom: 20px; }
-.wifi-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-light); margin-bottom: 6px; }
+.wifi-label { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-mid); margin-bottom: 6px; }
 .wifi-value { font-size: 24px; font-weight: 500; color: var(--navy); font-family: 'Roboto Slab', serif; word-break: break-all; }
 .wifi-copy-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--stone); border: none; border-radius: var(--r-sm); padding: 10px 16px; font-size: 13px; font-family: 'Roboto', sans-serif; color: var(--navy); cursor: pointer; margin-top: 8px; width: 100%; transition: background 0.15s; }
 .wifi-copy-btn:active { background: var(--stone-mid); }
@@ -168,23 +172,23 @@ ph-icon, [class^="ph-"] { color: var(--gold); }
 .checkin-row + .checkin-row { border-top: 0.5px solid var(--stone); }
 .checkin-icon { font-size: 28px; flex-shrink: 0; }
 .checkin-info { flex: 1; }
-.checkin-lbl { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-light); margin-bottom: 4px; }
+.checkin-lbl { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-mid); margin-bottom: 4px; }
 .checkin-time { font-family: 'Roboto Slab', serif; font-size: 44px; font-weight: 500; color: var(--navy); line-height: 1; }
-.checkin-note { font-size: 12px; color: var(--text-light); margin-top: 4px; }
+.checkin-note { font-size: 14px; color: var(--text-mid); margin-top: 4px; }
 
 /* MAP */
 .map-section { padding: 0; }
 .map-placeholder { background: var(--stone); height: 180px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 8px; color: var(--text-light); font-size: 14px; }
 .map-placeholder .mi { font-size: 36px; }
 .map-info { padding: 16px; }
-.map-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-light); margin-bottom: 6px; }
+.map-label { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-mid); margin-bottom: 6px; }
 .map-address { font-size: 16px; font-weight: 500; color: var(--navy); margin-bottom: 14px; }
 .map-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--navy); color: var(--gold); text-decoration: none; border-radius: var(--r-sm); padding: 14px; font-size: 14px; font-family: 'Roboto', sans-serif; }
 
 /* PHONES / CONTACTS */
 .phone-item { background: var(--white); border-radius: var(--r-sm); padding: 13px 16px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; box-shadow: var(--shadow); border: 0.5px solid rgba(13,27,42,0.05); }
 .phone-item-info { flex: 1; }
-.phone-cat { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-light); margin-bottom: 2px; }
+.phone-cat { font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-mid); margin-bottom: 2px; }
 .phone-name { font-size: 15px; font-weight: 500; color: var(--navy); }
 .phone-call { background: var(--white); color: var(--navy); border: 1.5px solid var(--stone-mid); border-radius: var(--r-sm); padding: 9px 14px; font-size: 13px; font-family: 'Roboto', sans-serif; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; white-space: nowrap; }
 
@@ -192,7 +196,7 @@ ph-icon, [class^="ph-"] { color: var(--gold); }
 .emergency-fixed { background: rgba(192,57,43,0.06); border: 0.5px solid rgba(192,57,43,0.15); border-radius: var(--r-sm); padding: 13px 16px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
 .emergency-fixed .phone-name { color: #c0392b; }
 .emergency-call { background: var(--white); color: #c0392b; border: 1.5px solid #c0392b; border-radius: var(--r-sm); padding: 9px 14px; font-size: 13px; font-family: 'Roboto', sans-serif; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-block; white-space: nowrap; }
-.emergency-section-title { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-light); margin: 18px 0 8px; }
+.emergency-section-title { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-mid); margin: 18px 0 8px; }
 .emergency-section-title:first-child { margin-top: 0; }
 
 /* LEVEL 3 */
@@ -203,11 +207,35 @@ ph-icon, [class^="ph-"] { color: var(--gold); }
 .content-body p { margin-bottom: 12px; }
 .content-body p:last-child { margin-bottom: 0; }
 
+/* ATTACHMENT BUTTON */
+.attachment-btn { display: flex; align-items: center; gap: 14px; background: var(--white); border: 1.5px solid var(--stone-mid); border-radius: var(--r-sm); padding: 14px 16px; margin-top: 20px; text-decoration: none; cursor: pointer; transition: border-color 0.15s; }
+.attachment-btn:active { border-color: var(--gold); background: var(--stone); }
+.attachment-icon { font-size: 28px; flex-shrink: 0; }
+.attachment-info { flex: 1; }
+.attachment-name { font-size: 15px; font-weight: 500; color: var(--navy); }
+.attachment-type { font-size: 11px; color: var(--text-light); margin-top: 2px; letter-spacing: 0.5px; text-transform: uppercase; }
+.attachment-arrow { font-size: 18px; color: var(--gold); flex-shrink: 0; }
+
 .shared-badge { display: inline-block; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; background: var(--stone); color: var(--text-light); padding: 2px 7px; border-radius: 4px; margin-left: 6px; vertical-align: middle; }
 
 .empty { text-align: center; padding: 48px 24px; color: var(--text-light); }
 .empty-icon { font-size: 40px; margin-bottom: 12px; }
 .empty-text { font-size: 14px; }
+
+/* HOST CARD */
+.host-card { background: var(--white); border-radius: var(--r); padding: 28px 20px 24px; box-shadow: var(--shadow-md); border: 0.5px solid rgba(13,27,42,0.06); text-align: center; margin: 0 0 16px; }
+.host-photo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--gold); margin-bottom: 14px; }
+.host-photo-placeholder { width: 100px; height: 100px; border-radius: 50%; background: rgba(182,157,92,0.12); border: 3px solid rgba(182,157,92,0.3); display: flex; align-items: center; justify-content: center; margin: 0 auto 14px; }
+.host-name { font-family: 'Roboto Slab', serif; font-size: 22px; font-weight: 500; color: var(--navy); margin-bottom: 10px; }
+.host-desc { font-size: 15px; color: var(--text-mid); line-height: 1.75; margin-bottom: 4px; text-align: left; }
+.host-desc p { margin-bottom: 8px; }
+.host-card .contact-actions { justify-content: center; }
+
+/* RESERVATION BANNER */
+.reservation-banner { margin: 0 16px 32px; background: var(--navy); border-radius: var(--r); padding: 20px 18px; text-align: center; }
+.reservation-banner-text { font-size: 15px; color: rgba(255,255,255,0.8); line-height: 1.5; margin-bottom: 14px; }
+.reservation-banner-text strong { color: var(--gold); }
+.reservation-banner-btn { display: inline-block; background: var(--gold); color: var(--navy); font-family: 'Roboto', sans-serif; font-weight: 600; font-size: 14px; padding: 12px 28px; border-radius: 50px; text-decoration: none; letter-spacing: 0.5px; }
 
 /* LOGIN */
 #screen-login { background: var(--navy); align-items: center; justify-content: center; padding: 40px 24px; }
@@ -413,6 +441,7 @@ ph-icon, [class^="ph-"] { color: var(--gold); }
   <div class="scroll-area">
     <div class="sub-list">
       <div class="sub-list-title" id="g-sub-title"></div>
+      <div id="g-sub-desc" class="section-desc-text"></div>
       <div id="g-sub-items"></div>
     </div>
   </div>
@@ -539,9 +568,9 @@ const HERO_BUCKET = 'villsy';
 // ─── SECTIONS ────────────────────────────────
 // Lokalne sekcije specifične za objekt
 const LOCAL_SECTIONS = [
-  { id:'villa',      icon:'🏡', hr:'O vili',                en:'About the Villa',      wide:false },
-  { id:'emergency',  icon:'🚨', hr:'In Case of Emergency',  en:'In Case of Emergency', wide:true  },
-  { id:'contacts',   icon:'📞', hr:'Useful Contacts',        en:'Useful Contacts',      wide:false },
+  { id:'villa',      icon:'🏡', hr:'Informacije o objektu', en:'About the Property',   wide:false },
+  { id:'emergency',  icon:'🚨', hr:'U slučaju nužde',       en:'In Case of Emergency', wide:true  },
+  { id:'contacts',   icon:'📞', hr:'Kontaktiraj domaćina',  en:'Contact the Host',     wide:false },
   { id:'recommends', icon:'⭐', hr:'Preporuke vlasnika',     en:'Owner Recommends',     wide:false },
 ];
 
@@ -553,13 +582,14 @@ const SHARED_SECTIONS = [
 
 // Podsekcije "O vili"
 const VILLA_SUBSECTIONS = [
-  { id:'address',  icon:'📍', hr:'Adresa & Navigacija', en:'Address & Navigation', special:'map' },
-  { id:'fuses',    icon:'⚡', hr:'Osigurači',            en:'Fuses & Electricity' },
-  { id:'rules',    icon:'📋', hr:'Kućni red',            en:'House Rules' },
-  { id:'ac',       icon:'❄️', hr:'Air Condition',        en:'Air Condition' },
-  { id:'sauna',    icon:'🧖', hr:'Sauna',                en:'Sauna' },
-  { id:'jacuzzi',  icon:'🛁', hr:'Jacuzzi',              en:'Jacuzzi' },
-  { id:'garbage',  icon:'♻️', hr:'Odvoz smeća',          en:'Garbage Disposal' },
+  { id:'address',   icon:'📍', hr:'Adresa & Navigacija',         en:'Address & Navigation',    special:'map' },
+  { id:'fuses',     icon:'⚡', hr:'Elektro osigurači',            en:'Electrical Fuses' },
+  { id:'rules',     icon:'📋', hr:'Kućni red',                   en:'House Rules' },
+  { id:'ac',        icon:'❄️', hr:'Klimatizacija i Grijanje',    en:'Air Conditioning & Heating' },
+  { id:'sauna',     icon:'🧖', hr:'Sauna',                       en:'Sauna' },
+  { id:'jacuzzi',   icon:'🛁', hr:'Hidromasažna kada',           en:'Jacuzzi / Hot Tub' },
+  { id:'garbage',   icon:'♻️', hr:'Odvoz smeća',                 en:'Garbage Disposal' },
+  { id:'services',  icon:'🛎️', hr:'Ostale usluge u objektu',    en:'Other Property Services' },
 ];
 
 // Podsekcije "Hrana i piće"
@@ -619,6 +649,7 @@ const PH_ICONS = {
   sauna:      { name: 'thermometer-hot',  weight: 'light' },
   jacuzzi:    { name: 'bathtub',          weight: 'light' },
   garbage:    { name: 'trash',            weight: 'light' },
+  services:   { name: 'bell-ringing',     weight: 'light' },
   // Food subsections
   restaurants:{ name: 'fork-knife',       weight: 'light' },
   bars:       { name: 'wine',             weight: 'light' },
@@ -686,13 +717,27 @@ function distLabel(km) {
 // ═══════════════════════════════════════════
 // NAVIGATION
 // ═══════════════════════════════════════════
+const scrollPositions = {};
+
 function show(id) {
+  const currentActive = document.querySelector('.screen.active');
+  if (currentActive) scrollPositions[currentActive.id] = window.scrollY;
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  window.scrollTo(0,0);
+  window.scrollTo(0, 0);
 }
-function goHome() { renderHome(); show('screen-home'); }
-function goSubs() { renderSubs(currentSectionId); show('screen-subs'); }
+function goHome() {
+  const savedScroll = scrollPositions['screen-home'] || 0;
+  renderHome();
+  show('screen-home');
+  if (savedScroll) setTimeout(() => window.scrollTo(0, savedScroll), 50);
+}
+function goSubs() {
+  const savedScroll = scrollPositions['screen-subs'] || 0;
+  renderSubs(currentSectionId);
+  show('screen-subs');
+  if (savedScroll) setTimeout(() => window.scrollTo(0, savedScroll), 50);
+}
 function goAdminLogin() {
   sb.auth.getSession().then(({ data }) => {
     if (data.session) { renderAdmin(); show('screen-admin'); }
@@ -739,7 +784,6 @@ async function loadProperty(slug) {
   if (!prop) return null;
 
   const { data: localItems } = await sb.from('local_items').select('*').eq('property_id', prop.id).order('sort_order');
-  const { data: phones }     = await sb.from('phones').select('*').eq('property_id', prop.id).order('sort_order');
 
   // Shared items — food/explore global (no region filter), recommends per property via links
   const { data: links } = await sb.from('property_shared_items').select('shared_item_id').eq('property_id', prop.id);
@@ -752,12 +796,15 @@ async function loadProperty(slug) {
 
   // Group sections
   prop.sections = { villa:{}, contacts:[], food:{}, explore:[], recommends:[] };
+  prop.sectionDescs = {}; // short descriptions per section
   VILLA_SUBSECTIONS.forEach(sub => prop.sections['villa'][sub.id] = []);
   FOOD_SUBSECTIONS.forEach(sub => prop.sections['food'][sub.id] = []);
   EXPLORE_SUBSECTIONS.forEach(sub => prop.sections['explore'][sub.id] = []);
 
   (localItems||[]).forEach(item => {
-    if (item.section === 'villa' && item.subsection && prop.sections['villa'][item.subsection]) {
+    if (item.section === 'desc') {
+      prop.sectionDescs[item.subsection] = item; // store desc item
+    } else if (item.section === 'villa' && item.subsection && prop.sections['villa'][item.subsection]) {
       prop.sections['villa'][item.subsection].push(item);
     } else if (item.section === 'contacts') {
       prop.sections['contacts'].push(item);
@@ -783,7 +830,7 @@ async function loadProperty(slug) {
     if (item.section === 'recommends') prop.sections['recommends'].push(item);
   });
 
-  prop.phones = phones || [];
+  prop.phones = [];
   prop.emergencyContacts = [];
   return prop;
 }
@@ -805,10 +852,10 @@ function renderHome() {
   const region = prop.regions ? (lang==='hr' ? prop.regions.name_hr : prop.regions.name_en) : '';
 
   (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-name'),name);
-  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc'),(prop.location||'') + (region ? ', ' + region : ''));
-  document.getElementById('g-welcome').textContent = lang==='hr' ? 'Dobrodošli' : 'Welcome';
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc'),'');
+  document.getElementById('g-welcome').textContent = lang==='hr' ? 'Dragi gosti, dobrodošli' : 'Dear guests, welcome';
   document.getElementById('g-hero-name').textContent = name;
-  document.getElementById('g-hero-loc').textContent = (prop.location||'') + (region ? ' · ' + region : '');
+  document.getElementById('g-hero-loc').textContent = '';
 
   // Hero photo
   const heroWrap = document.getElementById('g-hero-wrap');
@@ -838,25 +885,25 @@ function renderHome() {
   ciCard.onclick = () => renderCheckin();
   grid.appendChild(ciCard);
 
-  // 3. O vili
+  // 3. Informacije o objektu
   const villaCard = document.createElement('div');
   villaCard.className = 'section-card wide';
-  villaCard.innerHTML = `${phIcon('villa', 24)}<div class="section-card-text"><div class="section-card-label">${lang==='hr'?'O vili':'About the Villa'}</div></div><div class="section-card-arrow">›</div>`;
+  villaCard.innerHTML = `${phIcon('villa', 24)}<div class="section-card-text"><div class="section-card-label">${lang==='hr'?'Informacije o objektu':'About the Property'}</div></div><div class="section-card-arrow">›</div>`;
   villaCard.onclick = () => { currentSectionId = 'villa'; renderSubs('villa'); show('screen-subs'); };
   grid.appendChild(villaCard);
 
   // 4. Emergency (wide)
   const emergCard = document.createElement('div');
   emergCard.className = 'section-card wide';
-  emergCard.innerHTML = `${phIcon('emergency', 24)}<div class="section-card-text"><div class="section-card-label">${lang==='hr'?'In Case of Emergency':'In Case of Emergency'}</div></div><div class="section-card-arrow">›</div>`;
+  emergCard.innerHTML = `${phIcon('emergency', 24)}<div class="section-card-text"><div class="section-card-label">${lang==='hr'?'U slučaju nužde':'In Case of Emergency'}</div></div><div class="section-card-arrow">›</div>`;
   emergCard.onclick = () => renderEmergency();
   grid.appendChild(emergCard);
 
-  // 5. Useful contacts
+  // 5. Kontaktiraj domaćina
   const contactsCard = document.createElement('div');
   contactsCard.className = 'section-card';
-  contactsCard.innerHTML = `${phIconCard('contacts')} <div class="section-card-label">${lang==='hr'?'Useful Contacts':'Useful Contacts'}</div><div class="section-card-arrow">›</div>`;
-  contactsCard.onclick = () => { currentSectionId = 'contacts'; renderContacts(); show('screen-subs'); };
+  contactsCard.innerHTML = `${phIconCard('contacts')} <div class="section-card-label">${lang==='hr'?'Kontaktiraj domaćina':'Contact the Host'}</div><div class="section-card-arrow">›</div>`;
+  contactsCard.onclick = () => { renderHostContact(); show('screen-subs'); };
   grid.appendChild(contactsCard);
 
   // 6. Airport & Transferi (global)
@@ -889,6 +936,18 @@ function renderHome() {
     recsCard.onclick = () => { currentSectionId = 'recommends'; renderSubs('recommends'); show('screen-subs'); };
     grid.appendChild(recsCard);
   }
+
+  // Reservation banner — ukloni stari prije dodavanja novog
+  document.querySelectorAll('.reservation-banner').forEach(el => el.remove());
+  const banner = document.createElement('div');
+  banner.className = 'reservation-banner';
+  banner.innerHTML = `
+    <div class="reservation-banner-text">${lang==='hr'
+      ? `Sviđa vam se boravak u <strong>${name}</strong>? Rezervirajte opet s nama po najboljoj cijeni.`
+      : `Enjoying your stay at <strong>${name}</strong>? Book again with us for the best price.`
+    }</div>
+    <a class="reservation-banner-btn" href="https://villsy.com/hr/villas/" target="_blank">${lang==='hr'?'Rezerviraj':'Book Now'}</a>`;
+  document.getElementById('g-section-grid').insertAdjacentElement('afterend', banner);
 }
 
 // ═══════════════════════════════════════════
@@ -954,8 +1013,8 @@ function renderCheckin() {
   const coNote = lang==='hr' ? prop.checkout_note_hr : (prop.checkout_note_en||prop.checkout_note_hr);
   const extraNote = lang==='hr' ? prop.extra_note_hr : (prop.extra_note_en||prop.extra_note_hr);
 
-  const mapsBtn = prop.maps_link ? `<a class="contact-btn maps" href="${prop.maps_link}" target="_blank" style="margin-top:14px;">🗺️ ${lang==='hr'?'Navigiraj do vile':'Navigate to Villa'}</a>` : '';
-  const addrHtml = prop.address ? `<div class="checkin-address"><div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin-bottom:4px;">${lang==='hr'?'Adresa':'Address'}</div><div style="font-size:16px;font-weight:500;color:var(--navy);">${prop.address}</div>${mapsBtn}</div>` : '';
+  const mapsBtn = prop.maps_link ? `<a class="contact-btn maps" href="${prop.maps_link}" target="_blank" style="margin-top:14px;"><i class="ph-light ph-navigation-arrow" style="font-size:22px;color:var(--gold);"></i><span>${lang==='hr'?'Navigiraj do vile':'Navigate to Villa'}</span></a>` : '';
+  const addrHtml = prop.address ? `<div class="checkin-address"><div style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--text-mid);margin-bottom:4px;">${lang==='hr'?'Adresa':'Address'}</div><div style="font-size:16px;font-weight:500;color:var(--navy);">${prop.address}</div>${mapsBtn}</div>` : '';
 
   document.getElementById('g-checkin-content').innerHTML = `
     <div class="checkin-card">
@@ -987,7 +1046,7 @@ function renderCheckin() {
 // ═══════════════════════════════════════════
 async function renderEmergency() {
   const c = document.getElementById('g-emergency-content');
-  let h = `<div class="sub-list-title">🚨 In Case of Emergency</div>`;
+  let h = `<div class="sub-list-title">${lang==='hr'?'U slučaju nužde':'In Case of Emergency'}</div>`;
 
   // Fixed 112
   h += `<div class="emergency-section-title">${lang==='hr'?'Hitni broj':'Emergency Number'}</div>`;
@@ -1034,9 +1093,9 @@ function renderLocalRecommendsDetail(item) {
     : null;
 
   const actions = [];
-  if (item.phone_number) actions.push(`<a class="contact-btn call" href="tel:${item.phone_number}">📞 ${item.phone_number}</a>`);
-  if (mapsUrl)           actions.push(`<a class="contact-btn maps" href="${mapsUrl}" target="_blank">🗺️ ${lang==='hr'?'Navigiraj':'Navigate'}</a>`);
-  if (item.website)      actions.push(`<a class="contact-btn web" href="${item.website}" target="_blank">🌐 Web</a>`);
+  if (item.phone_number) actions.push(`<a class="contact-btn call" href="tel:${item.phone_number}"><i class="ph-light ph-phone" style="font-size:22px;color:var(--gold);"></i><span>${lang==='hr'?'Nazovi':'Call'}</span></a>`);
+  if (mapsUrl)           actions.push(`<a class="contact-btn maps" href="${mapsUrl}" target="_blank"><i class="ph-light ph-navigation-arrow" style="font-size:22px;color:var(--gold);"></i><span>${lang==='hr'?'Navigiraj':'Navigate'}</span></a>`);
+  if (item.website)      actions.push(`<a class="contact-btn web" href="${item.website}" target="_blank"><i class="ph-light ph-globe" style="font-size:22px;color:var(--gold);"></i><span>Web</span></a>`);
   const actionsHtml = actions.length ? `<div class="contact-actions">${actions.join('')}</div>` : '';
   const addrHtml = item.category ? `<div class="contact-address"><div class="contact-address-icon">📍</div><div>${item.category}</div></div>` : '';
 
@@ -1060,6 +1119,10 @@ async function renderGlobalSection() {
   (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc2'),prop.location||'');
   document.getElementById('bc-home-label').textContent = lang==='hr' ? 'Početak' : 'Home';
   document.getElementById('g-sub-title').textContent = '✈️ ' + (lang==='hr' ? 'Aerodromi & Transferi' : 'Airports & Transfers');
+
+  const descElAir = document.getElementById('g-sub-desc');
+  const descItemAir = prop.sectionDescs ? prop.sectionDescs['airport'] : null;
+  if (descElAir) descElAir.textContent = descItemAir ? (lang==='hr' ? descItemAir.title_hr : (descItemAir.title_en||descItemAir.title_hr)) : '';
 
   const container = document.getElementById('g-sub-items');
   container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text-light);font-size:13px;">Učitavam...</div>';
@@ -1100,10 +1163,10 @@ function renderGlobalItemDetail(item) {
   const descHtml = (desc||'').split('\n').map(l => l ? `<p>${l}</p>` : '').join('');
 
   const actions = [];
-  if (item.phone)     actions.push(`<a class="contact-btn call" href="tel:${item.phone}">📞 ${item.phone}</a>`);
-  if (item.maps_link) actions.push(`<a class="contact-btn maps" href="${item.maps_link}" target="_blank">🗺️ ${lang==='hr'?'Mapa':'Map'}</a>`);
-  if (item.website)   actions.push(`<a class="contact-btn web" href="${item.website}" target="_blank">🌐 ${lang==='hr'?'Web':'Website'}</a>`);
-  if (item.email)     actions.push(`<a class="contact-btn mail" href="mailto:${item.email}">✉️ Email</a>`);
+  if (item.phone)     actions.push(`<a class="contact-btn call" href="tel:${item.phone}"><i class="ph-light ph-phone" style="font-size:22px;color:var(--gold);"></i><span>${lang==='hr'?'Nazovi':'Call'}</span></a>`);
+  if (item.maps_link) actions.push(`<a class="contact-btn maps" href="${item.maps_link}" target="_blank"><i class="ph-light ph-navigation-arrow" style="font-size:22px;color:var(--gold);"></i><span>${lang==='hr'?'Navigiraj':'Navigate'}</span></a>`);
+  if (item.website)   actions.push(`<a class="contact-btn web" href="${item.website}" target="_blank"><i class="ph-light ph-globe" style="font-size:22px;color:var(--gold);"></i><span>Web</span></a>`);
+  if (item.email)     actions.push(`<a class="contact-btn mail" href="mailto:${item.email}"><i class="ph-light ph-envelope" style="font-size:22px;color:var(--gold);"></i><span>Email</span></a>`);
   const actionsHtml = actions.length ? `<div class="contact-actions">${actions.join('')}</div>` : '';
   const addrHtml = item.address ? `<div class="contact-address"><div class="contact-address-icon">📍</div><div>${item.address}</div></div>` : '';
 
@@ -1118,40 +1181,45 @@ function renderGlobalItemDetail(item) {
 }
 
 // ═══════════════════════════════════════════
-// GUEST: CONTACTS (Useful Contacts)
+// GUEST: HOST CONTACT (Kontaktiraj domaćina)
 // ═══════════════════════════════════════════
-function renderContacts() {
+function renderHostContact() {
   const prop = currentProp;
   const name = lang==='hr' ? prop.name_hr : (prop.name_en||prop.name_hr);
   (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-name2'),name);
   (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc2'),prop.location||'');
-  document.getElementById('bc-home-label').textContent = lang==='hr' ? 'Početak' : 'Home';
-  document.getElementById('g-sub-title').textContent = '📞 ' + (lang==='hr' ? 'Useful Contacts' : 'Useful Contacts');
+  document.getElementById('bc-home-label').textContent = lang==='hr' ? 'Natrag' : 'Back';
+  document.getElementById('g-sub-title').textContent = '📞 ' + (lang==='hr' ? 'Kontaktiraj domaćina' : 'Contact the Host');
+
+  const descEl = document.getElementById('g-sub-desc');
+  const descItem = currentProp.sectionDescs ? currentProp.sectionDescs['contacts'] : null;
+  if (descEl) descEl.textContent = descItem ? (lang==='hr' ? descItem.title_hr : (descItem.title_en||descItem.title_hr)) : '';
 
   const container = document.getElementById('g-sub-items');
   container.innerHTML = '';
 
+  // Host data is stored in local_items section='contacts', single entry
   const contacts = prop.sections['contacts'] || [];
-  if (!contacts.length) { container.innerHTML = emptyState('📞'); return; }
+  if (!contacts.length) { container.innerHTML = emptyState('👤'); return; }
 
-  contacts.forEach(item => {
-    const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
-    const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
-    // If item has a phone number field, show call button; otherwise show as sub-item
-    if (item.phone_number) {
-      container.innerHTML += `<div class="phone-item">
-        <div class="phone-item-info"><div class="phone-cat">${item.category||''}</div><div class="phone-name">${item.icon||'📞'} ${title}</div></div>
-        <a class="phone-call" href="tel:${item.phone_number}">${item.phone_number}</a>
-      </div>`;
-    } else {
-      const preview = (body||'').split('\n')[0].substring(0,55);
-      const div = document.createElement('div');
-      div.className = 'sub-item';
-      div.innerHTML = `<div class="sub-item-left"><div class="sub-item-icon">${item.icon||'📞'}</div><div class="sub-item-text"><div class="sub-item-title">${title}</div><div class="sub-item-preview">${preview}</div></div></div><div class="sub-item-arrow">›</div>`;
-      div.onclick = () => { currentSubsectionId = item.id; renderItemContentDirect('contacts', item.id); show('screen-content'); };
-      container.appendChild(div);
-    }
-  });
+  // Use first contact as the main host
+  const host = contacts[0];
+  const hostName = lang==='hr' ? host.title_hr : (host.title_en||host.title_hr);
+  const hostDesc = lang==='hr' ? host.body_hr  : (host.body_en||host.body_hr);
+  const descHtml = (hostDesc||'').split('\n').map(l => l ? `<p>${l}</p>` : '').join('');
+
+  const actions = [];
+  if (host.phone_number) actions.push(`<a class="contact-btn call" href="tel:${host.phone_number}"><i class="ph-light ph-phone" style="font-size:22px;color:var(--gold);"></i><span>${lang==='hr'?'Nazovi':'Call'}</span></a>`);
+  if (host.email)        actions.push(`<a class="contact-btn mail" href="mailto:${host.email}"><i class="ph-light ph-envelope" style="font-size:22px;color:var(--gold);"></i><span>Email</span></a>`);
+  const actionsHtml = actions.length ? `<div class="contact-actions">${actions.join('')}</div>` : '';
+
+  container.innerHTML = `
+    <div class="host-card">
+      ${host.category ? `<img class="host-photo" src="${host.category}" alt="${hostName}" onerror="this.style.display='none'">` : `<div class="host-photo-placeholder">${phIcon('contacts',40)}</div>`}
+      <div class="host-name">${hostName}</div>
+      ${hostDesc ? `<div class="host-desc">${descHtml}</div>` : ''}
+      ${actionsHtml}
+    </div>`;
 }
 
 // ═══════════════════════════════════════════
@@ -1199,13 +1267,18 @@ function renderSubs(sectionId) {
 
   (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-name2'),name);
   (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc2'),prop.location||'');
-  document.getElementById('bc-home-label').textContent = lang==='hr' ? 'Početak' : 'Home';
+  document.getElementById('bc-home-label').textContent = lang==='hr' ? 'Natrag' : 'Back';
 
   const container = document.getElementById('g-sub-items');
   container.innerHTML = '';
 
+  // Section description
+  const descEl = document.getElementById('g-sub-desc');
+  const descItem = prop.sectionDescs ? prop.sectionDescs[sectionId] : null;
+  if (descEl) descEl.textContent = descItem ? (lang==='hr' ? descItem.title_hr : (descItem.title_en||descItem.title_hr)) : '';
+
   if (sectionId === 'villa') {
-    document.getElementById('g-sub-title').textContent = '🏡 ' + (lang==='hr' ? 'O vili' : 'About the Villa');
+    document.getElementById('g-sub-title').textContent = '🏡 ' + (lang==='hr' ? 'Informacije o objektu' : 'About the Property');
     VILLA_SUBSECTIONS.forEach(sub => {
       // Address is always shown (has address data)
       if (sub.special === 'map') {
@@ -1312,10 +1385,10 @@ function renderSharedItemDetail(item, sectionOrSub) {
   const dist = item._dist !== undefined && item._dist < 9999 ? distLabel(item._dist) : '';
 
   const actions = [];
-  if (item.phone)   actions.push(`<a class="contact-btn call" href="tel:${item.phone}">📞 ${item.phone}</a>`);
-  if (mapsUrl)      actions.push(`<a class="contact-btn maps" href="${mapsUrl}" target="_blank">🗺️ ${lang==='hr'?'Navigiraj':'Navigate'}</a>`);
-  if (item.website) actions.push(`<a class="contact-btn web" href="${item.website}" target="_blank">🌐 ${lang==='hr'?'Web':'Website'}</a>`);
-  if (item.email)   actions.push(`<a class="contact-btn mail" href="mailto:${item.email}">✉️ Email</a>`);
+  if (item.phone)   actions.push(`<a class="contact-btn call" href="tel:${item.phone}"><i class="ph-light ph-phone" style="font-size:22px;color:var(--gold);"></i><span>${lang==='hr'?'Nazovi':'Call'}</span></a>`);
+  if (mapsUrl)      actions.push(`<a class="contact-btn maps" href="${mapsUrl}" target="_blank"><i class="ph-light ph-navigation-arrow" style="font-size:22px;color:var(--gold);"></i><span>${lang==='hr'?'Navigiraj':'Navigate'}</span></a>`);
+  if (item.website) actions.push(`<a class="contact-btn web" href="${item.website}" target="_blank"><i class="ph-light ph-globe" style="font-size:22px;color:var(--gold);"></i><span>Web</span></a>`);
+  if (item.email)   actions.push(`<a class="contact-btn mail" href="mailto:${item.email}"><i class="ph-light ph-envelope" style="font-size:22px;color:var(--gold);"></i><span>Email</span></a>`);
   const actionsHtml = actions.length ? `<div class="contact-actions">${actions.join('')}</div>` : '';
 
   const addressHtml = item.address
@@ -1324,7 +1397,7 @@ function renderSharedItemDetail(item, sectionOrSub) {
 
   document.getElementById('g-content-inner').innerHTML = `
     <div class="content-area">
-      <div class="content-icon">${item.icon||sectionOrSub?.icon||'📄'}</div>
+      ${item.image_url ? `<img src="${item.image_url}" style="width:100%;max-height:220px;object-fit:cover;border-radius:var(--r);margin-bottom:16px;" onerror="this.style.display='none'">` : `<div class="content-icon">${item.icon||sectionOrSub?.icon||'📄'}</div>`}
       <div class="content-title">${title}</div>
       ${body ? `<div class="content-body">${bodyHtml}</div>` : ''}
       ${addressHtml}
@@ -1341,7 +1414,27 @@ function renderVillaItemContent(sub, item) {
   const bodyHtml = (body||'').split('\n').map(l => l ? `<p>${l}</p>` : '').join('');
   setPropHeader3();
   document.getElementById('bc-section-label').textContent = lang==='hr' ? sub.hr : sub.en;
-  document.getElementById('g-content-inner').innerHTML = `<div class="content-area"><div class="content-icon">${item.icon||sub.icon}</div><div class="content-title">${title}</div><div class="content-body">${bodyHtml}</div></div>`;
+
+  let attachmentHtml = '';
+  if (item.image_url) {
+    const isPdf = item.image_url.toLowerCase().includes('.pdf');
+    attachmentHtml = `
+      <a class="attachment-btn" href="${item.image_url}" target="_blank">
+        <div class="attachment-icon">${isPdf ? '📄' : '🖼️'}</div>
+        <div class="attachment-info">
+          <div class="attachment-name">${isPdf ? (lang==='hr'?'Priloženi dokument':'Attached document') : (lang==='hr'?'Priložena fotografija':'Attached photo')}</div>
+          <div class="attachment-type">${isPdf ? 'PDF' : (lang==='hr'?'Klikni za prikaz':'Tap to view')}</div>
+        </div>
+        <div class="attachment-arrow">↗</div>
+      </a>`;
+  }
+
+  document.getElementById('g-content-inner').innerHTML = `<div class="content-area">
+    <div class="content-icon">${item.icon||sub.icon}</div>
+    <div class="content-title">${title}</div>
+    ${body ? `<div class="content-body">${bodyHtml}</div>` : ''}
+    ${attachmentHtml}
+  </div>`;
 }
 
 function renderVillaSub(sub) {
@@ -1422,7 +1515,7 @@ function renderMapContent() {
   const prop = currentProp;
   setPropHeader3();
   document.getElementById('bc-section-label').textContent = lang==='hr' ? 'O vili' : 'About the Villa';
-  const mapsBtn = prop.maps_link ? `<a class="contact-btn maps" href="${prop.maps_link}" target="_blank" style="margin-top:14px;display:flex;">🗺️ ${lang==='hr'?'Otvori u Google Maps':'Open in Google Maps'}</a>` : '';
+  const mapsBtn = prop.maps_link ? `<a class="contact-btn maps" href="${prop.maps_link}" target="_blank" style="margin-top:14px;"><i class="ph-light ph-navigation-arrow" style="font-size:22px;color:var(--gold);"></i><span>${lang==='hr'?'Navigiraj':'Navigate'}</span></a>` : '';
   document.getElementById('g-content-inner').innerHTML = `
     <div class="content-area">
       <div class="content-icon">{phIcon('address', 36)}</div>
@@ -1599,11 +1692,10 @@ async function onPropSelectChange() {
 async function loadPropertyAdminById(id) {
   const { data: prop } = await sb.from('properties').select('*').eq('id', id).single();
   const { data: localItems } = await sb.from('local_items').select('*').eq('property_id', id).order('sort_order');
-  const { data: emContacts } = await sb.from('emergency_contacts').select('*').eq('property_id', id).order('sort_order');
   const { data: links } = await sb.from('property_shared_items').select('shared_item_id').eq('property_id', id);
 
   prop.localItems = localItems || [];
-  prop.emergencyContacts = emContacts || [];
+  prop.emergencyContacts = [];
   prop.linkedSharedIds = (links||[]).map(l => l.shared_item_id);
 
   // Group
@@ -1617,6 +1709,7 @@ async function loadPropertyAdminById(id) {
     } else if (item.section === 'recommends') {
       prop.sections['recommends'].push(item);
     }
+    // desc items stay in localItems array, accessed via renderAdminSectionDescs
   });
   return prop;
 }
@@ -1625,6 +1718,10 @@ function renderAdminLocalSections() {
   const prop = adminPropData;
   const c = document.getElementById('a-sections');
   c.innerHTML = '';
+
+  // ── Naziv objekta ──
+  const nameCard = makeAdminCard('propname', '🏷️', 'Naziv objekta', renderAdminPropName(prop));
+  c.appendChild(nameCard);
 
   // ── Hero image ──
   const heroCard = makeAdminCard('hero', '🖼️', 'Hero fotografija', renderAdminHero(prop));
@@ -1639,16 +1736,20 @@ function renderAdminLocalSections() {
   c.appendChild(ciCard);
 
   // ── Villa subsections ──
-  const villaCard = makeAdminCard('villa', '🏡', 'O vili — podsekcije', renderAdminVilla(prop));
+  const villaCard = makeAdminCard('villa', '🏡', 'Informacije o objektu — podsekcije', renderAdminVilla(prop));
   c.appendChild(villaCard);
 
   // ── Contacts ──
-  const contactsCard = makeAdminCard('contacts', '📞', 'Useful Contacts', renderAdminContacts(prop));
+  const contactsCard = makeAdminCard('contacts', '📞', 'Kontaktiraj domaćina', renderAdminContacts(prop));
   c.appendChild(contactsCard);
 
   // ── Preporuke vlasnika ──
   const recsCard2 = makeAdminCard('recommends', '⭐', 'Preporuke vlasnika', renderAdminRecommends(prop));
   c.appendChild(recsCard2);
+
+  // ── Section Descriptions (kratki opisi kartica) ──
+  const descCard = makeAdminCard('descs', '📝', 'Kratki opisi sekcija (na Level 2)', renderAdminSectionDescs(prop));
+  c.appendChild(descCard);
 }
 
 function makeAdminCard(sid, icon, label, bodyHtml) {
@@ -1671,6 +1772,81 @@ async function toggleACard(sid) {
   if (sid === 'shared' && card.classList.contains('open')) {
     await renderSharedAssignment();
   }
+}
+
+// ─── ADMIN: Section Descriptions ─────────────
+const DESC_SECTIONS = [
+  { id:'villa',      hr:'Informacije o objektu', en:'About the Property' },
+  { id:'food',       hr:'Hrana i piće',          en:'Food & Drinks' },
+  { id:'explore',    hr:'Kamo otići',             en:'Things to Explore' },
+  { id:'recommends', hr:'Preporuke vlasnika',     en:'Owner Recommends' },
+  { id:'airport',    hr:'Aerodromi & Transferi',  en:'Airports & Transfers' },
+  { id:'contacts',   hr:'Kontaktiraj domaćina',   en:'Contact the Host' },
+];
+
+function renderAdminSectionDescs(prop) {
+  // Load desc items from local_items section='desc'
+  const descs = {};
+  (prop.localItems||[]).filter(i=>i.section==='desc').forEach(i=>{ descs[i.subsection]=i; });
+  let h = '<div class="info-note">Kratki tekst koji se prikazuje gostu na vrhu svake sekcije (Level 2). Opcionalno.</div>';
+  DESC_SECTIONS.forEach(sec => {
+    const item = descs[sec.id] || {};
+    h += `<div style="margin-bottom:16px;">
+      <div style="font-size:12px;font-weight:500;color:var(--navy);margin-bottom:6px;">${sec.hr}</div>
+      <div class="ltabs" style="margin-bottom:8px;">
+        <button class="ltab active" onclick="switchFL2('desc-${sec.id}','hr',this)">🇭🇷 HR</button>
+        <button class="ltab" onclick="switchFL2('desc-${sec.id}','en',this)">🇬🇧 EN</button>
+      </div>
+      <div id="af-desc-${sec.id}">
+        <div class="lfield active" id="lf-hr-desc-${sec.id}">
+          <textarea class="ft2" id="adesc-hr-${sec.id}" style="min-height:60px;" placeholder="Kratki opis na HR...">${escHtml(item.title_hr||'')}</textarea>
+        </div>
+        <div class="lfield" id="lf-en-desc-${sec.id}">
+          <textarea class="ft2" id="adesc-en-${sec.id}" style="min-height:60px;" placeholder="Short description in EN...">${escHtml(item.title_en||'')}</textarea>
+        </div>
+        <input type="hidden" id="adesc-id-${sec.id}" value="${item.id||''}">
+        <button class="btn-primary" style="margin-top:6px;font-size:12px;padding:7px 14px;" onclick="saveSectionDesc('${sec.id}')">Spremi opis</button>
+      </div>
+    </div><div class="divider"></div>`;
+  });
+  return h;
+}
+
+async function saveSectionDesc(secId) {
+  const title_hr = document.getElementById('adesc-hr-'+secId)?.value.trim() || '';
+  const title_en = document.getElementById('adesc-en-'+secId)?.value.trim() || '';
+  const editId = document.getElementById('adesc-id-'+secId)?.value || '';
+  if (editId) {
+    await sb.from('local_items').update({title_hr,title_en}).eq('id',editId);
+  } else {
+    await sb.from('local_items').insert({property_id:adminPropData.id,section:'desc',subsection:secId,title_hr,title_en,sort_order:0});
+  }
+  adminPropData = await loadPropertyAdminById(adminPropData.id);
+  document.getElementById('abody-descs').innerHTML = renderAdminSectionDescs(adminPropData);
+  toast('Opis spremljen!','success');
+}
+
+// ─── ADMIN: Naziv objekta ─────────────────────
+function renderAdminPropName(prop) {
+  return `
+    <div class="fg"><label class="fl2">Naziv (HR)</label><input type="text" class="fi2" id="pname-hr" value="${escHtml(prop.name_hr||'')}"></div>
+    <div class="fg"><label class="fl2">Name (EN)</label><input type="text" class="fi2" id="pname-en" value="${escHtml(prop.name_en||'')}"></div>
+    <div class="fg"><label class="fl2">Mjesto / lokacija</label><input type="text" class="fi2" id="pname-loc" value="${escHtml(prop.location||'')}"></div>
+    <button class="btn-gold" onclick="savePropName()">Spremi naziv</button>`;
+}
+
+async function savePropName() {
+  const name_hr = v('pname-hr'), name_en = v('pname-en'), location = v('pname-loc');
+  if (!name_hr) { toast('Unesite naziv!','error'); return; }
+  const { error } = await sb.from('properties').update({name_hr, name_en:name_en||name_hr, location}).eq('id', adminPropData.id);
+  if (error) { toast('Greška!','error'); return; }
+  adminPropData.name_hr = name_hr;
+  adminPropData.name_en = name_en;
+  adminPropData.location = location;
+  await loadAdminData();
+  renderAdminPropList();
+  renderAdminPropSelect();
+  toast('Naziv spremljen!','success');
 }
 
 // ─── ADMIN: Hero ─────────────────────────────
@@ -1823,6 +1999,7 @@ function renderAdminVilla(prop) {
         <div class="fg"><label class="fl2">Content (EN)</label><textarea class="ft2" id="aben-villa-${sub.id}"></textarea></div>
       </div>
       <button class="btn-translate" id="atr-villa-${sub.id}" onclick="autoTranslateVilla('${sub.id}')">🤖 Auto-prijevod HR → EN</button>
+      ${renderItemFileField('villa-'+sub.id, '')}
       <div class="btn-row">
         <button class="btn-secondary" onclick="closeAddFormVilla('${sub.id}')">Odustani</button>
         <button class="btn-gold" onclick="saveVillaItem('${sub.id}')">Spremi</button>
@@ -1858,20 +2035,28 @@ function editVillaItem(subId, itemId) {
   document.getElementById('abhr-villa-'+subId).value = item.body_hr||'';
   document.getElementById('aten-villa-'+subId).value = item.title_en||'';
   document.getElementById('aben-villa-'+subId).value = item.body_en||'';
+  // Update file field with existing URL
+  const urlEl = document.getElementById('ifileurl-villa-'+subId);
+  if (urlEl && item.image_url) urlEl.value = item.image_url;
+  const iffEl = document.getElementById('iff-villa-'+subId);
+  if (iffEl && item.image_url) iffEl.innerHTML = renderItemFileField('villa-'+subId, item.image_url).replace(/^<div[^>]*>/,'').replace(/<\/div>$/,'');
 }
 
 async function saveVillaItem(subId) {
   const title_hr=v('athr-villa-'+subId), body_hr=v('abhr-villa-'+subId);
   const title_en=v('aten-villa-'+subId), body_en=v('aben-villa-'+subId), icon=v('aicon-villa-'+subId);
   if (!title_hr) { toast('Unesite naslov!','error'); return; }
+  const fileUrl = await getItemFileUrl('villa-'+subId, `villa-${adminPropData.id}-${subId}`);
   const editId = v('aeid-villa-'+subId);
   if (editId) {
-    const { error } = await sb.from('local_items').update({icon,title_hr,body_hr,title_en,body_en}).eq('id',editId);
+    const updateData = {icon,title_hr,body_hr,title_en,body_en};
+    if (fileUrl !== undefined) updateData.image_url = fileUrl;
+    const { error } = await sb.from('local_items').update(updateData).eq('id',editId);
     if (error) { toast('Greška!','error'); return; }
     toast('Ažurirano!','success');
   } else {
     const sort_order = (adminPropData.sections['villa'][subId]||[]).length;
-    const { error } = await sb.from('local_items').insert({property_id:adminPropData.id,section:'villa',subsection:subId,icon,title_hr,body_hr,title_en,body_en,sort_order});
+    const { error } = await sb.from('local_items').insert({property_id:adminPropData.id,section:'villa',subsection:subId,icon,title_hr,body_hr,title_en,body_en,image_url:fileUrl,sort_order});
     if (error) { toast('Greška!','error'); return; }
     toast('Dodano!','success');
   }
@@ -1997,9 +2182,88 @@ async function deleteEmergencyContact(id) {
   toast('Obrisano.','success');
 }
 
-// ─── ADMIN: Useful Contacts ───────────────────
+// ─── ADMIN: Kontaktiraj domaćina ─────────────
 function renderAdminContacts(prop) {
-  return renderAdminPhoneSection('contacts', prop.sections['contacts']||[], '📞', 'Homeowner, agencija, ostali kontakti');
+  const host = (prop.sections['contacts']||[])[0] || null;
+  const photoUrl = host ? (host.category||'') : '';
+
+  return `
+    <div class="info-note">Podaci o domaćinu koji se prikazuju gostu. Jedan kontakt po objektu.</div>
+    <input type="hidden" id="host-item-id" value="${host?host.id:''}">
+    <div class="fg">
+      <label class="fl2">Fotografija domaćina (opcionalno)</label>
+      <div class="hero-upload-area" id="host-photo-zone" style="height:120px;">
+        ${photoUrl ? `<img class="hero-upload-preview" src="${photoUrl}" id="host-preview-img" style="width:100px;height:100px;border-radius:50%;object-fit:cover;">` : `<div class="hero-upload-icon" style="font-size:28px;">👤</div><div class="hero-upload-text" style="font-size:12px;">Klikni za upload fotografije</div>`}
+        <input type="file" accept="image/*" onchange="handleHostPhotoUpload(event)">
+      </div>
+      ${photoUrl ? `<button class="btn-secondary" style="margin-top:6px;font-size:12px;" onclick="removeHostPhoto()">🗑 Ukloni fotografiju</button>` : ''}
+    </div>
+    <div class="ltabs" style="margin-top:4px;">
+      <button class="ltab active" onclick="switchFL('host','hr',this)">🇭🇷 HR</button>
+      <button class="ltab" onclick="switchFL('host','en',this)">🇬🇧 EN</button>
+    </div>
+    <div class="lfield active" id="lf-hr-host">
+      <div class="fg"><label class="fl2">Ime i prezime (HR)</label><input type="text" class="fi2" id="athr-host" value="${host?escHtml(host.title_hr||''):''}"></div>
+      <div class="fg"><label class="fl2">Kratki opis (HR)</label><textarea class="ft2" id="abhr-host" style="min-height:80px;">${host?escHtml(host.body_hr||''):''}</textarea></div>
+    </div>
+    <div class="lfield" id="lf-en-host">
+      <div class="fg"><label class="fl2">Full name (EN)</label><input type="text" class="fi2" id="aten-host" value="${host?escHtml(host.title_en||''):''}"></div>
+      <div class="fg"><label class="fl2">Short description (EN)</label><textarea class="ft2" id="aben-host" style="min-height:80px;">${host?escHtml(host.body_en||''):''}</textarea></div>
+    </div>
+    <button class="btn-translate" id="atr-host" onclick="autoTranslateGeneric('host')">🤖 Auto-prijevod HR → EN</button>
+    <div class="divider"></div>
+    <div class="fg"><label class="fl2">📞 Telefon</label><input type="tel" class="fi2" id="aphone-host" value="${host?escHtml(host.phone_number||''):''}" placeholder="+385 91 234 5678"></div>
+    <div class="fg"><label class="fl2">✉️ Email</label><input type="email" class="fi2" id="aweb-host" value="${host?escHtml(host.email||''):''}" placeholder="ime@email.com"></div>
+    <button class="btn-gold" onclick="saveHostContact()">Spremi kontakt domaćina</button>`;
+}
+
+async function handleHostPhotoUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const ext = file.name.split('.').pop();
+  const fileName = `host-${adminPropData.id}-${Date.now()}.${ext}`;
+  const { data, error } = await sb.storage.from(HERO_BUCKET).upload(fileName, file, { upsert: true, contentType: file.type });
+  if (error) { toast('Greška pri uploadu!','error'); return; }
+  const { data: urlData } = sb.storage.from(HERO_BUCKET).getPublicUrl(fileName);
+  // Save to item's category field temporarily (or save to DB)
+  const hostId = document.getElementById('host-item-id').value;
+  if (hostId) {
+    await sb.from('local_items').update({category: urlData.publicUrl}).eq('id', hostId);
+  }
+  adminPropData._pendingHostPhoto = urlData.publicUrl;
+  toast('Fotografija uploadana!','success');
+  adminPropData = await loadPropertyAdminById(adminPropData.id);
+  document.getElementById('abody-contacts').innerHTML = renderAdminContacts(adminPropData);
+}
+
+async function removeHostPhoto() {
+  const hostId = document.getElementById('host-item-id').value;
+  if (hostId) await sb.from('local_items').update({category:''}).eq('id', hostId);
+  adminPropData = await loadPropertyAdminById(adminPropData.id);
+  document.getElementById('abody-contacts').innerHTML = renderAdminContacts(adminPropData);
+  toast('Fotografija uklonjena.','success');
+}
+
+async function saveHostContact() {
+  const title_hr = v('athr-host'), body_hr = v('abhr-host');
+  const title_en = v('aten-host'), body_en = v('aben-host');
+  const phone_number = v('aphone-host'), email = v('aweb-host');
+  if (!title_hr) { toast('Unesite ime domaćina!','error'); return; }
+  const editId = v('host-item-id');
+  const photoUrl = adminPropData._pendingHostPhoto || ((adminPropData.sections['contacts']||[])[0]?.category||'');
+  const updateData = {title_hr,body_hr,title_en,body_en,phone_number,email,category:photoUrl};
+  console.log('host save editId:', editId, 'data:', updateData);
+  if (editId) {
+    const { error } = await sb.from('local_items').update(updateData).eq('id',editId);
+    if (error) { console.error('host update error:', error); toast('Greška: '+error.message,'error'); return; }
+    toast('Domaćin ažuriran!','success');
+  } else {
+    const { error } = await sb.from('local_items').insert({property_id:adminPropData.id,section:'contacts',title_hr,body_hr,title_en,body_en,phone_number,email,category:photoUrl,sort_order:0});
+    if (error) { console.error('host insert error:', error); toast('Greška: '+error.message,'error'); return; }
+    toast('Domaćin dodan!','success');
+  }
+  adminPropData = await loadPropertyAdminById(adminPropData.id);
+  document.getElementById('abody-contacts').innerHTML = renderAdminContacts(adminPropData);
 }
 
 function renderAdminAirport(prop) {
@@ -2490,7 +2754,8 @@ function switchSFL(sid,l,btn) { const f=document.getElementById('saf-'+sid); if(
 async function autoTranslateGeneric(sec) {
   const title_hr=v('athr-'+sec), body_hr=v('abhr-'+sec);
   if (!title_hr&&!body_hr) { toast('Unesite HR sadržaj!','error'); return; }
-  await doTranslate(sec, title_hr, body_hr, 'aten-'+sec, 'aben-'+sec, 'atr-'+sec, 'af-'+sec);
+  const formId = document.getElementById('af-'+sec) ? 'af-'+sec : 'abody-'+sec;
+  await doTranslate(sec, title_hr, body_hr, 'aten-'+sec, 'aben-'+sec, 'atr-'+sec, formId);
 }
 async function autoTranslateShared(sec) {
   const title_hr=v('sathr-'+sec), body_hr=v('sabhr-'+sec);
@@ -2583,6 +2848,7 @@ function renderGlobalSharedSubsBody(secId, subsections) {
         <input type="text" class="fi2" id="gsacoords-${secId}-${sub.id}" placeholder="45.3271, 13.5526" oninput="previewCoords(this,'gsacoords-preview-${secId}-${sub.id}')">
         <div id="gsacoords-preview-${secId}-${sub.id}" style="font-size:11px;margin-top:4px;"></div>
       </div>
+      ${renderItemFileField(`gs-${secId}-${sub.id}`, '')}
       <div class="btn-row">
         <button class="btn-secondary" onclick="closeGSForm('${secId}','${sub.id}')">Odustani</button>
         <button class="btn-gold" onclick="saveGlobalSharedItem('${secId}','${sub.id}')">Spremi</button>
@@ -2630,6 +2896,8 @@ function editGlobalSharedItem(secId, subId, itemId) {
   setVal(`gsaweb-${secId}-${subId}`, item.website);
   setVal(`gsaemail-${secId}-${subId}`, item.email);
   if (item.lat && item.lng) setVal(`gsacoords-${secId}-${subId}`, `${item.lat}, ${item.lng}`);
+  const urlEl = document.getElementById(`ifileurl-gs-${secId}-${subId}`);
+  if (urlEl && item.image_url) urlEl.value = item.image_url;
   const t = document.getElementById(`gsaft-${secId}-${subId}`); if(t) t.textContent = 'Uredi stavku';
 }
 
@@ -2640,14 +2908,17 @@ async function saveGlobalSharedItem(secId, subId) {
   const coordsRaw=g('acoords'), coords=parseCoords(coordsRaw);
   const lat=coords?coords.lat:null, lng=coords?coords.lng:null;
   if (!title_hr) { toast('Unesite naziv!','error'); return; }
+  const fileUrl = await getItemFileUrl(`gs-${secId}-${subId}`, `item-${secId}-${subId}`);
   const editId = g('aeid');
+  const rowData = {icon,title_hr,body_hr,title_en,body_en,phone,address,website,email,lat,lng};
+  if (fileUrl) rowData.image_url = fileUrl;
   if (editId) {
-    const {error} = await sb.from('shared_items').update({icon,title_hr,body_hr,title_en,body_en,phone,address,website,email,lat,lng}).eq('id',editId);
+    const {error} = await sb.from('shared_items').update(rowData).eq('id',editId);
     if (error) { toast('Greška!','error'); return; }
     toast('Ažurirano!','success');
   } else {
     const sort_order = ((globalSharedData[secId]||{})[subId]||[]).length;
-    const {error} = await sb.from('shared_items').insert({section:secId,subsection:subId,icon,title_hr,body_hr,title_en,body_en,phone,address,website,email,lat,lng,sort_order});
+    const {error} = await sb.from('shared_items').insert({section:secId,subsection:subId,...rowData,sort_order});
     if (error) { toast('Greška!','error'); return; }
     toast('Dodano!','success');
   }
@@ -2831,7 +3102,7 @@ function renderAdminRecommends(prop) {
   if (!items.length) h += `<div style="font-size:13px;color:var(--text-light);padding:4px 0 10px;">Nema preporuka.</div>`;
   items.forEach(item => {
     h += `<div class="shared-item-admin">
-      <div class="sia-content"><div class="sia-title">${item.icon||'⭐'} ${item.title_hr}</div><div class="sia-preview">${item.address||(item.body_hr||'').substring(0,50)}</div></div>
+      <div class="sia-content"><div class="sia-title">${item.icon||'⭐'} ${item.title_hr}</div><div class="sia-preview">${(item.body_hr||'').substring(0,60)}</div></div>
       <div class="sia-actions">
         <button class="btn-sm-icon" onclick="editRecommendsItem('${item.id}')">✏️</button>
         <button class="btn-sm-icon del" onclick="deleteRecommendsItem('${item.id}')">🗑</button>
@@ -2848,20 +3119,14 @@ function renderAdminRecommends(prop) {
     </div>
     <div class="lfield active" id="lf-hr-recommends">
       <div class="fg"><label class="fl2">Naziv (HR)</label><input type="text" class="fi2" id="athr-recommends"></div>
-      <div class="fg"><label class="fl2">Opis (HR)</label><textarea class="ft2" id="abhr-recommends" style="min-height:60px;"></textarea></div>
+      <div class="fg"><label class="fl2">Opis (HR)</label><textarea class="ft2" id="abhr-recommends" style="min-height:80px;" placeholder="Kratki opis preporuke..."></textarea></div>
     </div>
     <div class="lfield" id="lf-en-recommends">
       <div class="fg"><label class="fl2">Name (EN)</label><input type="text" class="fi2" id="aten-recommends"></div>
-      <div class="fg"><label class="fl2">Description (EN)</label><textarea class="ft2" id="aben-recommends" style="min-height:60px;"></textarea></div>
+      <div class="fg"><label class="fl2">Description (EN)</label><textarea class="ft2" id="aben-recommends" style="min-height:80px;"></textarea></div>
     </div>
     <button class="btn-translate" id="atr-recommends" onclick="autoTranslateGeneric('recommends')">🤖 Auto-prijevod HR → EN</button>
-    <div class="divider"></div>
-    <div style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px;">Kontakt podaci (opcionalno)</div>
-    <div class="fg"><label class="fl2">📞 Telefon</label><input type="tel" class="fi2" id="aphone-recommends" placeholder="+385 ..."></div>
-    <div class="fg"><label class="fl2">📍 Adresa</label><input type="text" class="fi2" id="acat-recommends" placeholder="Ulica bb, Mjesto"></div>
-    <div class="fg"><label class="fl2">🌐 Web / Facebook</label><input type="text" class="fi2" id="aweb-recommends" placeholder="https://..."></div>
-    <div class="fg"><label class="fl2">📌 Koordinate</label><input type="text" class="fi2" id="acoords-recommends" placeholder="45.3271, 13.5526" oninput="previewCoords(this,'acoords-preview-recommends')"><div id="acoords-preview-recommends" style="font-size:11px;margin-top:4px;"></div></div>
-    <div class="btn-row">
+    <div class="btn-row" style="margin-top:12px;">
       <button class="btn-secondary" onclick="closeAddForm('recommends')">Odustani</button>
       <button class="btn-gold" onclick="saveRecommendsItem()">Spremi</button>
     </div>
@@ -2882,28 +3147,22 @@ function editRecommendsItem(itemId) {
   setVal('abhr-recommends', item.body_hr);
   setVal('aten-recommends', item.title_en);
   setVal('aben-recommends', item.body_en);
-  setVal('aphone-recommends', item.phone_number);
-  setVal('acat-recommends', item.category);
-  setVal('aweb-recommends', item.website);
-  if (item.lat && item.lng) setVal('acoords-recommends', `${item.lat}, ${item.lng}`);
 }
 
 async function saveRecommendsItem() {
-  const title_hr=v('athr-recommends'), body_hr=v('abhr-recommends');
-  const title_en=v('aten-recommends'), body_en=v('aben-recommends'), icon=v('aicon-recommends');
-  const phone_number=v('aphone-recommends'), category=v('acat-recommends'), website=v('aweb-recommends');
-  const coordsRaw=v('acoords-recommends'), coords=parseCoords(coordsRaw);
-  const lat=coords?coords.lat:null, lng=coords?coords.lng:null;
+  const title_hr = v('athr-recommends'), body_hr = v('abhr-recommends');
+  const title_en = v('aten-recommends'), body_en = v('aben-recommends');
+  const icon = v('aicon-recommends') || '⭐';
   if (!title_hr) { toast('Unesite naziv!','error'); return; }
   const editId = v('aeid-recommends');
   if (editId) {
-    const {error} = await sb.from('local_items').update({icon,title_hr,body_hr,title_en,body_en,phone_number,category,website,lat,lng}).eq('id',editId);
-    if (error) { toast('Greška!','error'); return; }
+    const {error} = await sb.from('local_items').update({icon,title_hr,body_hr,title_en,body_en}).eq('id',editId);
+    if (error) { console.error('recommends update error:', error); toast('Greška: '+error.message,'error'); return; }
     toast('Ažurirano!','success');
   } else {
     const sort_order = (adminPropData.sections['recommends']||[]).length;
-    const {error} = await sb.from('local_items').insert({property_id:adminPropData.id,section:'recommends',icon,title_hr,body_hr,title_en,body_en,phone_number,category,website,lat,lng,sort_order});
-    if (error) { toast('Greška!','error'); return; }
+    const {error} = await sb.from('local_items').insert({property_id:adminPropData.id,section:'recommends',icon,title_hr,body_hr,title_en,body_en,sort_order});
+    if (error) { console.error('recommends insert error:', error); toast('Greška: '+error.message,'error'); return; }
     toast('Dodano!','success');
   }
   adminPropData = await loadPropertyAdminById(adminPropData.id);
@@ -2937,6 +3196,70 @@ function previewCoords(input, previewId) {
 }
 
 // ═══════════════════════════════════════════
+// FILE UPLOAD HELPER (for items)
+// ═══════════════════════════════════════════
+async function uploadItemFile(file, prefix) {
+  const ext = file.name.split('.').pop().toLowerCase();
+  const fileName = `${prefix}-${Date.now()}.${ext}`;
+  const { data, error } = await sb.storage.from(HERO_BUCKET).upload(fileName, file, { upsert: true, contentType: file.type });
+  if (error) { toast('Greška pri uploadu: '+error.message,'error'); return null; }
+  const { data: urlData } = sb.storage.from(HERO_BUCKET).getPublicUrl(fileName);
+  return urlData.publicUrl;
+}
+
+function renderItemFileField(formId, currentUrl) {
+  const isPdf = currentUrl && currentUrl.toLowerCase().includes('.pdf');
+  return `
+    <div class="fg" id="iff-${formId}">
+      <label class="fl2">📎 Fotografija ili PDF (opcionalno)</label>
+      ${currentUrl ? `
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          ${isPdf
+            ? `<a href="${currentUrl}" target="_blank" style="font-size:13px;color:var(--gold);">📄 Preuzmi priloženi PDF</a>`
+            : `<img src="${currentUrl}" style="width:80px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--stone-mid);">`
+          }
+          <button class="btn-secondary" style="font-size:11px;padding:5px 10px;" onclick="clearItemFile('${formId}')">Ukloni</button>
+        </div>` : ''}
+      <input type="file" accept="image/*,application/pdf" id="ifile-${formId}" style="font-size:13px;color:var(--text-light);" onchange="previewItemFile('${formId}')">
+      <input type="hidden" id="ifileurl-${formId}" value="${currentUrl||''}">
+      <div id="ifile-preview-${formId}" style="margin-top:6px;"></div>
+    </div>`;
+}
+
+function previewItemFile(formId) {
+  const input = document.getElementById('ifile-'+formId);
+  const preview = document.getElementById('ifile-preview-'+formId);
+  if (!input || !input.files[0]) return;
+  const file = input.files[0];
+  if (file.type === 'application/pdf') {
+    preview.innerHTML = `<span style="font-size:12px;color:var(--text-light);">📄 ${file.name}</span>`;
+  } else {
+    const reader = new FileReader();
+    reader.onload = e => { preview.innerHTML = `<img src="${e.target.result}" style="width:80px;height:60px;object-fit:cover;border-radius:8px;border:1px solid var(--stone-mid);">`; };
+    reader.readAsDataURL(file);
+  }
+}
+
+function clearItemFile(formId) {
+  const urlEl = document.getElementById('ifileurl-'+formId);
+  if (urlEl) urlEl.value = '';
+  const preview = document.getElementById('ifile-preview-'+formId);
+  if (preview) preview.innerHTML = '';
+  // Re-render the field without current URL
+  const wrapper = document.getElementById('iff-'+formId);
+  if (wrapper) wrapper.innerHTML = renderItemFileField(formId, '').replace(`id="iff-${formId}"`, '').replace('<div class="fg"','');
+}
+
+async function getItemFileUrl(formId, prefix) {
+  const input = document.getElementById('ifile-'+formId);
+  const existingUrl = (document.getElementById('ifileurl-'+formId)||{}).value || '';
+  if (input && input.files[0]) {
+    return await uploadItemFile(input.files[0], prefix);
+  }
+  return existingUrl || null;
+}
+
+// ═══════════════════════════════════════════
 // API KEY
 // ═══════════════════════════════════════════
 function saveApiKey() { const k=document.getElementById('api-key-input').value.trim(); if(!k){toast('Unesite API ključ!','error');return;} localStorage.setItem('villsy_api_key',k); toast('API ključ spremljen!','success'); }
@@ -2946,6 +3269,7 @@ function getApiKey() { return localStorage.getItem('villsy_api_key')||''; }
 // HELPERS
 // ═══════════════════════════════════════════
 function v(id) { const el=document.getElementById(id); return el?el.value.trim():''; }
+function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function toast(msg,type) { const t=document.getElementById('toast'); t.textContent=msg; t.className='toast '+(type||''); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
 
 init();
