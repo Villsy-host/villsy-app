@@ -1518,7 +1518,7 @@ function renderMapContent() {
   const mapsBtn = prop.maps_link ? `<a class="contact-btn maps" href="${prop.maps_link}" target="_blank" style="margin-top:14px;"><i class="ph-light ph-navigation-arrow" style="font-size:22px;color:var(--gold);"></i><span>${lang==='hr'?'Navigiraj':'Navigate'}</span></a>` : '';
   document.getElementById('g-content-inner').innerHTML = `
     <div class="content-area">
-      <div class="content-icon">{phIcon('address', 36)}</div>
+      <div class="content-icon">${phIcon('address', 36)}</div>
       <div class="content-title">${lang==='hr'?'Adresa & Navigacija':'Address & Navigation'}</div>
       <div class="map-info" style="padding:0;">
         <div class="map-label">${lang==='hr'?'Adresa':'Address'}</div>
