@@ -1121,7 +1121,7 @@ async function renderEmergency() {
 
 function renderLocalRecommendsDetail(item) {
   setPropHeader3();
-  document.getElementById('bc-section-label').textContent = lang==='hr' ? 'Preporuke domaćina' : 'Host Recommends';
+  document.getElementById('bc-section-label').textContent = lang==='hr' ? 'Natrag' : 'Back';
   const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
   const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
   const bodyHtml = (body||'').split('\n').map(l => l ? `<p>${l}</p>` : '').join('');
@@ -1155,7 +1155,7 @@ async function renderGlobalSection() {
   const name = lang==='hr' ? prop.name_hr : (prop.name_en||prop.name_hr);
   (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-name2'),name);
   (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc2'),prop.location||'');
-  document.getElementById('bc-home-label').textContent = lang==='hr' ? 'Početak' : 'Home';
+  document.getElementById('bc-home-label').textContent = lang==='hr' ? 'Natrag' : 'Back';
   document.getElementById('g-sub-title').textContent = '✈️ ' + (lang==='hr' ? 'Aerodromi & Transferi' : 'Airports & Transfers');
 
   const descElAir = document.getElementById('g-sub-desc');
@@ -1195,7 +1195,7 @@ async function renderGlobalSection() {
 function renderGlobalItemDetail(item) {
   setPropHeader3();
   const catLabel = { airport: lang==='hr'?'Aerodromi':'Airports', transfer: lang==='hr'?'Transferi':'Transfers', hospital: lang==='hr'?'Bolnice':'Hospitals' };
-  document.getElementById('bc-section-label').textContent = catLabel[item.category] || '';
+  document.getElementById('bc-section-label').textContent = lang==='hr' ? 'Natrag' : 'Back';
   const n = lang==='hr' ? item.name_hr : (item.name_en||item.name_hr);
   const desc = lang==='hr' ? item.description_hr : (item.description_en||item.description_hr);
   const descHtml = (desc||'').split('\n').map(l => l ? `<p>${l}</p>` : '').join('');
@@ -1268,7 +1268,7 @@ function renderAirport() {
   const name = lang==='hr' ? prop.name_hr : (prop.name_en||prop.name_hr);
   (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-name2'),name);
   (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc2'),prop.location||'');
-  document.getElementById('bc-home-label').textContent = lang==='hr' ? 'Početak' : 'Home';
+  document.getElementById('bc-home-label').textContent = lang==='hr' ? 'Natrag' : 'Back';
   document.getElementById('g-sub-title').textContent = '✈️ ' + (lang==='hr' ? 'Airport & Transferi' : 'Airport & Transfers');
 
   const container = document.getElementById('g-sub-items');
@@ -1408,7 +1408,7 @@ function renderSubs(sectionId) {
 function renderSharedItemDetail(item, sectionOrSub) {
   setPropHeader3();
   const label = sectionOrSub ? (lang==='hr' ? sectionOrSub.hr : sectionOrSub.en) : '';
-  document.getElementById('bc-section-label').textContent = label;
+  document.getElementById('bc-section-label').textContent = lang==='hr' ? 'Natrag' : 'Back';
 
   const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
   const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
@@ -1451,7 +1451,7 @@ function renderVillaItemContent(sub, item) {
   const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
   const bodyHtml = (body||'').split('\n').map(l => l ? `<p>${l}</p>` : '').join('');
   setPropHeader3();
-  document.getElementById('bc-section-label').textContent = lang==='hr' ? sub.hr : sub.en;
+  document.getElementById('bc-section-label').textContent = lang==='hr' ? 'Natrag' : 'Back';
 
   let attachmentHtml = '';
   if (item.image_url) {
@@ -1478,7 +1478,7 @@ function renderVillaItemContent(sub, item) {
 function renderVillaSub(sub) {
   const items = currentProp.sections['villa'][sub.id] || [];
   setPropHeader3();
-  document.getElementById('bc-section-label').textContent = lang==='hr' ? sub.hr : sub.en;
+  document.getElementById('bc-section-label').textContent = lang==='hr' ? 'Natrag' : 'Back';
   let h = `<div class="content-area"><div class="content-icon">${sub.icon}</div><div class="content-title">${lang==='hr'?sub.hr:sub.en}</div>`;
   items.forEach(item => {
     const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
@@ -1545,14 +1545,14 @@ function renderItemContentDirect(section, itemId) {
   const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
   const bodyHtml = (body||'').split('\n').map(l => l ? `<p>${l}</p>` : '').join('');
   setPropHeader3();
-  document.getElementById('bc-section-label').textContent = sectionLabel;
+  document.getElementById('bc-section-label').textContent = lang==='hr' ? 'Natrag' : 'Back';
   document.getElementById('g-content-inner').innerHTML = `<div class="content-area"><div class="content-icon">${item.icon||'📄'}</div><div class="content-title">${title}</div><div class="content-body">${bodyHtml}</div></div>`;
 }
 
 function renderMapContent() {
   const prop = currentProp;
   setPropHeader3();
-  document.getElementById('bc-section-label').textContent = lang==='hr' ? 'O vili' : 'About the Villa';
+  document.getElementById('bc-section-label').textContent = lang==='hr' ? 'Natrag' : 'Back';
   const mapsBtn = prop.maps_link ? `<a class="contact-btn maps" href="${prop.maps_link}" target="_blank" style="margin-top:14px;"><i class="ph-light ph-navigation-arrow" style="font-size:22px;color:var(--gold);"></i><span>${lang==='hr'?'Navigiraj':'Navigate'}</span></a>` : '';
   document.getElementById('g-content-inner').innerHTML = `
     <div class="content-area">
