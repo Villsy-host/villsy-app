@@ -931,8 +931,8 @@ function renderHome() {
   const recsItems = prop.sections['recommends'] || [];
   if (recsItems.length) {
     const recsCard = document.createElement('div');
-    recsCard.className = 'section-card';
-    recsCard.innerHTML = `${phIconCard('recommends')} <div class="section-card-label">${lang==='hr'?'Preporuke vlasnika':'Owner Recommends'}</div><div class="section-card-arrow">›</div>`;
+    recsCard.className = 'section-card wide';
+    recsCard.innerHTML = `${phIcon('recommends', 24)}<div class="section-card-text"><div class="section-card-label">${lang==='hr'?'Preporuke vlasnika':'Owner Recommends'}</div></div><div class="section-card-arrow">›</div>`;
     recsCard.onclick = () => { currentSectionId = 'recommends'; renderSubs('recommends'); show('screen-subs'); };
     grid.appendChild(recsCard);
   }
