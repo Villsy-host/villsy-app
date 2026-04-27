@@ -207,6 +207,13 @@ ph-icon, [class^="ph-"] { color: var(--gold); }
 .content-body p { margin-bottom: 12px; }
 .content-body p:last-child { margin-bottom: 0; }
 
+/* RECOMMENDS CARD */
+.rec-card { background: var(--white); border-radius: var(--r); padding: 20px; box-shadow: var(--shadow-md); border: 0.5px solid rgba(13,27,42,0.06); margin-bottom: 12px; }
+.rec-card-title { font-family: 'Roboto Slab', serif; font-size: 20px; font-weight: 500; color: var(--navy); margin-bottom: 10px; }
+.rec-card-body { font-size: 16px; color: var(--text-mid); line-height: 1.75; }
+.rec-card-body p { margin-bottom: 8px; }
+.rec-card-body p:last-child { margin-bottom: 0; }
+
 /* ATTACHMENT BUTTON */
 .attachment-btn { display: flex; align-items: center; gap: 14px; background: var(--white); border: 1.5px solid var(--stone-mid); border-radius: var(--r-sm); padding: 14px 16px; margin-top: 20px; text-decoration: none; cursor: pointer; transition: border-color 0.15s; }
 .attachment-btn:active { border-color: var(--gold); background: var(--stone); }
@@ -571,7 +578,7 @@ const LOCAL_SECTIONS = [
   { id:'villa',      icon:'🏡', hr:'Informacije o objektu', en:'About the Property',   wide:false },
   { id:'emergency',  icon:'🚨', hr:'U slučaju nužde',       en:'In Case of Emergency', wide:true  },
   { id:'contacts',   icon:'📞', hr:'Kontaktiraj domaćina',  en:'Contact the Host',     wide:false },
-  { id:'recommends', icon:'⭐', hr:'Preporuke vlasnika',     en:'Owner Recommends',     wide:false },
+  { id:'recommends', icon:'⭐', hr:'Preporuke domaćina',      en:'Host Recommends',      wide:true  },
 ];
 
 // Dijeljene sekcije po regiji
@@ -932,8 +939,8 @@ function renderHome() {
   if (recsItems.length) {
     const recsCard = document.createElement('div');
     recsCard.className = 'section-card wide';
-    recsCard.innerHTML = `${phIcon('recommends', 24)}<div class="section-card-text"><div class="section-card-label">${lang==='hr'?'Preporuke vlasnika':'Owner Recommends'}</div></div><div class="section-card-arrow">›</div>`;
-    recsCard.onclick = () => { currentSectionId = 'recommends'; renderSubs('recommends'); show('screen-subs'); };
+    recsCard.innerHTML = `${phIcon('recommends', 24)}<div class="section-card-text"><div class="section-card-label">${lang==='hr'?'Preporuke domaćina':'Host Recommends'}</div></div><div class="section-card-arrow">›</div>`;
+    recsCard.onclick = () => { renderRecommends(); show('screen-subs'); };
     grid.appendChild(recsCard);
   }
 
@@ -951,8 +958,39 @@ function renderHome() {
 }
 
 // ═══════════════════════════════════════════
-// GUEST: WIFI
+// GUEST: PREPORUKE DOMAĆINA (direktna kartica)
 // ═══════════════════════════════════════════
+function renderRecommends() {
+  const prop = currentProp;
+  const name = lang==='hr' ? prop.name_hr : (prop.name_en||prop.name_hr);
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-name2'),name);
+  (function(el,v){if(el)el.textContent=v;})(document.getElementById('g-prop-loc2'),'');
+  document.getElementById('bc-home-label').textContent = lang==='hr' ? 'Natrag' : 'Back';
+  document.getElementById('g-sub-title').textContent = '⭐ ' + (lang==='hr' ? 'Preporuke domaćina' : 'Host Recommends');
+
+  const descEl = document.getElementById('g-sub-desc');
+  const descItem = prop.sectionDescs ? prop.sectionDescs['recommends'] : null;
+  if (descEl) descEl.textContent = descItem ? (lang==='hr' ? descItem.title_hr : (descItem.title_en||descItem.title_hr)) : '';
+
+  const container = document.getElementById('g-sub-items');
+  container.innerHTML = '';
+
+  const items = prop.sections['recommends'] || [];
+  if (!items.length) { container.innerHTML = emptyState('⭐'); return; }
+
+  // Show all recommends as cards on one screen
+  items.forEach(item => {
+    const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
+    const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
+    const bodyHtml = (body||'').split('\n').map(l => l ? `<p>${l}</p>` : '').join('');
+    const card = document.createElement('div');
+    card.className = 'rec-card';
+    card.innerHTML = `
+      ${title ? `<div class="rec-card-title">${item.icon||'⭐'} ${title}</div>` : ''}
+      ${body  ? `<div class="rec-card-body">${bodyHtml}</div>` : ''}`;
+    container.appendChild(card);
+  });
+}
 function renderWifi() {
   const prop = currentProp;
   const name = lang==='hr' ? prop.name_hr : (prop.name_en||prop.name_hr);
@@ -1083,7 +1121,7 @@ async function renderEmergency() {
 
 function renderLocalRecommendsDetail(item) {
   setPropHeader3();
-  document.getElementById('bc-section-label').textContent = lang==='hr' ? 'Preporuke vlasnika' : 'Owner Recommends';
+  document.getElementById('bc-section-label').textContent = lang==='hr' ? 'Preporuke domaćina' : 'Host Recommends';
   const title = lang==='hr' ? item.title_hr : (item.title_en||item.title_hr);
   const body  = lang==='hr' ? item.body_hr  : (item.body_en||item.body_hr);
   const bodyHtml = (body||'').split('\n').map(l => l ? `<p>${l}</p>` : '').join('');
@@ -1346,7 +1384,7 @@ function renderSubs(sectionId) {
   }
 
   if (sectionId === 'recommends') {
-    document.getElementById('g-sub-title').textContent = '⭐ ' + (lang==='hr' ? 'Preporuke vlasnika' : 'Owner Recommends');
+    document.getElementById('g-sub-title').textContent = '⭐ ' + (lang==='hr' ? 'Preporuke domaćina' : 'Host Recommends');
     const items = prop.sections['recommends'] || [];
     if (!items.length) { container.innerHTML = emptyState('⭐'); return; }
     const recsSub = { hr: 'Preporuke vlasnika', en: 'Owner Recommends', icon: '⭐' };
@@ -1744,7 +1782,7 @@ function renderAdminLocalSections() {
   c.appendChild(contactsCard);
 
   // ── Preporuke vlasnika ──
-  const recsCard2 = makeAdminCard('recommends', '⭐', 'Preporuke vlasnika', renderAdminRecommends(prop));
+  const recsCard2 = makeAdminCard('recommends', '⭐', 'Preporuke domaćina', renderAdminRecommends(prop));
   c.appendChild(recsCard2);
 
   // ── Section Descriptions (kratki opisi kartica) ──
